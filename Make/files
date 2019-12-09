@@ -1,0 +1,3 @@
+fuelCellFoam.C
+
+EXE = $(FOAM_USER_APPBIN)/fuelCell0Foam

@@ -1,0 +1,3 @@
+regionCourantNo/regionCourantNo.C
+
+LIB = $(FOAM_USER_LIBBIN)/libregionCourantNo

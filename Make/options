@@ -1,0 +1,36 @@
+EXE_INC = \
+    -Iinclude \
+    -IfuelCellSystems/fuelCellSystem/lnInclude \
+    -IfuelCellSystems/regionCourantNo/lnInclude \
+    -IfuelCellSystems/multiPhaseCompressibleTurbulenceModels/lnInclude \
+    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialCompositionModels/lnInclude \
+    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/derivedFvPatchFields/lnInclude \
+    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialModels/lnInclude \
+    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/functionObjects/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/solidThermo/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/reactionThermo/lnInclude \
+    -I$(LIB_SRC)/transportModels/compressible/lnInclude \
+    -I$(LIB_SRC)/transportModels/incompressible/transportModel \
+    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \
+    -I$(LIB_SRC)/TurbulenceModels/compressible/lnInclude \
+    -I$(LIB_SRC)/TurbulenceModels/phaseCompressible/lnInclude \
+    -I$(LIB_SRC)/combustionModels/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lfvOptions \
+    -lmeshTools \
+    -lsampling \
+    -lreactingEulerianFvPatchFields \
+    -lreactingEulerFoamFunctionObjects \
+    -lreactingEulerianInterfacialCompositionModels \
+    -lreactingEulerianInterfacialModels \
+    -L$(FOAM_USER_LIBBIN) \
+    -lregionCourantNo \
+    -lmultiphaseFuelCellTurbulenceModels \
+    -lfuelCellSystem
