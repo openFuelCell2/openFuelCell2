@@ -87,7 +87,6 @@ void Foam::dissolvedModels::noneDWModel::update
 }
 
 
-
 void Foam::dissolvedModels::noneDWModel::mapToCell
 (
     fuelCellSystem& fuelCell

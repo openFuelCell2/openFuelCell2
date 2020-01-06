@@ -1,1 +1,0 @@
-../diameterModels/constantDiameter/constantDiameter.H

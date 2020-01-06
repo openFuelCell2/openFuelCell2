@@ -1,1 +1,0 @@
-../sigmaModels/constantSigma/constantSigma.C

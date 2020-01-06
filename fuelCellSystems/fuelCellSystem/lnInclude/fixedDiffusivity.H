@@ -1,1 +1,0 @@
-../diffusivityModels/fixedDiffusivity/fixedDiffusivity.H

@@ -1,1 +1,0 @@
-../sigmaModels/sigmaModel/sigmaModel.C

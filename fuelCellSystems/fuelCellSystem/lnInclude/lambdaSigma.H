@@ -1,1 +1,0 @@
-../sigmaModels/lambdaSigma/lambdaSigma.H

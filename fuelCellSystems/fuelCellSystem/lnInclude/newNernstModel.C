@@ -1,1 +1,0 @@
-../nernstModels/nernstModel/newNernstModel.C

@@ -1,1 +1,0 @@
-../sigmaModels/porousSigma/porousSigma.H

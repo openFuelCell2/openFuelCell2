@@ -1,9 +1,8 @@
 EXE_INC = \
+    -I../interfacialModels/lnInclude \
+    -I../interfacialCompositionModels/lnInclude \
+    -I../derivedFvPatchFields/lnInclude \
     -I../multiPhaseCompressibleTurbulenceModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialCompositionModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/derivedFvPatchFields/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/functionObjects/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/solidThermo/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
@@ -25,8 +24,4 @@ LIB_LIBS = \
     -lcombustionModels \
     -lfiniteVolume \
     -lfvOptions \
-    -lmeshTools \
-    -lreactingEulerianFvPatchFields \
-    -lreactingEulerFoamFunctionObjects \
-    -lreactingEulerianInterfacialCompositionModels \
-    -lreactingEulerianInterfacialModels
+    -lmeshTools

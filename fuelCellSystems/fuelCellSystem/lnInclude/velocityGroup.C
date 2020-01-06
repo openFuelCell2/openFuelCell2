@@ -1,1 +1,0 @@
-../diameterModels/velocityGroup/velocityGroup.C

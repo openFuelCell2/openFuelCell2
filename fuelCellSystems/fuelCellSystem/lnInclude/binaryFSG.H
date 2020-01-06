@@ -1,1 +1,0 @@
-../diffusivityModels/binaryFSG/binaryFSG.H

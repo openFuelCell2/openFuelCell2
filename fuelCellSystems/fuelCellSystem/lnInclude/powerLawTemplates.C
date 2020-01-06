@@ -1,1 +1,0 @@
-../porosityModel/powerLaw/powerLawTemplates.C

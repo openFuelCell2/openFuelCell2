@@ -1,1 +1,0 @@
-../porosityModel/fixedCoeff/fixedCoeff.C

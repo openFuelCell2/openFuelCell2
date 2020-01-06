@@ -1,1 +1,0 @@
-../diameterModels/isothermalDiameter/isothermalDiameter.C

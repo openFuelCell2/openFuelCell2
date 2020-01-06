@@ -3,10 +3,9 @@ EXE_INC = \
     -IfuelCellSystems/fuelCellSystem/lnInclude \
     -IfuelCellSystems/regionCourantNo/lnInclude \
     -IfuelCellSystems/multiPhaseCompressibleTurbulenceModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialCompositionModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/derivedFvPatchFields/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/interfacialModels/lnInclude \
-    -I$(FOAM_SOLVERS)/multiphase/reactingEulerFoam/functionObjects/lnInclude \
+    -IfuelCellSystems/interfacialCompositionModels/lnInclude \
+    -IfuelCellSystems/derivedFvPatchFields/lnInclude \
+    -IfuelCellSystems/interfacialModels/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/solidThermo/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
@@ -26,11 +25,11 @@ EXE_LIBS = \
     -lfvOptions \
     -lmeshTools \
     -lsampling \
-    -lreactingEulerianFvPatchFields \
-    -lreactingEulerFoamFunctionObjects \
-    -lreactingEulerianInterfacialCompositionModels \
-    -lreactingEulerianInterfacialModels \
     -L$(FOAM_USER_LIBBIN) \
     -lregionCourantNo \
     -lmultiphaseFuelCellTurbulenceModels \
+    -lfuelCellEulerianFvPatchFields \
+    -lfuelCellEulerFoamFunctionObjects \
+    -lfuelCellEulerianInterfacialCompositionModels \
+    -lfuelCellEulerianInterfacialModels \
     -lfuelCellSystem

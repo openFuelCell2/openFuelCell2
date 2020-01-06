@@ -1,2 +1,0 @@
-porosity = porosityModel
-LIB = $(FOAM_USER_LIBBIN)/libfuelCellSystem

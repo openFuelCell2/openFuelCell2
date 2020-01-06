@@ -48,7 +48,7 @@ Foam::PurePhaseModel<BasePhaseModel>::PurePhaseModel
         (
             IOobject
             (
-                IOobject::groupName(word("iDmdt" + phaseName), this->water),
+                IOobject::groupName("iDmdt" + phaseName, this->water),
                 this->mesh().time().timeName(),
                 this->mesh(),
                 IOobject::NO_READ,

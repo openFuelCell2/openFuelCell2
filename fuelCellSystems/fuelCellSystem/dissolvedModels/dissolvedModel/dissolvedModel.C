@@ -27,7 +27,6 @@ License
 #include "zeroGradientFvPatchFields.H"
 
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 namespace Foam
 {
     defineTypeNameAndDebug(dissolvedModel, 0);

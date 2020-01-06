@@ -6,6 +6,10 @@ cd ${0%/*} || exit 1    # Run from this directory
 
 wmake $targetType regionCourantNo
 wmake $targetType fuelCellSystem
+wmake $targetType interfacialModels
+wmake $targetType interfacialCompositionModels
+wmake $targetType derivedFvPatchFields
+wmake $targetType functionObjects
 wmake $targetType multiPhaseCompressibleTurbulenceModels
 
 #------------------------------------------------------------------------------
