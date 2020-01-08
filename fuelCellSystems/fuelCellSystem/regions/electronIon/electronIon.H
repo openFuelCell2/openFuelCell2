@@ -24,6 +24,12 @@ License
 Class
     Foam::electronIon.C
 
+Description
+    The 'electronIon' region considers electron and ion/proton transfer in electrochemical devices.
+    Fuel cell and electrolyzer can operate under galvanostatic or potentostatic mode, which means
+    the current density or voltage is prescribed, respectively.
+    Possion equations are solved accordingly in electrically conductive regions.
+
 SourceFiles
     electronIon.C
 
@@ -66,47 +72,51 @@ private:
         //- Dictionary for ep parameters
         const dictionary& dict_;
 
-        //- current density
+        //- Current density (A/m2)
         volVectorField i_;
 
-        //- potential
+        //- Potential (V)
         volScalarField phi_;
 
-        //- source term
-        volScalarField source_;
+        //- Source term (A/m3)
+        volScalarField j_;
 
-        //- electronIonnic conductivity
+        //- Electric conductivity
         volScalarField sigmaField_;
 
-        //- temperature
+        //- Temperature
         volScalarField T_;
 
-        //- sigma model
+        //- Sigma model (electric conductivity)
         autoPtr<sigmaModelList> sigma_;
 
-        //- coefficient
+        //- Relaxation
         scalar relax_;
 
         //- Active side?
         //- Reference side: voltage = 0.0
         //- Active side: voltage: fixed or calculated
-        bool active_;
+        Switch active_;
 
-        //- dissolved water
+        //- Dissolved water
+        //- In PEM fuel cell/electrolyzer, water can dissolve from one side
+        //- to the other. This process is usually affected by the proton transfer.
+        //- Refer to the region of CCM (carbon coated membrane)
         autoPtr<dissolvedModel> dissolved_;
 
-        //- patch name (active_: true)
+        //- Patch name
+        //- The reference boundary for the prescribed current density or voltage
         word patchName_;
 
         //- Operation mode: (currentCollector_ true)
         Switch galvanostatic_;
 
-        // mean current density
-        // only make sense when galvanostatic_ is true
+        //- Mean current density
+        //- Make sense when galvanostatic_ is true
         scalar ibar_;
 
-        // voltage
-        // only make semse when galvanostatic_ is false
+        //- Voltage
+        //- Make semse when galvanostatic_ is false
         scalar voltage_;
 
 public:
@@ -130,14 +140,19 @@ public:
             return active_;
         }
 
+        //- Correct fields
         virtual void correct();
 
+        //- Set reversed delta t
         virtual void setRDeltaT();
 
+        //- Solve PDEs
         virtual void solve();
 
+        //- Map heat source/sink to the parent mesh
         virtual void mapToCell(fuelCellSystem&);
 
+        //- Map temperature from the parent mesh
         virtual void mapFromCell(fuelCellSystem&);
 };
 

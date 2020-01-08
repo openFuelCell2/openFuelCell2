@@ -89,7 +89,7 @@ Foam::regionTypes::electronIon::electronIon
         ),
         *this
     ),
-    source_
+    j_
     (
         IOobject
         (
@@ -197,7 +197,7 @@ void Foam::regionTypes::electronIon::solve()
     tmp<fvScalarMatrix> phiEqn
     (
       - fvm::laplacian(sigmaField_, phi_)
-      - source_
+      - j_
     );
 
     phiEqn->relax();
@@ -229,7 +229,7 @@ void Foam::regionTypes::electronIon::correct()
     {
         //- Update the potential field.
         //- ElectroNatural, the total electron+proton flux should be zero
-        const scalarField& source = source_;
+        const scalarField& source = j_;
         const scalarField& volume = this->V();
         scalarField sum = source*volume;
         scalar iDot(Foam::gSum(sum));
