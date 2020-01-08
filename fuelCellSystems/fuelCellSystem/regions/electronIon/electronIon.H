@@ -102,6 +102,7 @@ private:
         //- In PEM fuel cell/electrolyzer, water can dissolve from one side
         //- to the other. This process is usually affected by the proton transfer.
         //- Refer to the region of CCM (carbon coated membrane)
+        Switch dissolveOnOff_;
         autoPtr<dissolvedModel> dissolved_;
 
         //- Patch name

@@ -71,6 +71,9 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::~electroChemica
 template<class ReactionThermo>
 void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
 {
+    //- Activation overpotential model update
+    eta_->correct();
+
     //- Get sub regions
     //- Refer to regionType
     //- Including: fluid, electron (BPP + GDL + CL), ion (CLs + membrane)
@@ -101,7 +104,7 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     dimensionedScalar specieStoichCoeff
     (
         "stoichCoeff",
-        dimCurrent/dimMoles,
+        dimless,
         eta_->nernst().rxnList().found(water)
       ? eta_->nernst().rxnList()[water]/mag(eta_->nernst().rxnList()["e"])
       : 0.0
@@ -238,7 +241,7 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
     dimensionedScalar specieStoichCoeff
     (
         "stoichCoeff",
-        dimCurrent/dimMoles,
+        dimless,
         eta_->nernst().rxnList().found(Y.member())
       ? eta_->nernst().rxnList()[Y.member()]/mag(eta_->nernst().rxnList()["e"])
       : 0.0

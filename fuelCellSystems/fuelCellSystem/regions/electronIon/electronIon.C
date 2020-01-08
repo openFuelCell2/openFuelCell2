@@ -132,7 +132,8 @@ Foam::regionTypes::electronIon::electronIon
         zeroGradientFvPatchScalarField::typeName
     ),
     relax_(dict_.lookupOrDefault<scalar>("relax", 0.0)),
-    active_(false),
+    active_(dict_.lookupOrDefault<Switch>("active", false)),
+    dissolveOnOff_(dict_.lookupOrDefault<Switch>("dissolveOnOff", false)),
     patchName_(word::null),
     galvanostatic_(true),
     ibar_(0.0),
@@ -143,11 +144,7 @@ Foam::regionTypes::electronIon::electronIon
 
     const dictionary& dissolvedDict = cellProperties.subDict("dissolved");
 
-    if
-    (
-        word(dissolvedDict.lookup("region"))
-     == this->name()
-    )
+    if (dissolveOnOff_)
     {
         dissolved_ = dissolvedModel::New(*this, dissolvedDict);
     }
@@ -163,11 +160,7 @@ Foam::regionTypes::electronIon::electronIon
 
     const dictionary& galvanostaticDict = cellProperties.subDict("galvanostatic");
 
-    if
-    (
-        word(galvanostaticDict.lookup("region"))
-     == this->name()
-    )
+    if (active_)
     {
         active_ = true;
         galvanostatic_ = Switch(galvanostaticDict.lookupOrDefault("active", true));
