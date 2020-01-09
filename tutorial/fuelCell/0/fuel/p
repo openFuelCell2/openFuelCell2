@@ -1,0 +1,82 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           volScalarField;
+    object          p;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 101325;
+
+boundaryField
+{
+    fuelInlet
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    fuelOutlet
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    fuelSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    fuelInletSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    fuelOutletSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    anodeSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    aflSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+    
+    fuel_to_electrolyte //anode
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    fuel_to_interconnect
+    {
+        type               calculated;
+        value              $internalField;
+    }
+}
+
+
+// ************************************************************************* //

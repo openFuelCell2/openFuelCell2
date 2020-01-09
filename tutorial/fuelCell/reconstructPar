@@ -1,0 +1,22 @@
+#!/bin/bash
+
+reconstructParMesh -fileHandler collated -region air -constant
+reconstructParMesh -fileHandler collated -region fuel -constant
+reconstructParMesh -fileHandler collated -region interconnect -constant
+reconstructParMesh -fileHandler collated -region electrolyte -constant
+reconstructParMesh -fileHandler collated -region phiEA -constant
+reconstructParMesh -fileHandler collated -region phiEC -constant
+reconstructParMesh -fileHandler collated -region phiI -constant
+
+
+
+
+reconstructPar -fileHandler collated -latestTime
+reconstructPar -fileHandler collated -region air -latestTime
+reconstructPar -fileHandler collated -region fuel -latestTime
+reconstructPar -fileHandler collated -region interconnect -latestTime
+reconstructPar -fileHandler collated -region electrolyte -latestTime
+ 
+reconstructPar -fileHandler collated -region phiEA -latestTime
+reconstructPar -fileHandler collated -region phiEC -latestTime
+reconstructPar -fileHandler collated -region phiI -latestTime

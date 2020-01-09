@@ -1,0 +1,10 @@
+#!/bin/bash
+
+foamToVTK -latestTime
+foamToVTK -region air -latestTime
+foamToVTK -region fuel -latestTime
+foamToVTK -region electrolyte -latestTime
+foamToVTK -region interconnect -latestTime
+foamToVTK -region phiI -latestTime
+foamToVTK -region phiEA -latestTime
+foamToVTK -region phiEC -latestTime

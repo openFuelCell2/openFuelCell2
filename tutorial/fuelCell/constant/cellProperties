@@ -1,0 +1,263 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          cellProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+active      true;
+
+dissolved
+{
+    type        standard;
+
+    standardCoeffs
+    {
+        region      phiI;
+        nd          0.12;
+        rhoOnEW     1964;
+
+        ksi
+        (
+            acl 1.3
+            ccl 1.3
+        );
+
+        relax 1.0e-3;
+    }
+}
+
+galvanostatic
+{
+    active      true;
+    patchName   interconnect0;
+
+    ibar 8000;
+}
+
+nx    3;
+ny    1;
+
+names
+(
+    air
+    fuel
+    electrolyte
+    interconnect
+    phiEA
+    phiEC
+    phiI
+);
+
+gaugeMesh    interconnect;
+
+regions
+{
+    air
+    {
+        name            air;
+        regionType      fluid;
+    }
+
+    fuel
+    {
+        name            fuel;
+        regionType      fluid;
+    }
+
+    interconnect
+    {
+        name            interconnect;
+        regionType      solid;
+    }
+
+    electrolyte
+    {
+        name            electrolyte;
+        regionType      solid;
+    }
+
+    phiEA
+    {
+        name            phiEA;
+        regionType      electronIon;
+
+        sigma
+        {
+            bpp
+            {
+                sigmaModel      constantSigma;
+
+                constantSigmaCoeffs
+                {
+                    cellZone    bpp;
+                    sigma       20000;
+                }
+            }
+
+            acl
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        acl;
+                    catalyst        no;
+                    porosity        0.3;
+                    sigma           5000;
+                }
+            }
+
+            ampl
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        ampl;
+                    catalyst        no;
+                    porosity        0.4;
+                    sigma           8000;
+                }
+            }
+
+            anode
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        anode;
+                    catalyst        no;
+                    porosity        0.7;
+                    sigma           8000;
+                }
+            }
+        }
+    }
+
+    phiEC
+    {
+        name            phiEC;
+        regionType      electronIon;
+        active          yes;
+        relax           1.0e-5;
+
+        sigma
+        {
+            bpp
+            {
+                sigmaModel      constantSigma;
+
+                constantSigmaCoeffs
+                {
+                    cellZone        bpp;
+                    sigma           20000;
+                }
+            }
+
+            ccl
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        ccl;
+                    catalyst        no;
+                    porosity        0.3;
+                    sigma           5000;
+                }
+            }
+
+            cmpl
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        cmpl;
+                    catalyst        no;
+                    porosity        0.4;
+                    sigma           8000;
+                }
+            }
+
+            cathode
+            {
+                sigmaModel      porousSigma;
+
+                porousSigmaCoeffs
+                {
+                    cellZone        cathode;
+                    catalyst        no;
+                    porosity        0.7;
+                    sigma           8000;
+                }
+            }
+        }
+    }
+
+    phiI
+    {
+        name            phiI;
+        regionType      electronIon;
+        dissolveOnOff   yes;
+        active          no;
+
+        relax           -1.0e-3;
+
+        sigma
+        {
+            ccl
+            {
+                sigmaModel          lambdaSigma;
+
+                lambdaSigmaCoeffs
+                {
+                    cellZone            ccl;
+                    catalyst            yes;
+
+                    porosity            0.3;
+                    porNaf              0.3;
+                    lambdaName          lambda;
+                }
+            }
+
+            acl
+            {
+                sigmaModel          lambdaSigma;
+
+                lambdaSigmaCoeffs
+                {
+                    cellZone            acl;
+                    catalyst            yes;
+
+                    porosity            0.3;
+                    porNaf              0.3;
+                    lambdaName          lambda;
+                }
+            }
+
+            membrane
+            {
+                sigmaModel          lambdaSigma;
+                lambdaSigmaCoeffs
+                {
+                    cellZone            membrane;
+                    lambdaName          lambda;
+                }
+            }
+        }
+    }
+}
+
+// ************************************************************************* //

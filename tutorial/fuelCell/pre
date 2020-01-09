@@ -1,0 +1,109 @@
+#!/bin/bash
+# clean
+
+sed -i -e 's/SIDES/Sides/g' constant/polyMesh/boundary
+sed -i -e 's/INLET/Inlet/g' constant/polyMesh/boundary
+sed -i -e 's/OUTLET/Outlet/g' constant/polyMesh/boundary
+sed -i -e 's/wall/patch/g' constant/polyMesh/boundary
+sed -i -e 's/INTERCONNECT/interconnect/g' constant/polyMesh/boundary
+sed -i -e 's/ELECTROLYTE/electrolyte/g' constant/polyMesh/boundary
+sed -i -e 's/AIR/air/g' constant/polyMesh/boundary
+sed -i -e 's/FUEL/fuel/g' constant/polyMesh/boundary
+
+sed -i -e 's/ACL/acl/g' constant/polyMesh/boundary
+sed -i -e 's/CCL/ccl/g' constant/polyMesh/boundary
+
+sed -i -e 's/CATHODE/cathode/g' constant/polyMesh/boundary
+sed -i -e 's/ANODE/anode/g' constant/polyMesh/boundary
+
+cp system/controlDict.mesh system/controlDict
+
+rm -rf constant/*/polyMesh
+
+rm constant/polyMesh/sets/*
+
+setSet -batch config/make.zoneSet
+
+rm constant/polyMesh/cellZones
+
+rm -rf constant/polyMesh/tmp
+mkdir constant/polyMesh/tmp
+
+mv constant/polyMesh/sets/* constant/polyMesh/tmp/.
+cp constant/polyMesh/tmp/air constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/fuel constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/interconnect constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/electrolyte constant/polyMesh/sets/.
+
+## split
+
+setsToZones -noFlipMap
+splitMeshRegions -cellZonesOnly
+cp -rf 1/. constant/.
+rm -rf 1
+
+setSet -batch config/make.setAir -region air
+setSet -batch config/make.setFuel -region fuel
+
+setsToZones -noFlipMap -region air
+setsToZones -noFlipMap -region fuel
+
+## creating protonic and electronic field
+rm constant/polyMesh/cellZones
+
+rm constant/polyMesh/sets/*
+
+# move the other regions, keep phiEC, phiEA, phiI0, phi0, phiI0
+cp constant/polyMesh/tmp/phiEA constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/phiEC constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/phi0 constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/phiI0 constant/polyMesh/sets/.
+
+# clean phiEA and phiEC mesh
+
+setsToZones -noFlipMap
+splitMeshRegions -cellZonesOnly
+cp -rf 1/. constant/.
+rm -rf 1
+
+setSet -batch config/make.setPhiEC -region phiEC
+setsToZones -noFlipMap -region phiEC
+
+setSet -batch config/make.setPhiEA -region phiEA
+setsToZones -noFlipMap -region phiEA
+
+rm -rf constant/phiI0
+rm -rf constant/phi0
+
+rm -rf constant/polyMesh/sets/*
+
+# creating phiI
+
+cp constant/polyMesh/tmp/phiI constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/phiE0 constant/polyMesh/sets/.
+cp constant/polyMesh/tmp/phiE1 constant/polyMesh/sets/.
+
+rm constant/polyMesh/cellZones
+
+setsToZones -noFlipMap
+splitMeshRegions -cellZonesOnly
+cp -rf 1/. constant/.
+rm -rf 1
+
+setSet -batch config/make.setPhiI -region phiI
+setsToZones -noFlipMap -region phiI
+
+rm -rf constant/phiE1
+rm -rf constant/phiE0
+
+cp constant/polyMesh/tmp/* constant/polyMesh/sets/.
+rm -rf constant/polyMesh/tmp
+
+setsToZones -noFlipMap
+
+rm -rf system/phi0
+rm -rf system/phiI0
+rm -rf system/phiE0
+rm -rf system/phiE1
+
+cp system/controlDict.run system/controlDict

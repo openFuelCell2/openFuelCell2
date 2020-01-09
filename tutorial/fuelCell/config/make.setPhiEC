@@ -1,0 +1,4 @@
+cellSet cathode new boxToCell (-40 -12.0 0.0425e-3) (40.0 12.0 0.3125e-3)
+cellSet cmpl new boxToCell (-40 -12.0 0.0225e-3) (40.0 12.0 0.0425e-3)
+cellSet ccl new boxToCell (-40 -12.0 0) (40.0 12.0 0.0225e-3)
+cellSet bpp new boxToCell (-40 -12.0 0.3125e-3) (40.0 12.0 10.0)
