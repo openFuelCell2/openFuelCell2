@@ -76,7 +76,9 @@ Foam::activationOverpotentialModel::activationOverpotentialModel
     const dictionary& dict
 )
 :
-    volScalarField
+    phase_(phase),
+    dict_(dict),
+    eta_
     (
         IOobject
         (
@@ -94,9 +96,6 @@ Foam::activationOverpotentialModel::activationOverpotentialModel
             0.0
         )
     ),
-
-    phase_(phase),
-    dict_(dict),
     phaseChange_(dict_.lookupOrDefault<Switch>("phaseChange", true)),
     zoneName_(dict_.lookup("zoneName")),
     regions_(dict_.subDict("regions")),
@@ -144,10 +143,10 @@ Foam::activationOverpotentialModel::Qdot() const
             IOobject
             (
                 IOobject::groupName("q", phase_.name()),
-                mesh().time().timeName(),
-                mesh()
+                eta_.mesh().time().timeName(),
+                eta_.mesh()
             ),
-            mesh(),
+            eta_.mesh(),
             dimensionedScalar("zero", dimEnergy/dimVolume/dimTime, 0)
         )
     );
@@ -166,7 +165,7 @@ Foam::activationOverpotentialModel::Qdot() const
     const scalarField& j = j_;
     const scalarField& T = phase_.thermo().T();
 
-    const scalarField& eta = *this;
+    const scalarField& eta = eta_;
 
     //- only consider catalyst zone
     label znId = fluidPhase.cellZones().findZoneID(zoneName_);

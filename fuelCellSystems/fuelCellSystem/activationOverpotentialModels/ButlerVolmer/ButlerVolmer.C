@@ -94,7 +94,7 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
         );
 
     //- Reference
-    scalarField& eta = *this;
+    scalarField& eta = this->eta_;
     //- Nernst field
     scalarField& nernst = this->nernst_();
     //- Current density
@@ -177,6 +177,11 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
 
         Rj += fluidPhase.V()[fluidId] * j[fluidId];
     }
+
+    reduce(Rj, sumOp<scalar>());
+
+    Info << "Total current (A) at " << this->zoneName_
+         << ": " << Rj << endl;
 }
 
 // ************************************************************************* //

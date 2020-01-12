@@ -49,8 +49,6 @@ namespace Foam
                            Class activationOverpotentialModel Declaration
 \*---------------------------------------------------------------------------*/
 class activationOverpotentialModel
-:
-    public volScalarField
 {
 protected:
 
@@ -59,6 +57,9 @@ protected:
 
         //- Dictionary
         const dictionary& dict_;
+
+        //- Activational field
+        volScalarField eta_;
 
         //- Phase change
         Switch phaseChange_;
