@@ -119,6 +119,10 @@ public:
 
         //- map from cell
         virtual void mapFromCell(fuelCellSystem&);
+
+    //- IO
+
+        virtual bool read(const dictionary& dict);
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

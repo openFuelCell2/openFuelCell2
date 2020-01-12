@@ -103,4 +103,10 @@ void Foam::dissolvedModels::noneDWModel::mapFromCell
 {
     // nothing
 }
+
+
+bool Foam::dissolvedModels::noneDWModel::read(const dictionary& dict)
+{
+    return dict.isDict(type() + "Coeffs");
+}
 // ************************************************************************* //

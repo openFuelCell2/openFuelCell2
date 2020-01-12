@@ -132,8 +132,8 @@ void Foam::dissolvedModels::standardDWModel::solve()
     tmp<fvScalarMatrix> wEqn
     (
 //         fvm::ddt(rhoOnEW_, lambda)
-        fvm::div(phiI*nd_/F, *this, "div(D,lambda)")
-      - fvm::laplacian(rhoOnEW_*Dwm_, *this, "laplacian(diff,lambda)")
+        fvm::div(phiI*nd_/F, lambda_, "div(D,lambda)")
+      - fvm::laplacian(rhoOnEW_*Dwm_, lambda_, "laplacian(diff,lambda)")
       - dmdt_
     );
 
@@ -144,7 +144,7 @@ void Foam::dissolvedModels::standardDWModel::solve()
 
 void Foam::dissolvedModels::standardDWModel::correct()
 {
-    scalarField& lambdaIn = *this;
+    scalarField& lambdaIn = lambda_;
 
     const scalarField& T = mesh().lookupObject<volScalarField>(TName_);
 
@@ -165,7 +165,7 @@ void Foam::dissolvedModels::standardDWModel::correct()
     // Water intake = water uptake
     scalarField sum = source*volume;
     scalar iDot(Foam::gSum(sum)/Foam::gSum(volume));
-    this->primitiveFieldRef() += iDot*relax_;
+    this->lambda_.primitiveFieldRef() += iDot*relax_;
 }
 
 
@@ -174,7 +174,7 @@ void Foam::dissolvedModels::standardDWModel::update
     const word& clName
 )
 {
-    scalarField& lambdaIn = *this;
+    scalarField& lambdaIn = lambda_;
 
     //- only consider the catalyst layer for water adsorption or desorption
 
@@ -210,5 +210,21 @@ void Foam::dissolvedModels::standardDWModel::mapFromCell
 )
 {
     // nothing
+}
+
+
+bool Foam::dissolvedModels::standardDWModel::read(const dictionary& dict)
+{
+    const dictionary& dict0 = dict.subDict(type() + "Coeffs");
+
+    dict0.lookup("ksi") >> ksi_;
+    nd_ = dimensionedScalar("nd", dimless, dict0);
+    rhoOnEW_ = dimensionedScalar("rhoOnEW", dimMoles/dimVol, dict0);
+    iName_ = word(dict0.lookupOrDefault<word>("i", "i"));
+    TName_ = word(dict0.lookupOrDefault<word>("T", "T"));
+    relax_ = scalar(dict0.lookupOrDefault<scalar>("relax", 0.0));
+    corr_ = scalar(dict0.lookupOrDefault<scalar>("corr", 1.0));
+
+    return true;
 }
 // ************************************************************************* //

@@ -26,6 +26,7 @@ License
 #include "dissolvedModel.H"
 #include "zeroGradientFvPatchFields.H"
 
+const Foam::word Foam::dissolvedModel::modelName("dissolved");
 
 namespace Foam
 {
@@ -40,7 +41,21 @@ Foam::dissolvedModel::dissolvedModel
     const fvMesh& mesh
 )
 :
-    volScalarField
+    regIOobject
+    (
+        IOobject
+        (
+            modelName,
+            mesh.time().timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        )
+    ),
+
+    mesh_(mesh),
+
+    lambda_
     (
         IOobject
         (
@@ -52,8 +67,6 @@ Foam::dissolvedModel::dissolvedModel
         ),
         mesh
     ),
-
-    mesh_(mesh),
 
     dmdt_
     (
@@ -112,5 +125,9 @@ Foam::dissolvedModel::dissolvedModel
 Foam::dissolvedModel::~dissolvedModel()
 {}
 
-
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+
+bool Foam::dissolvedModel::writeData(Ostream& os) const
+{
+    return true;
+}

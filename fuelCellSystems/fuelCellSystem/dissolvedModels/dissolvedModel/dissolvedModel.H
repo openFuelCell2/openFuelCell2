@@ -51,12 +51,23 @@ class fuelCellSystem;
 
 class dissolvedModel
 :
-    public volScalarField
+    public regIOobject
 {
+    //- Private Membrane Functions
+
+    //- Disallow default bitwise copy construction
+    dissolvedModel(const dissolvedModel&);
+
+    //- Disallow default bitwise assignment
+    void operator=(const dissolvedModel&);
+
 protected:
 
     //- Mesh
     const fvMesh& mesh_;
+
+    //- Lambda
+    volScalarField lambda_;
 
     //- Water content transfer source/sink
     volScalarField dmdt_;
@@ -72,6 +83,9 @@ public:
 
     //- Runtime type information
     TypeName("dissolvedModel");
+
+    //- Default name of the water name
+    static const word modelName;
 
     // Declare runtime construction
 
@@ -122,36 +136,36 @@ public:
         virtual void mapFromCell(fuelCellSystem&) = 0;
 
     // Access
+        inline const fvMesh& mesh() const;
 
-        const fvMesh& mesh() const
-        {
-            return mesh_;
-        }
+        inline const volScalarField& lambda() const;
+        inline volScalarField& lambda();
 
-        const volScalarField& dmdt() const
-        {
-            return dmdt_; 
-        }
+        inline const volScalarField& dmdt() const;
+        inline volScalarField& dmdt();
 
-        volScalarField& dmdt()
-        {
-            return dmdt_;
-        }
+        inline const volScalarField& act() const;
+        inline volScalarField& act();
 
-        const volScalarField& act() const
-        {
-            return act_;
-        }
+     //- IO
 
-        volScalarField& act()
-        {
-            return act_;
-        }
+       //- Write
+       virtual bool writeData(Ostream& os) const;
+
+       //- Inherit read from regIOobject
+       using regIOobject::read;
+
+//       //- Read dictionary
+//       virtual bool read(const dictionary& dict);
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 } // End namespace Foam
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "dissolvedModelI.H"
 
 #endif
 
