@@ -62,9 +62,6 @@ protected:
         //- mesh, parent mesh
         const fvMesh& mesh_;
 
-        //- dictionary
-        const dictionary& dict_;
-
         //- phase type
         autoPtr<phaseSystem> phases_;
 
@@ -76,7 +73,7 @@ public:
         fluid
         (
             const fvMesh& mesh,
-            const dictionary& dict
+            const word& regionName
         );
 
     //- Destructor
@@ -86,11 +83,6 @@ public:
         virtual bool active() const
         {
             return true;
-        }
-
-        const dictionary& dict() const
-        {
-            return dict_;
         }
 
         virtual void correct();

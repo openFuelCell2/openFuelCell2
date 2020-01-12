@@ -37,6 +37,7 @@ SourceFiles
 
 #include "fvMesh.H"
 #include "dictionary.H"
+#include "regionProperties.H"
 #include "regionType.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -73,16 +74,13 @@ protected:
         //- Reference to the mesh database
         const fvMesh& mesh_;
 
-        dictionary dict_;
+        regionProperties region_;
 
 
 public:
 
     //- Constructor
     regionTypeList(const fvMesh& mesh);
-
-    //- Constructor
-    regionTypeList(const fvMesh& mesh, const dictionary& dict);
 
     //- Destructor
     ~regionTypeList();
@@ -93,7 +91,7 @@ public:
         bool active(const bool active = false) const;
 
         //- Reset the source list
-        void reset(const dictionary& dict);
+        void reset(const regionProperties& region);
 
         void correct();
 

@@ -58,6 +58,8 @@ protected:
         //- mesh
         const fvMesh& mesh_;
 
+        const IOdictionary dict_;
+
         //- read from files
         labelIOList faceRegionAddressingIO_;
 
@@ -90,18 +92,12 @@ public:
             dictionary,
             (
                 const fvMesh& mesh,
-                const dictionary& dict
+                const word& name
             ),
-            (mesh, dict)
+            (mesh, name)
         );
 
     // Constructors
-        regionType
-        (
-            const fvMesh& mesh,
-            const dictionary& dict
-        );
-
         regionType
         (
             const fvMesh& mesh,
@@ -115,7 +111,8 @@ public:
         static autoPtr<regionType> New
         (
             const fvMesh& mesh,
-            const dictionary& dict
+            const word& name,
+            const word& modelType
         );
 
     // Member Functions

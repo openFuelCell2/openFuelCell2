@@ -52,13 +52,12 @@ namespace regionTypes
 Foam::regionTypes::fluid::fluid
 (
     const fvMesh& mesh,
-    const dictionary& dict
+    const word& regionName
 )
 :
-    regionType(mesh, dict),
+    regionType(mesh, regionName),
 
-    mesh_(mesh),
-    dict_(dict)
+    mesh_(mesh)
 {
     //- correct fluid, solve the mass and momentum equations, singlePhase and twoPhase.
     phases_ = phaseSystem::New

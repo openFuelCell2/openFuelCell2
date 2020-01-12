@@ -30,13 +30,11 @@ License
 Foam::autoPtr<Foam::regionType> Foam::regionType::New
 (
     const fvMesh& mesh,
-    const dictionary& dict
+    const word& name,
+    const word& modelType
 )
 {
-    word regionType
-    (
-        dict.lookup("regionType")
-    );
+    word regionType(modelType);
 
     Info << "Selecting regionType: "
         << regionType << endl;
@@ -54,8 +52,6 @@ Foam::autoPtr<Foam::regionType> Foam::regionType::New
            << exit(FatalError);
     }
 
-    return cstrIter()(mesh, dict);
+    return cstrIter()(mesh, name);
 }
-
-
 // ************************************************************************* //

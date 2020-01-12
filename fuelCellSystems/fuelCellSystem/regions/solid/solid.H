@@ -56,9 +56,6 @@ class solid
         //- mesh
         const fvMesh& mesh_;
 
-        //- dictionary
-        const dictionary& dict_;
-
        //- solid thermo model
        autoPtr<solidThermo> thermo_;
 
@@ -73,7 +70,7 @@ public:
         solid
         (
             const fvMesh& mesh,
-            const dictionary& dict
+            const word& regionName
         );
 
     //- Destructor

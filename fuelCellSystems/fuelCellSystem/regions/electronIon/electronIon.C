@@ -56,13 +56,12 @@ namespace regionTypes
 Foam::regionTypes::electronIon::electronIon
 (
     const fvMesh& mesh,
-    const dictionary& dict
+    const word& regionName
 )
 :
-    regionType(mesh, dict),
+    regionType(mesh, regionName),
 
     mesh_(mesh),
-    dict_(dict),
     i_
     (
         IOobject

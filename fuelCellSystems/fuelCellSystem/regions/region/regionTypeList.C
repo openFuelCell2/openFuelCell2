@@ -37,38 +37,9 @@ Foam::regionTypeList::regionTypeList
 :
     PtrList<regionType>(),
     mesh_(mesh),
-    dict_
-    (
-        IOdictionary 
-        (
-            IOobject
-            (
-                "regions",
-                mesh.time().constant(),
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            )
-        )
-    )
+    region_(mesh.time())
 {
-    reset(dict_);
-
-    active(true);
-}
-
-
-Foam::regionTypeList::regionTypeList
-(
-    const fvMesh& mesh,
-    const dictionary& dict
-)
-:
-    PtrList<regionType>(),
-    mesh_(mesh),
-    dict_(dict)
-{
-    reset(dict_);
+    reset(region_);
 
     active(true);
 }
@@ -99,37 +70,49 @@ bool Foam::regionTypeList::active(const bool warn) const
 }
 
 
-void Foam::regionTypeList::reset(const dictionary& dict)
+void Foam::regionTypeList::reset(const regionProperties& rp)
 {
-    label count = 0;
-    forAllConstIter(dictionary, dict, iter)
+    wordList regionNames;
+
+    forAllConstIter(HashTable<wordList>, rp, iter)
     {
-        if (iter().isDict())
+        const wordList& regions = iter();
+
+        forAll(regions, regionI)
         {
-            count++;
+            if (findIndex(regionNames, regions[regionI]))
+            {
+                regionNames.append(regions[regionI]);
+            }
         }
     }
 
-    this->setSize(count);
+    this->setSize(regionNames.size());
+
     label i = 0;
-    forAllConstIter(dictionary, dict, iter)
+
+    forAllConstIter(HashTable<wordList>, rp, iter)
     {
-        if (iter().isDict())
+        const word& modelType = iter.key();
+        const wordList& regions = iter();
+
+        if (regions.size())
         {
-            const word& name = iter().keyword();
-            const dictionary& modelDict = iter().dict();
+            forAll(regions, regionI)
+            {
+                Info << "Creating " << regions[regionI] << endl;
 
-            Info << "Creating " << name << endl;
-
-            this->set
-            (
-                i++,
-                regionType::New
+                this->set
                 (
-                    mesh_,
-                    modelDict
-                )
-            );
+                    i++,
+                    regionType::New
+                    (
+                        mesh_,
+                        regions[regionI],
+                        modelType
+                    )
+                );
+            }
         }
     }
 }

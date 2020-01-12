@@ -37,15 +37,6 @@ namespace Foam
 Foam::regionType::regionType
 (
     const fvMesh& mesh,
-    const dictionary& dict
-)
-:
-    regionType(mesh, word(dict.lookup("name")))
-{}
-
-Foam::regionType::regionType
-(
-    const fvMesh& mesh,
     const word& regionName
 )
 :
@@ -61,6 +52,18 @@ Foam::regionType::regionType
     ),
 
     mesh_(mesh),
+
+    dict_
+    (
+        IOobject
+        (
+            "regionProperties",
+            this->time().constant(),
+            *this,
+            IOobject::MUST_READ_IF_MODIFIED,
+            IOobject::NO_WRITE
+        )
+    ),
 
     faceRegionAddressingIO_
     (

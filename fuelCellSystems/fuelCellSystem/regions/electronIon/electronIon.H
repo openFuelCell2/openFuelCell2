@@ -69,9 +69,6 @@ private:
         //-mesh
         const fvMesh& mesh_;
 
-        //- Dictionary for ep parameters
-        const dictionary& dict_;
-
         //- Current density (A/m2)
         volVectorField i_;
 
@@ -128,7 +125,7 @@ public:
         electronIon
         (
             const fvMesh& mesh,
-            const dictionary& dict
+            const word& regionName
         );
 
     //- Destructor
