@@ -7,9 +7,9 @@ ___Chemical reaction___
 > Anode side:
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{2e}^{-}" title="\Large \textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{e}^{-}" />
 > Cathode side:
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H_2O}" title="\Large 0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H_2O}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H}_{2}\textrm{O}" title="\Large 0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H}_{2}\textrm{O}" />
 > Overall Reaction:
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H_2O}" title="\Large \textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H_2O}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H}_{2}\textrm{O}" title="\Large \textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H}_{2}\textrm{O}" />
 
 ___The water may exist in vapor, liquid, or both phases in PEM fuel cells, depending on operating temperature___
 
