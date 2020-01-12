@@ -1,8 +1,8 @@
 #!/bin/sh
 cd ${0%/*} || exit 1    # Run from this directory
 
-fuelCellSystems/Allwclean
-wclean
-tools/Allwclean
+wclean libso decomposeParID
+wclean libso masterRegionToCell
+wclean libso topoSet
 
 #------------------------------------------------------------------------------
