@@ -1,19 +1,19 @@
-__PEM fuel cell application__
+# __PEM fuel cell application__
 
 This is a test case for proton exchange membrane / polymer electrolyte fuel cell.
 
 ___Chemical reaction___
 
-> Anode side:
+- Anode side:
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{2e}^{-}" title="\Large \textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{e}^{-}" />
-> Cathode side:
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H_2O}" title="\Large 0.5\textrm{O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H_2O}" />
-> Overall Reaction:
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H_2O}" title="\Large \textrm{H}_{2}+0.5\textrm{O}_{2}\to\textrm{H_2O}" />
+- Cathode side:
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{0.5O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H}_{2}\textrm{O}" title="\Large \textrm{0.5O}_{2}+\textrm{2H}^{+}+\textrm{2e}^{-}\to\textrm{H}_{2}\textrm{O}" />
+- Overall Reaction:
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}+\textrm{0.5O}_{2}\to\textrm{H}_{2}\textrm{O}" title="\Large \textrm{H}_{2}+\textrm{0.5O}_{2}\to\textrm{H}_{2}\textrm{O}" />
 
 ___The water may exist in vapor, liquid, or both phases in PEM fuel cells, depending on operating temperature___
 
-Operating conditions:
+# Operating conditions:
 
 ```
 Temperature:            353 K, 80 oC
