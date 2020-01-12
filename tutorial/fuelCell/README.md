@@ -2,7 +2,7 @@
 
 This is a test case for proton exchange membrane / polymer electrolyte fuel cell.
 
-___Chemical reaction___
+Chemical reaction:
 
 - Anode side:
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{2e}^{-}" title="\Large \textrm{H}_{2}\to\textrm{2H}^{+}+\textrm{e}^{-}" />
@@ -56,11 +56,11 @@ To view the result:
 
 - In serial
 
-> Residual plot
+  - Residual plot
 ```
 make sPlot | gnuplot sResidualPlot
 ```
-> Simulation results
+  - Simulation results
 ```
 make view
 paraview
@@ -68,11 +68,11 @@ paraview
 
 - In parallel
 
-> Residual plot
+  - Residual plot
 ```
 make pPlot | gnuplot pResidualPlot
 ```
-> Simulation results
+  - Simulation results
 ```
 make reconstruct
 make view
