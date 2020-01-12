@@ -26,7 +26,7 @@ echo "NPROCS = " $NPROCS
 
 cp system/controlDict.mesh system/controlDict
 
-decomposePar >& log.decompose
+decomposePar -fileHandler collated >& log.decompose
 
 cp system/decomposeParDict system/air/.
 cp system/decomposeParDict system/fuel/.
@@ -36,136 +36,121 @@ cp system/decomposeParDict system/phiEA/.
 cp system/decomposeParDict system/phiEC/.
 cp system/decomposeParDict system/phiI/.
 
-decomposePar -region air
-decomposePar -region fuel
-decomposePar -region electrolyte
-decomposePar -region interconnect
-decomposePar -region phiEA
-decomposePar -region phiEC
-decomposePar -region phiI
+decomposePar -region air -fileHandler collated 
+decomposePar -region fuel -fileHandler collated
+decomposePar -region electrolyte -fileHandler collated
+decomposePar -region interconnect -fileHandler collated
+decomposePar -region phiEA -fileHandler collated
+decomposePar -region phiEC -fileHandler collated
+decomposePar -region phiI -fileHandler collated
 
 # mpirun -np $NPROCS setSet -batch ./config/make.zoneSet -constant -noVTK -parallel -noZero
 mv constant/polyMesh/cellZones constant/polyMesh/cellZones_backup
 
+rm -rf processors$NPROCS/constant/*/polyMesh/sets/*
 
-@ I = 0
-while ( $I < $NPROCS )
+mkdir processors$NPROCS/constant/polyMesh/tmp
 
-rm -rf processor$I/constant/*/polyMesh/sets/*
+mv processors$NPROCS/constant/polyMesh/sets/* processors$NPROCS/constant/polyMesh/tmp/.
 
-mkdir processor$I/constant/polyMesh/tmp
+## air, fuel, electrolyte, interconnect
 
-mv processor$I/constant/polyMesh/sets/* processor$I/constant/polyMesh/tmp/.
+cp processors$NPROCS/constant/polyMesh/tmp/air          processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/fuel         processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/electrolyte  processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/interconnect processors$NPROCS/constant/polyMesh/sets/.
 
-cp processor$I/constant/polyMesh/tmp/air processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/fuel processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/electrolyte processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/interconnect processor$I/constant/polyMesh/sets/.
+rm processors$NPROCS/constant/polyMesh/cellZones
 
-rm processor$I/constant/polyMesh/cellZones
+mpirun -np $NPROCS setsToZones -noFlipMap -constant -parallel -fileHandler collated
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
 
-@ I++
+rm processors$NPROCS/constant/polyMesh/sets/*
 
+# sleep to wait for files
+while (! -d processors$NPROCS/1 )
+  sleep 1s
 end
+ls processors$NPROCS/1
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -constant -parallel
+cp -rf processors$NPROCS/1/. processors$NPROCS/constant/.
+rm -rf processors$NPROCS/1
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec splitMeshRegions -cellZonesOnly -parallel >& log.split1
+## phiEA, phiEC
 
-@ I = 0
-while ( $I < $NPROCS )
+cp processors$NPROCS/constant/polyMesh/tmp/phiEA processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/phiEC processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/phiI0 processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/phi0  processors$NPROCS/constant/polyMesh/sets/.
 
-cp -rf processor$I/1/. processor$I/constant/.
-rm -rf processor$I/1
+rm processors$NPROCS/constant/polyMesh/cellZones
 
-rm processor$I/constant/polyMesh/sets/*
+mpirun -np $NPROCS setsToZones -noFlipMap -constant -parallel -fileHandler collated
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated 
 
-cp processor$I/constant/polyMesh/tmp/phiEA processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/phiEC processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/phiI0 processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/phi0 processor$I/constant/polyMesh/sets/.
+rm processors$NPROCS/constant/polyMesh/sets/*
 
-rm processor$I/constant/polyMesh/cellZones
-
-@ I++
-
+# sleep to wait for files
+while (! -d processors$NPROCS/1 )
+  sleep 1s
 end
+ls processors$NPROCS/1
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -constant -parallel
+cp -rf processors$NPROCS/1/phiEA processors$NPROCS/constant/.
+cp -rf processors$NPROCS/1/phiEC processors$NPROCS/constant/.
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec splitMeshRegions -cellZonesOnly -parallel >& log.split2
+rm -rf processors$NPROCS/1
 
-@ I = 0
-while ( $I < $NPROCS )
+## phiI
 
-cp -rf processor$I/1/. processor$I/constant/.
-rm -rf processor$I/1
+cp processors$NPROCS/constant/polyMesh/tmp/phiE0 processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/phiE1 processors$NPROCS/constant/polyMesh/sets/.
+cp processors$NPROCS/constant/polyMesh/tmp/phiI  processors$NPROCS/constant/polyMesh/sets/.
 
-rm -rf processor$I/constant/phiI0
-rm -rf processor$I/constant/phi0
+rm processors$NPROCS/constant/polyMesh/cellZones
 
-##mkdir processor$I/constant/polyMesh/sets
-rm processor$I/constant/polyMesh/sets/*
+mpirun -np $NPROCS setsToZones -noFlipMap -constant -parallel -fileHandler collated
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
 
-cp processor$I/constant/polyMesh/tmp/phiE0 processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/phiE1 processor$I/constant/polyMesh/sets/.
-cp processor$I/constant/polyMesh/tmp/phiI processor$I/constant/polyMesh/sets/.
+rm processors$NPROCS/constant/polyMesh/sets/*
 
-rm processor$I/constant/polyMesh/cellZones
-
-@ I++
-
+# sleep to wait for files
+while (! -d processors$NPROCS/1 )
+  sleep 1s
 end
+ls processors$NPROCS/1
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -constant -parallel
+cp -rf processors$NPROCS/1/phiI processors$NPROCS/constant/.
+rm -rf processors$NPROCS/1
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec splitMeshRegions -cellZonesOnly -parallel >& log.split3
+cp processors$NPROCS/constant/polyMesh/tmp/* processors$NPROCS/constant/polyMesh/sets/.
 
+rm processors$NPROCS/constant/polyMesh/cellZones
 
-@ I = 0
-while ( $I < $NPROCS )
+rm -rf processors$NPROCS/constant/polyMesh/tmp
 
-cp -rf processor$I/1/. processor$I/constant/.
-
-rm -rf processor$I/1
-
-rm -rf processor$I/constant/phiE0
-rm -rf processor$I/constant/phiE1
-
-rm processor$I/constant/polyMesh/sets/*
-
-cp processor$I/constant/polyMesh/tmp/* processor$I/constant/polyMesh/sets/.
-
-rm processor$I/constant/polyMesh/cellZones
-
-rm -rf processor$I/constant/polyMesh/tmp
-
-@ I++
-
-end
-
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -constant -parallel
+mpirun -np $NPROCS setsToZones -noFlipMap -constant -parallel -fileHandler collated
 
 ## patches:
 
 # air zones
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setSet -batch ./config/make.setAir -region air -constant -noVTK -parallel -noZero
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -region air -constant -parallel
+mpirun -np $NPROCS setSet -batch ./config/make.setAir -region air -constant -noVTK -parallel -noZero -fileHandler collated
+mpirun -np $NPROCS setsToZones -noFlipMap -region air -constant -parallel -fileHandler collated
 
 # fuel zones
 #
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setSet -batch ./config/make.setFuel -region fuel -constant -noVTK -parallel -noZero
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -region fuel -constant -parallel
+mpirun -np $NPROCS setSet -batch ./config/make.setFuel -region fuel -constant -noVTK -parallel -noZero -fileHandler collated
+mpirun -np $NPROCS setsToZones -noFlipMap -region fuel -constant -parallel -fileHandler collated
 
 # electronic zones
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setSet -batch ./config/make.setPhiEA -region phiEA -constant -noVTK -parallel -noZero
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -region phiEA -constant -parallel
+mpirun -np $NPROCS setSet -batch ./config/make.setPhiEA -region phiEA -constant -noVTK -parallel -noZero -fileHandler collated
+mpirun -np $NPROCS setsToZones -noFlipMap -region phiEA -constant -parallel -fileHandler collated
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setSet -batch ./config/make.setPhiEC -region phiEC -constant -noVTK -parallel -noZero
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -region phiEC -constant -parallel
+mpirun -np $NPROCS setSet -batch ./config/make.setPhiEC -region phiEC -constant -noVTK -parallel -noZero -fileHandler collated
+mpirun -np $NPROCS setsToZones -noFlipMap -region phiEC -constant -parallel -fileHandler collated
 
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setSet -batch ./config/make.setPhiI -region phiI -constant -noVTK -parallel -noZero
-$MPIEXEC $FLAGS_MPI_BATCH -np $NPROCS foamExec setsToZones -noFlipMap -region phiI -constant -parallel
+mpirun -np $NPROCS setSet -batch ./config/make.setPhiI -region phiI -constant -noVTK -parallel -noZero -fileHandler collated
+mpirun -np $NPROCS setsToZones -noFlipMap -region phiI -constant -parallel -fileHandler collated
 
 rm -rf system/phi0
 rm -rf system/phiI0

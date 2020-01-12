@@ -52,8 +52,8 @@ inertSpecie H2O;
     }
     transport
     {
-        muCoeffs<8>     (959e-6 0 0 0 0 0 0 0);
-        kappaCoeffs<8>  (0.001 0 0 0 0 0 0 0);
+        muCoeffs<8>     (3.645e-3 0 0 0 0 0 0 0);
+        kappaCoeffs<8>  (0.66 0 0 0 0 0 0 0);
     }
 //    specie
 //    {

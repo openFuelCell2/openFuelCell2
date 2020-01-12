@@ -1,21 +1,6 @@
 #!/bin/bash
 # clean
 
-sed -i -e 's/SIDES/Sides/g' constant/polyMesh/boundary
-sed -i -e 's/INLET/Inlet/g' constant/polyMesh/boundary
-sed -i -e 's/OUTLET/Outlet/g' constant/polyMesh/boundary
-sed -i -e 's/wall/patch/g' constant/polyMesh/boundary
-sed -i -e 's/INTERCONNECT/interconnect/g' constant/polyMesh/boundary
-sed -i -e 's/ELECTROLYTE/electrolyte/g' constant/polyMesh/boundary
-sed -i -e 's/AIR/air/g' constant/polyMesh/boundary
-sed -i -e 's/FUEL/fuel/g' constant/polyMesh/boundary
-
-sed -i -e 's/ACL/acl/g' constant/polyMesh/boundary
-sed -i -e 's/CCL/ccl/g' constant/polyMesh/boundary
-
-sed -i -e 's/CATHODE/cathode/g' constant/polyMesh/boundary
-sed -i -e 's/ANODE/anode/g' constant/polyMesh/boundary
-
 cp system/controlDict.mesh system/controlDict
 
 rm -rf constant/*/polyMesh

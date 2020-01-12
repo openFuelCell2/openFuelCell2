@@ -25,6 +25,14 @@ solvers
     p_rgh
     {
         solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0.001;
+    }
+
+    p_rghFinal
+    {
+        solver          PCG;
         preconditioner
         {
             preconditioner  GAMG;
@@ -40,14 +48,8 @@ solvers
             mergeLevels     1;
         }
         tolerance       1e-10;
-        relTol          0.001;
-        maxIter         120;
-    }
-
-    p_rghFinal
-    {
-        $p_rgh;
         relTol          0;
+        maxIter         120;
     }
 
     "(e|h).*"

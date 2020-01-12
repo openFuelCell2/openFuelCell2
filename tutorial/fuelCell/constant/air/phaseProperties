@@ -15,8 +15,8 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-//type          interfaceCompositionPhaseChangeTwoPhaseSystem;
-type          basicTwoPhaseSystem;
+type          interfaceCompositionPhaseChangeTwoPhaseSystem;
+//type          basicTwoPhaseSystem;
 
 phases (air water);
 
@@ -70,27 +70,26 @@ blending
 {
     default
     {
-        type            none;//linear;
-        continuousPhase air;//
+        type            linear;
         minFullyContinuousAlpha.air 0.7;
         minPartlyContinuousAlpha.air 0.3;
         minFullyContinuousAlpha.water 0.7;
         minPartlyContinuousAlpha.water 0.3;
     }
 
-//    heatTransfer
-//    {
-//        type            linear;
-//        minFullyContinuousAlpha.air 1;
-//        minPartlyContinuousAlpha.air 0;
-//        minFullyContinuousAlpha.water 1;
-//        minPartlyContinuousAlpha.water 0;
-//    }
-//
-//    massTransfer
-//    {
-//        $heatTransfer;
-//    }
+    heatTransfer
+    {
+        type            linear;
+        minFullyContinuousAlpha.air 1;
+        minPartlyContinuousAlpha.air 0;
+        minFullyContinuousAlpha.water 1;
+        minPartlyContinuousAlpha.water 0;
+    }
+
+    massTransfer
+    {
+        $heatTransfer;
+    }
 }
 
 surfaceTension

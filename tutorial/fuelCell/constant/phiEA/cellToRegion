@@ -25,11 +25,11 @@ boundaryField
     {
         type            zeroGradient;
     }
-    interconnect1
+    anodeSides
     {
         type            zeroGradient;
     }
-    anodeSides
+    interconnect1
     {
         type            zeroGradient;
     }

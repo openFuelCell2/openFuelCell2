@@ -26,19 +26,11 @@ boundaryField
         type            fixedValue;
         value           uniform 353.15;
     }
-    airInletSides
-    {
-        type            zeroGradient;
-    }
-    cathodeSides
-    {
-        type            zeroGradient;
-    }
     airOutlet
     {
         type            zeroGradient;
     }
-    airOutletSides
+    cathodeSides
     {
         type            zeroGradient;
     }

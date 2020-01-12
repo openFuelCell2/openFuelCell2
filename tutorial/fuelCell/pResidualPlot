@@ -1,0 +1,16 @@
+set logscale y
+set title "Residuals"
+set ylabel 'Residual'
+set xlabel 'Iteration'
+plot
+"< cat log.prun | grep 'Solving for Ux.air' | cut -d' ' -f9 | tr -d ','" every 2 title 'Ux' with lines,\
+"< cat log.prun | grep 'Solving for p_rgh' | cut -d' ' -f9 | tr -d ','" every 6 title 'p' with lines,\
+"< cat log.prun | grep 'Solving for O2.air' | cut -d' ' -f9 | tr -d ','" every 1 title 'YO2' with lines,\
+"< cat log.prun | grep 'Solving for H2.fuel' | cut -d' ' -f9 | tr -d ','" every 1 title 'YH2' with lines,\
+"< cat log.prun | grep 'Solving for H2O.air' | cut -d' ' -f9 | tr -d ','" every 1 title 'YH2O' with lines,\
+"< cat log.prun | grep 'Solving for T' | cut -d' ' -f9 | tr -d ','" title 'T' with lines,\
+"< cat log.prun | grep 'Solving for phi' | cut -d' ' -f9 | tr -d ','" every 3 title 'phi' with lines,\
+"< cat log.prun | grep 'Solving for lambda' | cut -d' ' -f9 | tr -d ','" every 1 title 'w' with lines,\
+
+pause 1
+reread

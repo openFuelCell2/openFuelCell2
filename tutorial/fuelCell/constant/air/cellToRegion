@@ -25,19 +25,11 @@ boundaryField
     {
         type            zeroGradient;
     }
-    airInletSides
-    {
-        type            zeroGradient;
-    }
-    cathodeSides
-    {
-        type            zeroGradient;
-    }
     airOutlet
     {
         type            zeroGradient;
     }
-    airOutletSides
+    cathodeSides
     {
         type            zeroGradient;
     }

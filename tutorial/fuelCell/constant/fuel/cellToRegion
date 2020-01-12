@@ -21,23 +21,15 @@ internalField   uniform 1;
 
 boundaryField
 {
-    fuelInlet
-    {
-        type            zeroGradient;
-    }
-    fuelInletSides
-    {
-        type            zeroGradient;
-    }
     anodeSides
     {
         type            zeroGradient;
     }
-    fuelOutlet
+    fuelInlet
     {
         type            zeroGradient;
     }
-    fuelOutletSides
+    fuelOutlet
     {
         type            zeroGradient;
     }

@@ -17,8 +17,7 @@ FoamFile
 
 combustionModel electroChemicalReaction;
 
-
-dissolved       no;
+dissolved       false;
 
 saturation
 {
