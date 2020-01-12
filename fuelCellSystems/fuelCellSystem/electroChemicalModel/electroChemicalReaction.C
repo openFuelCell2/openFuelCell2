@@ -127,7 +127,8 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     //- Dissolved water model
     dissolvedModel& dW = const_cast<dissolvedModel&>
     (
-        ionPhase.template lookupObject<dissolvedModel>("lambda")
+        ionPhase.template
+        lookupObject<dissolvedModel>(dissolvedModel::modelName)
     );
 
     //- Water activity and water source/sink

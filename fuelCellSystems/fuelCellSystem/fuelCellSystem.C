@@ -180,8 +180,7 @@ Foam::fuelCellSystem::fuelCellSystem
     (
         new regionTypeList
         (
-            mesh_,
-            this->subDict("regions")
+            mesh_
         )
     );
 }
