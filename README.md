@@ -14,13 +14,28 @@ Names:
 
 - Prof. Steven Beale (s.beale@fz-juelich.de), Forschungszentrum Juelich, IEK-14
 
-# How the code works:
+## How the code works:
 
-The code should be based on the foundation version of [OpenFOAM](https://openfoam.org/), version-6. The code will be updated with the latest OpenFOAM. Anyone who has installed OpenFOAM-v6 on his/her linux machine is able to compile the code and runs the test case. [A test case](tutorial/fuelCell) have been prepared for users in tutorial.
+### To compile the code:
 
+The code should be based on the foundation version of [OpenFOAM](https://openfoam.org/), version-6. The code will be updated with the latest OpenFOAM. Anyone who has installed OpenFOAM-v6 on his/her linux machine is able to compile the code and runs the test case.
+
+```
+git clone XXX fuelCell0Foam
+
+cd fuelCell0Foam
+
+./Allwmake
+```
+
+You can also clear the libraries and executable files with
+
+```
+./Allwclean
+```
 ### The cross-section of a fuel cell (as an example):
 
-The computational domain ![Computation domain](images/computationDomain.jpg)
+[A test case](tutorial/fuelCell) have been prepared for users in tutorial. The computational domain ![Computation domain](images/computationDomain.jpg)
 
 In a PEM fuel cell, there are several domains/regions: air, fuel, electrolyte, and interconnect. This can be found from the repository [openFuelCell](http://openfuelcell.sourceforge.net/). However, additional domains/regions, e.g. phiEA, phiEC, and phiI are also necessary for electron/proton and dissolved water transfer.
 
