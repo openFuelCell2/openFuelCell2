@@ -1,0 +1,89 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      combustionProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+combustionModel electroChemicalReaction;
+
+dissolved       true;
+
+saturation
+{
+    type ArdenBuck;
+}
+
+
+activationOverpotentialModel
+{
+    type    ButlerVolmer;
+
+    zoneName  acl;
+
+    phaseChange     false;
+
+    regions
+    {
+        fluid
+        {
+            name    fuel;
+        }
+        electron
+        {
+            name    phiEA;
+        }
+        ion
+        {
+            name    phiI;
+        }
+        dissolved
+        {
+            name    dissolved;
+        }
+    }
+
+    species
+    {
+        H2
+        {
+            ksi     1;
+            cRef    26.3;
+        }
+    }
+
+    phiNames
+    (
+        electron    phi
+        ion         phi
+    );
+
+    j0              1.0e8;
+    relax           0.6;
+    alpha           0.5;
+    gamma           1.5;
+
+    nernstModel
+    {
+        type        standard;
+
+        pRef        101325;
+
+        RxnList
+        (
+            H2     1
+            e      -2
+        );
+    }
+}
+// ************************************************************************* //
