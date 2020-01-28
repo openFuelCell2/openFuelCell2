@@ -241,14 +241,14 @@ void Foam::MultiComponentFickPhaseModel<BasePhaseModel>::correctThermo()
     {
         Yi[inertIndex_] = scalar(1) - Yt;
         Yi[inertIndex_].max(0);
+
+        Yt += Yi[inertIndex_];
     }
-    else
+
+    //- Normalize
+    forAll(Yi, i)
     {
-        forAll(Yi, i)
-        {
-            Yi[i] /= Yt;
-            Yi[i].max(0);
-        }
+        Yi[i] /= Yt;
     }
 
     //- Mixture mole fraction
