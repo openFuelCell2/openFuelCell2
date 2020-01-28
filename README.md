@@ -35,7 +35,7 @@ You can also clear the libraries and executable files with
 ```
 ### The cross-section of a fuel cell (as an example):
 
-[A test case](tutorial/fuelCell) have been prepared for users in tutorial. The computational domain ![Computation domain](images/computationDomain.jpg)
+[Test cases](tutorial/) have been prepared for users in tutorial. The computational domain ![Computation domain](images/computationDomain.jpg)
 
 In a PEM fuel cell, there are several domains/regions: air, fuel, electrolyte, and interconnect. This can be found from the repository [openFuelCell](http://openfuelcell.sourceforge.net/). However, additional domains/regions, e.g. phiEA, phiEC, and phiI are also necessary for electron/proton and dissolved water transfer.
 
