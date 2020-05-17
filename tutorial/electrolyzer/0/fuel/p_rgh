@@ -1,0 +1,86 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+    
+    class           volScalarField;
+    object          p;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 1e5;
+
+boundaryField
+{
+
+    fuelInlet
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    fuelOutlet
+    {
+        type               prghTotalPressure;
+        p                  $internalField;
+        p0                 $internalField;
+        value              $internalField;
+	U                  U.fuel;
+    }
+
+    fuelSides
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    fuelInletSides
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    fuelOutletSides
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    anodeSides
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    fuel_to_interconnect
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    fuel_to_electrolyte //cathode
+    {
+        type               fixedFluxPressure;
+        value              $internalField;
+    }
+}
+
+
+// ************************************************************************* //
