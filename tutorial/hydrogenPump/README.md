@@ -40,12 +40,16 @@ make mesh
 
 Edit values of 'nx' and 'ny' in constant/cellProperties
 
+export NPROCS=nx*ny (value of 'nx' times 'ny')
+
 decomposeParID -coordinate '((0 -0.001 0) (0.04 0.001 0))' -allRegions
 decomposeParID -coordinate '((0 -0.001 0) (0.04 0.001 0))'
 
 make parallel
 
-make prun
+make prun ( the value of 'nx' times 'ny' needs to be changed in 'Makefile')
+or
+mpirun -np nx*ny fuelCell0Foam -parallel -fileHandler collated | tee log.run
 ```
 
 To view the result:
@@ -54,7 +58,9 @@ To view the result:
 
   - Residual plot
 ```
-make sPlot | gnuplot sResidualPlot
+make plot
+or
+gnuplot ResidualPlot
 ```
   - Simulation results
 ```
@@ -66,7 +72,9 @@ paraview
 
   - Residual plot
 ```
-make pPlot | gnuplot pResidualPlot
+make plot
+or
+gnuplot ResidualPlot
 ```
   - Simulation results
 ```

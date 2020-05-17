@@ -9,37 +9,38 @@ mesh:
 	(./pre | tee log.pre);
 	(cp -rf ./system/controlDict.run ./system/controlDict);
 #############
+decompose:
+	(decomposeParID -allRegions -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
+	(decomposeParID -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 parallel:
 	(./parallel.csh | tee log.parallel);
 #############
 run:
-	(mpirun -np 3 fuelCell0Foam -parallel -fileHandler collated | tee log.prun);
-pPlot:
-	(gnuplot pResidualPlot)
+	(mpirun -np 3 fuelCell0Foam -parallel -fileHandler collated | tee log.run);
+plot:
+	(gnuplot ResidualPlot)
 srun:
-	(fuelCell0Foam | tee log.srun);
-sPlot:
-	(gnuplot sResidualPlot)
+	(fuelCell0Foam | tee log.run);
 #############
 ###reconstructMesh:
 ############
 reconstruct:
 	(reconstructParMesh);
-	(reconstructParMesh -region air 					-constant);
-	(reconstructParMesh -region fuel 					-constant);
-	(reconstructParMesh -region electrolyte 	-constant);
-	(reconstructParMesh -region interconnect 	-constant);
-	(reconstructParMesh -region phiEA 				-constant);
-	(reconstructParMesh -region phiEC 				-constant);
-	(reconstructParMesh -region phiI				 -constant);
-	(reconstructPar);
-	(reconstructPar -region air);
-	(reconstructPar -region fuel);
-	(reconstructPar -region electrolyte);
-	(reconstructPar -region interconnect);
-	(reconstructPar -region phiEA);
-	(reconstructPar -region phiEC);
-	(reconstructPar -region phiI);
+	(reconstructParMesh -region air 					-constant -fileHandler collated);
+	(reconstructParMesh -region fuel 					-constant -fileHandler collated);
+	(reconstructParMesh -region electrolyte 	-constant -fileHandler collated);
+	(reconstructParMesh -region interconnect 	-constant -fileHandler collated);
+	(reconstructParMesh -region phiEA 				-constant -fileHandler collated);
+	(reconstructParMesh -region phiEC 				-constant -fileHandler collated);
+	(reconstructParMesh -region phiI				 	-constant -fileHandler collated);
+	(reconstructPar -fileHandler collated);
+	(reconstructPar -region air -fileHandler collated);
+	(reconstructPar -region fuel -fileHandler collated);
+	(reconstructPar -region electrolyte -fileHandler collated);
+	(reconstructPar -region interconnect -fileHandler collated);
+	(reconstructPar -region phiEA -fileHandler collated);
+	(reconstructPar -region phiEC -fileHandler collated);
+	(reconstructPar -region phiI -fileHandler collated);
 #############
 view:
 	(foamToVTK -latestTime);
