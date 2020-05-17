@@ -35,7 +35,6 @@ License
 #include "IsothermalPhaseModel.H"
 #include "AnisothermalPhaseModel.H"
 #include "PurePhaseModel.H"
-#include "MultiComponentPhaseModel.H"
 #include "MultiComponentFickPhaseModel.H"
 #include "InertPhaseModel.H"
 #include "ReactingPhaseModel.H"
@@ -145,30 +144,6 @@ namespace Foam
     typedef
         AnisothermalPhaseModel
         <
-            MultiComponentPhaseModel
-            <
-                InertPhaseModel
-                <
-                    MovingPhaseModel
-                    <
-                        ThermoPhaseModel<phaseModel, rhoReactionThermo>
-                    >
-                >
-            >
-        >
-        multiComponentPhaseModel;
-
-    addNamedToRunTimeSelectionTable
-    (
-        phaseModel,
-        multiComponentPhaseModel,
-        dictionary,
-        multiComponentPhaseModel
-    );
-
-    typedef
-        AnisothermalPhaseModel
-        <
             MultiComponentFickPhaseModel
             <
                 InertPhaseModel
@@ -188,31 +163,6 @@ namespace Foam
         multiComponentFickPhaseModel,
         dictionary,
         multiComponentFickPhaseModel
-    );
-
-    typedef
-        AnisothermalPhaseModel
-        <
-            MultiComponentPhaseModel
-            <
-                ReactingPhaseModel
-                <
-                    MovingPhaseModel
-                    <
-                        ThermoPhaseModel<phaseModel, rhoReactionThermo>
-                    >,
-                    CombustionModel<rhoReactionThermo>
-                >
-            >
-        >
-        reactingPhaseModel;
-
-    addNamedToRunTimeSelectionTable
-    (
-        phaseModel,
-        reactingPhaseModel,
-        dictionary,
-        reactingPhaseModel
     );
 
     typedef

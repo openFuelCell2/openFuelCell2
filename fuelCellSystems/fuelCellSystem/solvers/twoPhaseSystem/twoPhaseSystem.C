@@ -262,8 +262,8 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
 
         Info<< alpha1.name() << " volume fraction = "
             << alpha1.weightedAverage(mesh_.V()).value()
-            << "  Min(alpha." << alpha1.name() << ") = " << min(alpha1).value()
-            << "  Max(alpha." << alpha1.name() << ") = " << max(alpha1).value()
+            << "  Min(alpha." << alpha1.group() << ") = " << min(alpha1).value()
+            << "  Max(alpha." << alpha1.group() << ") = " << max(alpha1).value()
             << endl;
 
         // Ensure the phase-fractions are bounded

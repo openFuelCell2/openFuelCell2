@@ -249,6 +249,10 @@ void Foam::MultiComponentFickPhaseModel<BasePhaseModel>::correctThermo()
     forAll(Yi, i)
     {
         Yi[i] /= Yt;
+
+        Info<< "Y: " << Yi[i].name() << ":"
+            << gMin(Yi[i]) << " -> " << gMax(Yi[i])
+            << endl;
     }
 
     //- Mixture mole fraction
