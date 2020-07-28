@@ -1,0 +1,4 @@
+cellSet anode new boxToCell (-40 -12.0 -0.25e-3) (40.0 12.0 -0.05e-3)
+cellSet ampl  new boxToCell (-40 -12.0 -0.05e-3) (40.0 12.0 -0.03e-3)
+cellSet acl   new boxToCell (-40 -12.0 -0.03e-3) (40.0 12.0  0.01e-3)
+cellSet bpp   new boxToCell (-40 -12.0 -10.0e-3) (40.0 12.0 -0.25e-3)
