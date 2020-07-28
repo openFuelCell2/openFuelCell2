@@ -14,7 +14,7 @@ Chemical reaction:
 # Operating conditions:
 
 ```
-Temperature:            443 K, 160 oC
+Temperature:            433 K, 160 oC
 Pressure:               1 bar/1 bar (anode/cathode)
 Stoichiometric factor:  2/2 (anode/cathode)
 gases:                  (H2 & H2O)/(air& H2O) (anode/cathode)
