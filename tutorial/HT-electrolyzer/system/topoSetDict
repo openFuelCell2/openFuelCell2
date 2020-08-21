@@ -1,0 +1,211 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+
+	{
+        name    phiEA;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+			box (-10 -10 -10)(10 10 -2.5e-5);
+        }
+    }
+
+	{
+        name    phiEC;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+			box (-10 -10 2.5e-5)(10 10 10);
+        }
+    }
+    
+	{
+        name    phiEA;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiEA;
+        }
+    }
+
+	{
+        name    phiEC;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiEC;
+        }
+    }
+
+	{
+        name    phiEA;
+        type    cellZoneSet;
+        action  delete;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set fuel;
+        }
+    }
+        
+	{
+        name    phiEC;
+        type    cellZoneSet;
+        action  delete;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set air;
+        }
+    }
+    
+    
+	{
+        name    phiEC;
+        type    cellZoneSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+			box (-10 -10 2.5e-5)(10 10 0.325e-3);
+        }
+    }
+		
+	{
+        name    phiEA;
+        type    cellZoneSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+			box (-10 -10 -0.325e-3)(10 10 -2.5e-5);
+        }
+    }
+
+	{
+        name    phiI;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -0.075e-3 )(10 10 0.075e-3);
+        }
+    }
+    
+	{
+        name    phiI;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiI;
+        }
+    }
+    
+    
+    
+    {
+        name    phi0;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -10 )(10 10 10);
+        }
+    }
+    
+	{
+        name    phi1;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -10 )(10 10 10);
+        }
+    }
+    
+    {
+        name    phi0;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phi0;
+        }
+    }
+
+    {
+        name    phi1;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phi1;
+        }
+    }
+
+	{
+        name    phi0;
+        type    cellZoneSet;
+        action  delete;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiEA;
+        }
+    }
+
+	{
+        name    phi0;
+        type    cellZoneSet;
+        action  delete;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiEC;
+        }
+    }
+
+	{
+        name    phi1;
+        type    cellZoneSet;
+        action  delete;
+        source  setToCellZone;
+        sourceInfo
+        {
+			set phiI;
+        }
+    }
+);
+// ************************************************************************* //
