@@ -77,6 +77,12 @@ The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the 
 
 - [Oct. 2020] A new branch for openFOAM-ESI
   > The majority part of this update was conducted by Mr. Steffen Hess. The code is able to compile in the OpenFOAM-ESI environment.
+- [Nov. 2020] The new branch for openFOAM-ESI
+  > Some bugs were found and fixed:
+    1. The compiling sequence.
+    2. The locations of gravity fields, g. The files "g" move to constant/.
+    3. The functionObjects library is missing.
+    4. Remove some warnings: apply new functions in OpenFOAM-ESI.
 
 ## Computational domains
 
@@ -143,7 +149,7 @@ The sub-regions can be classified as three different types, namely fluid, solid,
 
 - 1st level:
 
-```bash
+```none
   fuelCellFoam.C  [Main code]
   EEqns.H         [Enthalpy equation]
   createFields.H  [Create necessary fields]
@@ -157,7 +163,7 @@ The sub-regions can be classified as three different types, namely fluid, solid,
 
   - fuelCellSystems
 
-   ```bash
+   ```none
     derivedFvPatchFields          [Two phase models boundary conditions]
     functionObjects               [Two phase models functions]
     interfacialCompositionModels  [Two phase models, interfacial composition, mass transfer, saturation, and surface tension]
@@ -169,7 +175,7 @@ The sub-regions can be classified as three different types, namely fluid, solid,
 
   - tools
 
-   ```bash
+   ```none
     decomposeParID              [Generate cell IDs for manual decomposition]
     masterRegionToCell          [Create cell sets from the regions in master region]
     topoSet                     [Recompile topoSet to include masterRegionToCell]
