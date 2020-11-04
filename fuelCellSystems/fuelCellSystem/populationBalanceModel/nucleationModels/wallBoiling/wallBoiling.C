@@ -67,7 +67,7 @@ wallBoiling
                 IOobject::groupName
                 (
                     "alpha",
-                    dict.lookup("velocityGroup")
+                    dict.get<word>("velocityGroup")
                 )
             ).dPtr()()
         )
@@ -178,7 +178,7 @@ Foam::diameterModels::nucleationModels::wallBoiling::addToNucleationRate
 
             forAll(alphatw, facei)
             {
-                if (dmdt[facei] > small)
+                if (dmdt[facei] > SMALL)
                 {
                     const label faceCelli = faceCells[facei];
 

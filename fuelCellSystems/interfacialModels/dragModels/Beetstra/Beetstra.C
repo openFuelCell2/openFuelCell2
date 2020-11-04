@@ -49,7 +49,7 @@ Foam::dragModels::Beetstra::Beetstra
 )
 :
     dragModel(dict, pair, registerObject),
-    residualRe_("residualRe", dimless, dict.lookup("residualRe"))
+    residualRe_("residualRe", dimless, dict)
 {}
 
 

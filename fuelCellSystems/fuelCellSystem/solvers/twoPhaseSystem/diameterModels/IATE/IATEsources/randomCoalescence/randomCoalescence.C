@@ -88,7 +88,7 @@ Foam::diameterModels::IATEsources::randomCoalescence::R
 
     forAll(R, celli)
     {
-        if (alpha[celli] < alphaMax - small)
+        if (alpha[celli] < alphaMax - SMALL)
         {
             const scalar cbrtAlphaMaxMAlpha = cbrtAlphaMax - cbrt(alpha[celli]);
 

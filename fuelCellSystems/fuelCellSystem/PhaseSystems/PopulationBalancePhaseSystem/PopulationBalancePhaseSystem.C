@@ -74,7 +74,7 @@ PopulationBalancePhaseSystem
 
             if (!this->phasePairs_.found(key))
             {
-                this->phasePairs_.insert
+                this->phasePairs_.set
                 (
                     key,
                     autoPtr<phasePair>
@@ -105,7 +105,7 @@ PopulationBalancePhaseSystem
         }
 
         // Initially assume no mass transfer
-        pDmdt_.insert
+        pDmdt_.set
         (
             pair,
             new volScalarField
@@ -148,7 +148,7 @@ Foam::PopulationBalancePhaseSystem<BasePhaseSystem>::dmdt
 
 
 template<class BasePhaseSystem>
-Foam::Xfer<Foam::PtrList<Foam::volScalarField>>
+Foam::PtrList<Foam::volScalarField>
 Foam::PopulationBalancePhaseSystem<BasePhaseSystem>::dmdts() const
 {
     PtrList<volScalarField> dmdts(BasePhaseSystem::dmdts());
@@ -162,7 +162,7 @@ Foam::PopulationBalancePhaseSystem<BasePhaseSystem>::dmdts() const
         this->addField(pair.phase2(), "dmdt", - pDmdt, dmdts);
     }
 
-    return dmdts.xfer();
+    return dmdts;
 }
 
 

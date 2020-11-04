@@ -15,6 +15,4 @@ LIB_LIBS = \
     -lcompressibleTurbulenceModels \
     -lfiniteVolume \
     -lfvOptions \
-    -lmeshTools \
-    -L$(FOAM_USER_LIBBIN) \
-    -lfuelCellSystem
+    -lmeshTools

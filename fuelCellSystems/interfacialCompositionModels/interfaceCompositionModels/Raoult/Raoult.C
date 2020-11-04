@@ -121,7 +121,7 @@ Foam::interfaceCompositionModels::Raoult<Thermo, OtherThermo>::Yf
     const volScalarField& Tf
 ) const
 {
-    if (this->speciesNames_.contains(speciesName))
+    if (this->speciesNames_.found(speciesName))
     {
         return
              this->otherThermo_.composition().Y(speciesName)
@@ -144,7 +144,7 @@ Foam::interfaceCompositionModels::Raoult<Thermo, OtherThermo>::YfPrime
     const volScalarField& Tf
 ) const
 {
-    if (this->speciesNames_.contains(speciesName))
+    if (this->speciesNames_.found(speciesName))
     {
         return
              this->otherThermo_.composition().Y(speciesName)

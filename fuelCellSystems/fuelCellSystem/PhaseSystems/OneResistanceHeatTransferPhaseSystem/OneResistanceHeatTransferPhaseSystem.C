@@ -72,7 +72,7 @@ heatTransfer() const
     {
         const phaseModel& phase = this->phaseModels_[phasei];
 
-        eqns.insert
+        eqns.set
         (
             phase.name(),
             new fvScalarMatrix(phase.thermo().he(), dimEnergy/dimTime)

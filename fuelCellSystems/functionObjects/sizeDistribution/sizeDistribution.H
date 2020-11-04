@@ -78,8 +78,9 @@ SourceFiles
 #define functionObjects_sizeDistribution_H
 
 #include "fvMeshFunctionObject.H"
-#include "logFiles.H"
+#include "writeFile.H"
 #include "populationBalanceModel.H"
+#include "Enum.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -99,7 +100,7 @@ namespace functionObjects
 class sizeDistribution
 :
     public fvMeshFunctionObject,
-    public logFiles
+    public writeFile
 {
 
 public:
@@ -114,7 +115,7 @@ public:
         };
 
         //- Region type names
-        static const NamedEnum<regionTypes, 2> regionTypeNames_;
+        static const Enum<regionTypes> regionTypeNames_;
 
 
         //- Function type enumeration
@@ -127,7 +128,7 @@ public:
         };
 
         //- Function type names
-        static const NamedEnum<functionTypes, 4> functionTypeNames_;
+        static const Enum<functionTypes> functionTypeNames_;
 
 
         //- abszissa type enumeration
@@ -138,7 +139,7 @@ public:
         };
 
         //- Abszissa type names
-        static const NamedEnum<abszissaTypes, 2> abszissaTypeNames_;
+        static const Enum<abszissaTypes> abszissaTypeNames_;
 
 
 protected:
@@ -209,7 +210,7 @@ protected:
         tmp<scalarField> filterField(const scalarField& field) const;
 
         //- Output file header information
-        virtual void writeFileHeader(const label i);
+        virtual void writeFileHeader(const label i = 0);
 
 
 public:

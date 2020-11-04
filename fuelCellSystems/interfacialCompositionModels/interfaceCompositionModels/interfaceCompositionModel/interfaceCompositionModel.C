@@ -68,7 +68,7 @@ bool Foam::interfaceCompositionModel::transports
     word& speciesName
 ) const
 {
-    if (this->speciesNames_.contains(speciesName))
+    if (this->speciesNames_.found(speciesName))
     {
         return true;
     }

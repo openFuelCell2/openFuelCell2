@@ -38,53 +38,41 @@ namespace functionObjects
 }
 }
 
-template<>
-const char*
-Foam::NamedEnum
+const Foam::Enum
 <
-    Foam::functionObjects::sizeDistribution::regionTypes,
-    2
->::names[] = {"cellZone", "all"};
+    Foam::functionObjects::sizeDistribution::regionTypes
+>
+Foam::functionObjects::sizeDistribution::regionTypeNames_
+({
+    {regionTypes::rtCellZone, "cellZone"},
+    {regionTypes::rtAll, "all"},
+});
 
-template<>
-const char*
-Foam::NamedEnum
-<
-    Foam::functionObjects::sizeDistribution::functionTypes,
-    4
->::names[] =
-    {
-        "numberDensity",
-        "volumeDensity",
-        "numberConcentration",
-        "moments"
-    };
 
-template<>
-const char*
-Foam::NamedEnum
-<
-    Foam::functionObjects::sizeDistribution::abszissaTypes,
-    2
->::names[] = {"diameter", "volume"};
 
-const Foam::NamedEnum
+const Foam::Enum
 <
-    Foam::functionObjects::sizeDistribution::regionTypes,
-    2
-> Foam::functionObjects::sizeDistribution::regionTypeNames_;
+    Foam::functionObjects::sizeDistribution::functionTypes
+>
+Foam::functionObjects::sizeDistribution::functionTypeNames_
+({
+    {functionTypes::ftNdf, "numberDensity"},
+    {functionTypes::ftVdf, "volumeDensity"},
+    {functionTypes::ftNc, "numberConcentration"},
+    {functionTypes::ftMom, "moments"},
+});
 
-const Foam::NamedEnum
-<
-    Foam::functionObjects::sizeDistribution::functionTypes,
-    4
-> Foam::functionObjects::sizeDistribution::functionTypeNames_;
 
-const Foam::NamedEnum
+const Foam::Enum
 <
-    Foam::functionObjects::sizeDistribution::abszissaTypes,
-    2
-> Foam::functionObjects::sizeDistribution::abszissaTypeNames_;
+    Foam::functionObjects::sizeDistribution::abszissaTypes
+>
+Foam::functionObjects::sizeDistribution::abszissaTypeNames_
+({
+
+    {abszissaTypes::atDiameter, "diameter"},
+    {abszissaTypes::atVolume, "volume"},
+});
 
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
@@ -350,9 +338,12 @@ Foam::functionObjects::sizeDistribution::sizeDistribution
 )
 :
     fvMeshFunctionObject(name, runTime, dict),
-    logFiles(obr_, name),
+    writeFile(obr_, name),
     dict_(dict),
-    regionType_(regionTypeNames_.read(dict.lookup("regionType"))),
+    regionType_
+    (
+        regionTypeNames_.get("regionType", dict)
+    ),
     regionName_(word::null),
     functionType_(functionTypeNames_.read(dict.lookup("functionType"))),
     abszissaType_(abszissaTypeNames_.read(dict.lookup("abszissaType"))),
@@ -364,7 +355,7 @@ Foam::functionObjects::sizeDistribution::sizeDistribution
     (
         obr_.lookupObject<Foam::diameterModels::populationBalanceModel>
         (
-            dict.lookup("populationBalance")
+            dict.get<word>("populationBalance")
         )
     ),
     N_(popBal_.sizeGroups().size()),
@@ -374,7 +365,8 @@ Foam::functionObjects::sizeDistribution::sizeDistribution
     sumV_(0.0)
 {
     read(dict);
-    resetName(name);
+    resetFile(name);
+    createFile(name);
 }
 
 
@@ -409,20 +401,16 @@ bool Foam::functionObjects::sizeDistribution::execute()
 
 bool Foam::functionObjects::sizeDistribution::write()
 {
-    logFiles::write();
-
-    if (Pstream::master())
-    {
-        writeTime(file());
-    }
+    writeFileHeader();
+    writeCurrentTime(file());
 
     Log << type() << " " << name() << " write" << nl;
 
     scalarField V(filterField(mesh().V()));
     combineFields(V);
 
-    sumN_ *= 0.0;
-    sumV_ *= 0.0;
+    sumN_ = 0.0;
+    sumV_ = 0.0;
 
     forAll(N_, i)
     {

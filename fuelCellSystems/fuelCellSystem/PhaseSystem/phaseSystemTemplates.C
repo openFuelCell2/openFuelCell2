@@ -208,7 +208,7 @@ void Foam::phaseSystem::generatePairsAndSubModels
                     << exit(FatalError);
             }
 
-            models[key][pair.index(phase)] = tempModelIter().ptr();
+             models[key][pair.index(phase)].set(tempModelIter().ptr());
         }
     }
 }

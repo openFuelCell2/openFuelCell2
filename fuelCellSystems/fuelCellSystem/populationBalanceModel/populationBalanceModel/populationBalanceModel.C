@@ -848,7 +848,7 @@ Foam::diameterModels::populationBalanceModel::populationBalanceModel
     (
         mesh_.lookupObject<phaseModel>
         (
-            IOobject::groupName("alpha", dict_.lookup("continuousPhase"))
+            IOobject::groupName("alpha", dict_.get<word>("continuousPhase"))
         )
     ),
     velocityGroups_(),

@@ -182,14 +182,14 @@ InterfaceCompositionPhaseChangePhaseSystem
             this->phasePairs_[interfaceCompositionModelIter.key()];
         const phasePair unorderedPair(pair.phase1(), pair.phase2());
 
-        iDmdtSu_.insert(pair, new HashPtrTable<volScalarField>());
-        iDmdtSp_.insert(pair, new HashPtrTable<volScalarField>());
+        iDmdtSu_.set(pair, new HashPtrTable<volScalarField>());
+        iDmdtSp_.set(pair, new HashPtrTable<volScalarField>());
 
         forAllConstIter(hashedWordList, compositionModel.species(), memberIter)
         {
             const word& member = *memberIter;
 
-            iDmdtSu_[pair]->insert
+            iDmdtSu_[pair]->set
             (
                 member,
                 new volScalarField
@@ -205,7 +205,7 @@ InterfaceCompositionPhaseChangePhaseSystem
                 )
             );
 
-            iDmdtSp_[pair]->insert
+            iDmdtSp_[pair]->set
             (
                 member,
                 new volScalarField
@@ -247,7 +247,7 @@ Foam::InterfaceCompositionPhaseChangePhaseSystem<BasePhaseSystem>::dmdt
 
 
 template<class BasePhaseSystem>
-Foam::Xfer<Foam::PtrList<Foam::volScalarField>>
+Foam::PtrList<Foam::volScalarField>
 Foam::InterfaceCompositionPhaseChangePhaseSystem<BasePhaseSystem>::dmdts() const
 {
     PtrList<volScalarField> dmdts(BasePhaseSystem::dmdts());
@@ -288,7 +288,7 @@ Foam::InterfaceCompositionPhaseChangePhaseSystem<BasePhaseSystem>::dmdts() const
         }
     }
 
-    return dmdts.xfer();
+    return dmdts;
 }
 
 
@@ -407,7 +407,7 @@ correctInterfaceThermo()
 
         const volScalarField H1(heatTransferModelIter().first()->K());
         const volScalarField H2(heatTransferModelIter().second()->K());
-        const dimensionedScalar HSmall("small", heatTransferModel::dimK, small);
+        const dimensionedScalar HSmall("small", heatTransferModel::dimK, SMALL);
 
         volScalarField& Tf = *this->Tf_[pair];
 

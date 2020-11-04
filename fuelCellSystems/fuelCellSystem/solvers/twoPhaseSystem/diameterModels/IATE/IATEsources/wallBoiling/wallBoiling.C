@@ -124,7 +124,7 @@ Foam::diameterModels::IATEsources::wallBoiling::R
 
             forAll(alphatw, facei)
             {
-                if (dmdt[facei] > small)
+                if (dmdt[facei] > SMALL)
                 {
                     const label faceCelli = faceCells[facei];
                     R[faceCelli] =

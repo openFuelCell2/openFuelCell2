@@ -299,7 +299,7 @@ Foam::functionObjects::phaseForces::phaseForces
     (
         mesh_.lookupObject<phaseModel>
         (
-            IOobject::groupName("alpha", dict.lookup("phaseName"))
+            IOobject::groupName("alpha", dict.get<word>("phaseName"))
         )
     ),
     fluid_(mesh_.lookupObject<phaseSystem>("phaseProperties")),

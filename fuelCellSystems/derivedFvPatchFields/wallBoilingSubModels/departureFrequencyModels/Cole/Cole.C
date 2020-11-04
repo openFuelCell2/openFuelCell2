@@ -1,9 +1,12 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2016-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
+-------------------------------------------------------------------------------
+    Copyright (C) 2016-2018 OpenFOAM Foundation
+    Copyright (C) 2018 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -80,7 +83,7 @@ Cole::fDeparture
 {
     // Gravitational acceleration
     const uniformDimensionedVectorField& g =
-        liquid.mesh().lookupObject<uniformDimensionedVectorField>("g");
+        liquid.mesh().time().lookupObject<uniformDimensionedVectorField>("g");
 
     const scalarField rhoLiquid(liquid.thermo().rho(patchi));
     const scalarField rhoVapor(vapor.thermo().rho(patchi));

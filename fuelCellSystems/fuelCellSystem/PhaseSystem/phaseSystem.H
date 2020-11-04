@@ -172,9 +172,6 @@ protected:
         //- Pressure p_rgh
         volScalarField p_rgh_;
 
-        //- gravity
-        uniformDimensionedVectorField g_;
-
         //- local time step
         autoPtr<volScalarField> trDeltaT_;
 
@@ -423,9 +420,6 @@ public:
 
             inline volScalarField& p_rgh();
 
-            //- Gravity
-            inline const uniformDimensionedVectorField& g() const;
-
             //- return phase status, single or two
             virtual bool isSinglePhase() const = 0;
 
@@ -499,7 +493,8 @@ public:
             virtual tmp<volScalarField> dmdt(const phasePairKey& key) const;
 
             //- Return the mass transfer rates for each phase
-            virtual Xfer<PtrList<volScalarField>> dmdts() const;
+            //- Xfer is not included in openfoam esi
+            virtual PtrList<volScalarField> dmdts() const;
 
             //- Return relative flux magnitude
             virtual tmp<surfaceScalarField> phirMag() const = 0;

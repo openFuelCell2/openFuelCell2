@@ -21,7 +21,7 @@ autoPtr<diffusivityModel> diffusivityModel::New
     const dictionary& dict
 )
 {
-    word diffTypeName = dict.lookup("type");
+    word diffTypeName = dict.get<word>("type");
 
     Info<< "Selecting diffusivity model " << diffTypeName << endl;
 

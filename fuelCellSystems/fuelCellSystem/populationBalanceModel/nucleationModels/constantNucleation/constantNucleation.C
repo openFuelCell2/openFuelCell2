@@ -67,7 +67,7 @@ constantNucleation
                 IOobject::groupName
                 (
                     "alpha",
-                    dict.lookup("velocityGroup")
+                    dict.get<word>("velocityGroup")
                 )
             ).dPtr()()
         )

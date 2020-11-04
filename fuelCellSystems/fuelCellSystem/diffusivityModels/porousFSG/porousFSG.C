@@ -39,7 +39,7 @@ porousFSG::porousFSG
     spB_(dict_.lookup("speciesB")),
     eps_(1),
     tau_(1),
-    dPore_(dict_.lookup("dPore"))
+    dPore_(dict_.get<dimensionedScalar>("dPore"))
     //,
     //doBinary_(dict_.lookup("doBinary"))
 {

@@ -25,7 +25,7 @@ fixedDiffusivity::fixedDiffusivity
 )
 :
     diffusivityModel(mesh, diff, cells, dict),
-    diff0_(dict_.lookup("diff0"))
+    diff0_(dict_.get<dimensionedScalar>("diff0"))
 {}
 
 

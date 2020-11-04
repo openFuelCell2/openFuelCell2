@@ -28,8 +28,8 @@ knudsen::knudsen
 :
     diffusivityModel(mesh, diff, cells, dict),
     Tname_(dict_.lookup("Tname")),
-    dPore_(dict_.lookup("dPore")),
-    MW_(dict_.lookup("MW"))
+    dPore_(dict_.get<dimensionedScalar>("dPore")),
+    MW_(dict_.get<dimensionedScalar>("MW"))
 {}
 
 

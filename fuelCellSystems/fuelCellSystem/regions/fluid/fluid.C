@@ -100,7 +100,7 @@ void Foam::regionTypes::fluid::mapToCell
     Info << "Map " << name() << " to Cell" << endl;
 
     const uniformDimensionedVectorField& g =
-        this->lookupObject<uniformDimensionedVectorField>("g");
+        this->time().lookupObject<uniformDimensionedVectorField>("g");
 
     //- Continuous phase name
     const word& continuous = phases_->continuous();

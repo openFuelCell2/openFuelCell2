@@ -1,4 +1,5 @@
-const uniformDimensionedVectorField& g = g_;
+const uniformDimensionedVectorField& g =
+  runTime.lookupObject<uniformDimensionedVectorField>("g");
 
 #include "readhRef.H"
 

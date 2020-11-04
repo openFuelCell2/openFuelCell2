@@ -133,7 +133,7 @@ public:
         virtual tmp<volScalarField> dmdt(const phasePairKey& key) const;
 
         //- Return the mass transfer rates for each phase
-        virtual Xfer<PtrList<volScalarField>> dmdts() const;
+        virtual PtrList<volScalarField> dmdts() const;
 
         //- Return the mass transfer matrices
         virtual autoPtr<phaseSystem::massTransferTable> massTransfer() const;

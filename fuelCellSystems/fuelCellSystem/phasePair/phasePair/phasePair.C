@@ -54,7 +54,7 @@ Foam::phasePair::phasePair
     phasePairKey(phase1.name(), phase2.name(), ordered),
     phase1_(phase1),
     phase2_(phase2),
-    g_(phase1.mesh().lookupObject<uniformDimensionedVectorField>("g"))
+    g_(phase1.mesh().time().lookupObject<uniformDimensionedVectorField>("g"))
 {}
 
 

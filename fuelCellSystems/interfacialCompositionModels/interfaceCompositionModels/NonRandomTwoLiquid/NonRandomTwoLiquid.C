@@ -78,26 +78,26 @@ NonRandomTwoLiquid
     (
         "alpha12",
         dimless,
-        dict.subDict(species1Name_).lookup("alpha")
+        dict.subDict(species1Name_).get<scalar>("alpha")
     );
     alpha21_ = dimensionedScalar
     (
         "alpha21",
         dimless,
-        dict.subDict(species2Name_).lookup("alpha")
+        dict.subDict(species2Name_).get<scalar>("alpha")
     );
 
     beta12_ = dimensionedScalar
     (
         "beta12",
         dimless/dimTemperature,
-        dict.subDict(species1Name_).lookup("beta")
+        dict.subDict(species1Name_).get<scalar>("beta")
     );
     beta21_ = dimensionedScalar
     (
         "beta21",
         dimless/dimTemperature,
-        dict.subDict(species2Name_).lookup("beta")
+        dict.subDict(species2Name_).get<scalar>("beta")
     );
 
     saturationModel12_.reset
@@ -195,8 +195,8 @@ update
         (
             sqr(X2)
            *(
-                tau21*sqr(G21)/max(sqr(X1 + X2*G21), small)
-              + tau12*G12/max(sqr(X2 + X1*G12), small)
+                tau21*sqr(G21)/max(sqr(X1 + X2*G21), SMALL)
+              + tau12*G12/max(sqr(X2 + X1*G12), SMALL)
             )
         );
     gamma2_ =
@@ -204,8 +204,8 @@ update
         (
             sqr(X1)
            *(
-                tau12*sqr(G12)/max(sqr(X2 + X1*G12), small)
-              + tau21*G21/max(sqr(X1 + X2*G21), small)
+                tau12*sqr(G12)/max(sqr(X2 + X1*G12), SMALL)
+              + tau21*G21/max(sqr(X1 + X2*G21), SMALL)
             )
         );
 }

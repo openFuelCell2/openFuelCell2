@@ -1,9 +1,12 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2016-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
+-------------------------------------------------------------------------------
+    Copyright (C) 2016-2019 OpenFOAM Foundation
+    Copyright (C) 2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -52,7 +55,7 @@ Foam::wallBoilingModels::partitioningModels::
 Lavieville::Lavieville(const dictionary& dict)
 :
     partitioningModel(),
-    alphaCrit_(readScalar(dict.lookup("alphaCrit")))
+    alphaCrit_(dict.get<scalar>("alphaCrit"))
 {}
 
 
@@ -88,7 +91,7 @@ void Foam::wallBoilingModels::partitioningModels::
 Lavieville::write(Ostream& os) const
 {
     partitioningModel::write(os);
-    os.writeKeyword("alphaCrit") << alphaCrit_ << token::END_STATEMENT << nl;
+    os.writeEntry("alphaCrit", alphaCrit_);
 }
 
 

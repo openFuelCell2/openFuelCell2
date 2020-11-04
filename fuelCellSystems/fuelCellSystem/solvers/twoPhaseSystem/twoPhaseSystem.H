@@ -156,34 +156,34 @@ public:
 
             //- Return the implicit force coefficients for the face-based
             //  algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> AFfs() const = 0;
+            virtual PtrList<surfaceScalarField> AFfs() const = 0;
 
             //- Return the force fluxes for the cell-based algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> phiFs
+            virtual PtrList<surfaceScalarField> phiFs
             (
                 const PtrList<volScalarField>& rAUs
             ) = 0;
 
             //- Return the force fluxes for the face-based algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> phiFfs
+            virtual PtrList<surfaceScalarField> phiFfs
             (
                 const PtrList<surfaceScalarField>& rAUfs
             ) = 0;
 
             //- Return the force fluxes for the cell-based algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> phiKdPhis
+            virtual PtrList<surfaceScalarField> phiKdPhis
             (
                 const PtrList<volScalarField>& rAUs
             ) const = 0;
 
             //- Return the force fluxes for the face-based algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> phiKdPhifs
+            virtual PtrList<surfaceScalarField> phiKdPhifs
             (
                 const PtrList<surfaceScalarField>& rAUfs
             ) const = 0;
 
             //- Return the explicit part of the drag force
-            virtual Xfer<PtrList<volVectorField>> KdUByAs
+            virtual PtrList<volVectorField> KdUByAs
             (
                 const PtrList<volScalarField>& rAUs
             ) const = 0;
@@ -201,7 +201,7 @@ public:
             ) = 0;
 
             //- Return the flux corrections for the cell-based algorithm
-            virtual Xfer<PtrList<surfaceScalarField>> ddtCorrByAs
+            virtual PtrList<surfaceScalarField> ddtCorrByAs
             (
                 const PtrList<volScalarField>& rAUs,
                 const bool includeVirtualMass = false

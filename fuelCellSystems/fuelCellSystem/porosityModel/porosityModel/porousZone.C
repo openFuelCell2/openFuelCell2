@@ -64,7 +64,7 @@ void Foam::porousZone::adjustNegativeResistance(dimensionedVector& resist)
 Foam::label Foam::porousZone::fieldIndex(const label i) const
 {
     label index = 0;
-    if (!coordSys_.R().uniform())
+    if (!coordSys_.uniform())
     {
         index = i;
     }

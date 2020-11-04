@@ -116,7 +116,7 @@ Foam::interfaceCompositionModels::Saturated<Thermo, OtherThermo>::Yf
         return
             this->thermo_.Y()[speciesIndex]
            *(scalar(1) - wRatioByP()*saturationModel_->pSat(Tf))
-           /max(scalar(1) - this->thermo_.Y()[saturatedIndex_], small);
+           /max(scalar(1) - this->thermo_.Y()[saturatedIndex_], SMALL);
     }
 }
 
@@ -143,7 +143,7 @@ Foam::interfaceCompositionModels::Saturated<Thermo, OtherThermo>::YfPrime
         return
           - this->thermo_.Y()[speciesIndex]
            *wRatioByP()*saturationModel_->pSatPrime(Tf)
-           /max(scalar(1) - this->thermo_.Y()[saturatedIndex_], small);
+           /max(scalar(1) - this->thermo_.Y()[saturatedIndex_], SMALL);
     }
 }
 

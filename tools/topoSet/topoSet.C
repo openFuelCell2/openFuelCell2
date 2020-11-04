@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 
     #include "createNamedPolyMesh.H"
 
-    const bool noSync = args.optionFound("noSync");
+    const bool noSync = args.found("noSync");
 
     const word dictName("topoSetDict");
     #include "setSystemMeshDictionaryIO.H"
@@ -284,13 +284,14 @@ int main(int argc, char *argv[])
                 case topoSetSource::ADD:
                 case topoSetSource::DELETE:
                 {
-                    Info<< "    Applying source " << word(dict.lookup("source"))
-                        << endl;
+                    const word sourceType(dict.get<word>("source"));
+
+                    Info<< "    Applying source " << sourceType << endl;
                     autoPtr<topoSetSource> source = topoSetSource::New
                     (
-                        dict.lookup("source"),
+                        sourceType,
                         mesh,
-                        dict.subDict("sourceInfo")
+                        dict.optionalSubDict("sourceInfo")
                     );
 
                     source().applyToSet(action, currentSet());
@@ -303,13 +304,14 @@ int main(int argc, char *argv[])
 
                 case topoSetSource::SUBSET:
                 {
-                    Info<< "    Applying source " << word(dict.lookup("source"))
-                        << endl;
+                    const word sourceType(dict.get<word>("source"));
+
+                    Info<< "    Applying source " << sourceType << endl;
                     autoPtr<topoSetSource> source = topoSetSource::New
                     (
-                        dict.lookup("source"),
+                        sourceType,
                         mesh,
-                        dict.subDict("sourceInfo")
+                        dict.optionalSubDict("sourceInfo")
                     );
 
                     // Backup current set.

@@ -153,6 +153,7 @@ SourceFiles
 
 #include "sizeGroup.H"
 #include "phasePair.H"
+#include "HashPtrTable.H"
 #include "pimpleControl.H"
 #include "phaseCompressibleTurbulenceModelFwd.H"
 

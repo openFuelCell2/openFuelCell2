@@ -1,9 +1,12 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2016-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
+-------------------------------------------------------------------------------
+    Copyright (C) 2016-2019 OpenFOAM Foundation
+    Copyright (C) 2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -55,9 +58,9 @@ TolubinskiKostanchuk::TolubinskiKostanchuk
 )
 :
     departureDiameterModel(),
-    dRef_(dict.lookupOrDefault<scalar>("dRef", 6e-4)),
-    dMax_(dict.lookupOrDefault<scalar>("dMax", 0.0014)),
-    dMin_(dict.lookupOrDefault<scalar>("dMin", 1e-6))
+    dRef_(dict.getOrDefault<scalar>("dRef", 6e-4)),
+    dMax_(dict.getOrDefault<scalar>("dMax", 0.0014)),
+    dMin_(dict.getOrDefault<scalar>("dMin", 1e-6))
 {}
 
 
@@ -90,9 +93,9 @@ void Foam::wallBoilingModels::departureDiameterModels::
 TolubinskiKostanchuk::write(Ostream& os) const
 {
     departureDiameterModel::write(os);
-    os.writeKeyword("dRef") << dRef_ << token::END_STATEMENT << nl;
-    os.writeKeyword("dMax") << dMax_ << token::END_STATEMENT << nl;
-    os.writeKeyword("dMin") << dMin_ << token::END_STATEMENT << nl;
+    os.writeEntry("dRef", dRef_);
+    os.writeEntry("dMax", dMax_);
+    os.writeEntry("dMin", dMin_);
 }
 
 

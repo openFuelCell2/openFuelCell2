@@ -97,9 +97,9 @@ TwoResistanceHeatTransferPhaseSystem
 
         volScalarField H1(heatTransferModels_[pair].first()->K());
         volScalarField H2(heatTransferModels_[pair].second()->K());
-        dimensionedScalar HSmall("small", heatTransferModel::dimK, small);
+        dimensionedScalar HSmall("small", heatTransferModel::dimK, SMALL);
 
-        Tf_.insert
+        Tf_.set
         (
             pair,
             new volScalarField
@@ -145,7 +145,7 @@ heatTransfer() const
     {
         const phaseModel& phase = this->phaseModels_[phasei];
 
-        eqns.insert
+        eqns.set
         (
             phase.name(),
             new fvScalarMatrix(phase.thermo().he(), dimEnergy/dimTime)
@@ -179,7 +179,7 @@ heatTransfer() const
            /max
             (
                 Ks.first()() + Ks.second()(),
-                dimensionedScalar("small", heatTransferModel::dimK, small)
+                dimensionedScalar("small", heatTransferModel::dimK, SMALL)
             )
         );
 
@@ -307,7 +307,7 @@ Foam::TwoResistanceHeatTransferPhaseSystem<BasePhaseSystem>::heatTransfer
            /max
             (
                 Ks.first()() + Ks.second()(),
-                dimensionedScalar("small", heatTransferModel::dimK, small)
+                dimensionedScalar("small", heatTransferModel::dimK, SMALL)
             )
         );
 
@@ -536,8 +536,8 @@ correctInterfaceThermo()
         );
 
         // Limit the H[12] to avoid /0
-        H1.max(small);
-        H2.max(small);
+        H1.max(SMALL);
+        H2.max(SMALL);
 
         Tf = (H1*T1 + H2*T2 + dmdt*L)/(H1 + H2);
 

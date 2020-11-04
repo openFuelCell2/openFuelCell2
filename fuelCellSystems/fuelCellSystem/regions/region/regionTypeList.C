@@ -80,7 +80,7 @@ void Foam::regionTypeList::reset(const regionProperties& rp)
 
         forAll(regions, regionI)
         {
-            if (findIndex(regionNames, regions[regionI]))
+            if (!regionNames.found(regions[regionI]))
             {
                 regionNames.append(regions[regionI]);
             }

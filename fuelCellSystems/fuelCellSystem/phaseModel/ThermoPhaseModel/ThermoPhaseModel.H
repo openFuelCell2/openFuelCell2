@@ -118,11 +118,11 @@ public:
             //- Return the laminar thermal conductivity on a patch
             virtual tmp<scalarField> kappa(const label patchi) const;
 
-//            //- Thermal diffusivity for energy of mixture [kg/m/s]
-//            virtual tmp<volScalarField> alphahe() const;
-//
-//            //- Thermal diffusivity for energy of mixture for patch [kg/m/s]
-//            virtual tmp<scalarField> alphahe(const label patchi) const;
+            //- Thermal diffusivity for energy of mixture [kg/m/s]
+            virtual tmp<volScalarField> alphahe() const;
+
+            //- Thermal diffusivity for energy of mixture for patch [kg/m/s]
+            virtual tmp<scalarField> alphahe(const label patchi) const;
 
             //- Return the laminar thermal conductivity, given the turbulent
             //  thermal diffusivity

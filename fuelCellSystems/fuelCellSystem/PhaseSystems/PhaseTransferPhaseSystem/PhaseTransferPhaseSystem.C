@@ -71,7 +71,7 @@ Foam::PhaseTransferPhaseSystem<BasePhaseSystem>::PhaseTransferPhaseSystem
         phaseTransferModelIter
     )
     {
-        this->rDmdt_.insert
+        this->rDmdt_.set
         (
             phaseTransferModelIter.key(),
             phaseSystem::dmdt(phaseTransferModelIter.key()).ptr()
@@ -102,7 +102,7 @@ Foam::PhaseTransferPhaseSystem<BasePhaseSystem>::dmdt
 
 
 template<class BasePhaseSystem>
-Foam::Xfer<Foam::PtrList<Foam::volScalarField>>
+Foam::PtrList<Foam::volScalarField>
 Foam::PhaseTransferPhaseSystem<BasePhaseSystem>::dmdts() const
 {
     PtrList<volScalarField> dmdts(BasePhaseSystem::dmdts());
@@ -116,7 +116,7 @@ Foam::PhaseTransferPhaseSystem<BasePhaseSystem>::dmdts() const
         this->addField(pair.phase2(), "dmdt", - rDmdt, dmdts);
     }
 
-    return dmdts.xfer();
+    return dmdts;
 }
 
 
@@ -140,7 +140,7 @@ Foam::PhaseTransferPhaseSystem<BasePhaseSystem>::massTransfer() const
 
         forAll(Yi, i)
         {
-            eqns.insert
+            eqns.set
             (
                 Yi[i].name(),
                 new fvScalarMatrix(Yi[i], dimMass/dimTime)

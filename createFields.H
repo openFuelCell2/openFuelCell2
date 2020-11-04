@@ -2,6 +2,9 @@
 
 Info << "Creating fuel cell system\n" << endl;
 
+// Read the gravity field
+#include "readGravitationalAcceleration.H"
+
 fuelCellSystem fuelCell(mesh);
 
 regionTypeList& regions = fuelCell.regions();

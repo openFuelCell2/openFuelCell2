@@ -61,19 +61,19 @@ Foam::mixtureViscosityModels::plastic::plastic
     (
         "coeff",
         dimensionSet(1, -1, -1, 0, 0),
-        plasticCoeffs_.lookup("coeff")
+        plasticCoeffs_
     ),
     plasticViscosityExponent_
     (
         "exponent",
         dimless,
-        plasticCoeffs_.lookup("exponent")
+        plasticCoeffs_
     ),
     muMax_
     (
         "muMax",
         dimensionSet(1, -1, -1, 0, 0),
-        plasticCoeffs_.lookup("muMax")
+        plasticCoeffs_
     ),
     alpha_
     (

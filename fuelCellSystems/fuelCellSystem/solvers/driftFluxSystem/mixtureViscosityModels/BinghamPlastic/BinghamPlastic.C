@@ -106,7 +106,7 @@ Foam::mixtureViscosityModels::BinghamPlastic::mu
 
     volScalarField mup(plastic::mu(muc));
 
-    dimensionedScalar tauySmall("tauySmall", tauy.dimensions(), small);
+    dimensionedScalar tauySmall("tauySmall", tauy.dimensions(), SMALL);
 
     return min
     (

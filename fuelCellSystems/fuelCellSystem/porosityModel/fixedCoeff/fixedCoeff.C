@@ -133,52 +133,41 @@ Foam::porousZones::fixedCoeff::~fixedCoeff()
 
 void Foam::porousZones::fixedCoeff::calcTranformModelData()
 {
-    if (coordSys_.R().uniform())
+    // The alpha coefficient as a tensor                   // S.Hess
+    tensor alphaCoeff(Zero);
+    alphaCoeff.xx() = alphaXYZ_.value().x();
+    alphaCoeff.yy() = alphaXYZ_.value().y();
+    alphaCoeff.zz() = alphaXYZ_.value().z();
+
+    // The beta coefficient as a tensor
+    tensor betaCoeff(Zero);
+    betaCoeff.xx() = betaXYZ_.value().x();
+    betaCoeff.yy() = betaXYZ_.value().y();
+    betaCoeff.zz() = betaXYZ_.value().z();
+
+    if (coordSys_.uniform())
     {
-        forAll (cellZoneIDs_, zoneI)
+        forAll(cellZoneIDs_, zonei)
         {
-            alpha_[zoneI].setSize(1);
-            beta_[zoneI].setSize(1);
+            alpha_[zonei].resize(1);
+            beta_[zonei].resize(1);
 
-            alpha_[zoneI][0] = tensor::zero;
-            alpha_[zoneI][0].xx() = alphaXYZ_.value().x();
-            alpha_[zoneI][0].yy() = alphaXYZ_.value().y();
-            alpha_[zoneI][0].zz() = alphaXYZ_.value().z();
-            alpha_[zoneI][0] = coordSys_.R().transformTensor(alpha_[zoneI][0]);
-
-            beta_[zoneI][0] = tensor::zero;
-            beta_[zoneI][0].xx() = betaXYZ_.value().x();
-            beta_[zoneI][0].yy() = betaXYZ_.value().y();
-            beta_[zoneI][0].zz() = betaXYZ_.value().z();
-            beta_[zoneI][0] = coordSys_.R().transformTensor(beta_[zoneI][0]);
+            alpha_[zonei] = coordSys_.transform(alphaCoeff);
+            beta_[zonei] = coordSys_.transform(betaCoeff);
         }
     }
     else
     {
-        forAll(cellZoneIDs_, zoneI)
+        forAll(cellZoneIDs_, zonei)
         {
-            const labelList& cells = mesh_.cellZones()[cellZoneIDs_[zoneI]];
+            const pointUIndList cc
+            (
+                mesh_.cellCentres(),
+                mesh_.cellZones()[cellZoneIDs_[zonei]]
+            );
 
-            alpha_[zoneI].setSize(cells.size());
-            beta_[zoneI].setSize(cells.size());
-
-            forAll(cells, i)
-            {
-                alpha_[zoneI][i] = tensor::zero;
-                alpha_[zoneI][i].xx() = alphaXYZ_.value().x();
-                alpha_[zoneI][i].yy() = alphaXYZ_.value().y();
-                alpha_[zoneI][i].zz() = alphaXYZ_.value().z();
-
-                beta_[zoneI][i] = tensor::zero;
-                beta_[zoneI][i].xx() = betaXYZ_.value().x();
-                beta_[zoneI][i].yy() = betaXYZ_.value().y();
-                beta_[zoneI][i].zz() = betaXYZ_.value().z();
-            }
-
-            const coordinateRotation& R = coordSys_.R(mesh_, cells);
-
-            alpha_[zoneI] = R.transformTensor(alpha_[zoneI], cells);
-            beta_[zoneI] = R.transformTensor(beta_[zoneI], cells);
+            alpha_[zonei] = coordSys_.transform(cc, alphaCoeff);
+            beta_[zonei] = coordSys_.transform(cc, betaCoeff);
         }
     }
 }

@@ -150,13 +150,6 @@ inline const Foam::volScalarField& Foam::phaseSystem::p_rgh() const
 }
 
 
-inline const Foam::uniformDimensionedVectorField&
-Foam::phaseSystem::g() const
-{
-    return g_;
-}
-
-
 inline Foam::volScalarField& Foam::phaseSystem::p_rgh()
 {
     return p_rgh_;

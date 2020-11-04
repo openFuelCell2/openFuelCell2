@@ -67,7 +67,7 @@ Foam::blendingMethods::linear::linear
             (
                 nameFull,
                 dimless,
-                dict.lookup(nameFull)
+                dict
             )
         );
 
@@ -83,7 +83,7 @@ Foam::blendingMethods::linear::linear
             (
                 namePart,
                 dimless,
-                dict.lookup(namePart)
+                dict
             )
         );
 
@@ -128,7 +128,7 @@ Foam::tmp<Foam::volScalarField> Foam::blendingMethods::linear::f1
             max
             (
                 (phase2 - minPartAlpha)
-               /(minFullAlpha - minPartAlpha + small),
+               /(minFullAlpha - minPartAlpha + SMALL),      // S.Hess
                 scalar(0)
             ),
             scalar(1)
@@ -153,7 +153,7 @@ Foam::tmp<Foam::volScalarField> Foam::blendingMethods::linear::f2
             max
             (
                 (phase1 - minPartAlpha)
-               /(minFullAlpha - minPartAlpha + small),
+               /(minFullAlpha - minPartAlpha + SMALL),  // S.Hess
                 scalar(0)
             ),
             scalar(1)

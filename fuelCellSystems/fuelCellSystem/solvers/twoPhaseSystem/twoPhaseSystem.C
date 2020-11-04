@@ -267,11 +267,11 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.maxMin(phase1.residualAlpha().value(), 1);
+        alpha1.clip(phase1.residualAlpha().value(), 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.maxMin(phase2.residualAlpha().value(), 1);
+        alpha2.clip(phase2.residualAlpha().value(), 1);
     }
 }
 

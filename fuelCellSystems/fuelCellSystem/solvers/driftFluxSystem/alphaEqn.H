@@ -188,10 +188,10 @@
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.maxMin(SMALL, 1);
+        alpha1.clip(SMALL, 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.maxMin(SMALL, 1);
+        alpha2.clip(SMALL, 1);
     }
 }

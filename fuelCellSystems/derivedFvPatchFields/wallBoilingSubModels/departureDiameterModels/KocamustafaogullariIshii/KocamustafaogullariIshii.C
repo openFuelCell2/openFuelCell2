@@ -1,9 +1,12 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2016-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
+-------------------------------------------------------------------------------
+    Copyright (C) 2016-2019 OpenFOAM Foundation
+    Copyright (C) 2018-2020 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -60,7 +63,7 @@ KocamustafaogullariIshii::KocamustafaogullariIshii
 )
 :
     departureDiameterModel(),
-    phi_(readScalar(dict.lookup("phi")))
+    phi_(dict.get<scalar>("phi"))
 {}
 
 
@@ -87,7 +90,7 @@ KocamustafaogullariIshii::dDeparture
 {
     // Gravitational acceleration
     const uniformDimensionedVectorField& g =
-        liquid.mesh().lookupObject<uniformDimensionedVectorField>("g");
+        liquid.mesh().time().lookupObject<uniformDimensionedVectorField>("g");
 
     const scalarField rhoLiquid(liquid.thermo().rho(patchi));
     const scalarField rhoVapor(vapor.thermo().rho(patchi));
@@ -111,7 +114,7 @@ void Foam::wallBoilingModels::departureDiameterModels::
 KocamustafaogullariIshii::write(Ostream& os) const
 {
     departureDiameterModel::write(os);
-    os.writeKeyword("phi") << phi_ << token::END_STATEMENT << nl;
+    os.writeEntry("phi", phi_);
 }
 
 

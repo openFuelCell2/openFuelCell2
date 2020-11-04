@@ -99,7 +99,7 @@ ThermalPhaseChangePhaseSystem
         }
 
         // Initially assume no mass transfer
-        iDmdt_.insert
+        iDmdt_.set
         (
             pair,
             new volScalarField
@@ -118,7 +118,7 @@ ThermalPhaseChangePhaseSystem
         );
 
         // Initially assume no mass transfer
-        wDmdt_.insert
+        wDmdt_.set
         (
             pair,
             new volScalarField
@@ -137,7 +137,7 @@ ThermalPhaseChangePhaseSystem
         );
 
         // Initially assume no mass transfer
-        wMDotL_.insert
+        wMDotL_.set
         (
             pair,
             new volScalarField
@@ -188,7 +188,7 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::dmdt
 
 
 template<class BasePhaseSystem>
-Foam::Xfer<Foam::PtrList<Foam::volScalarField>>
+Foam::PtrList<Foam::volScalarField>
 Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::dmdts() const
 {
     PtrList<volScalarField> dmdts(BasePhaseSystem::dmdts());
@@ -211,7 +211,7 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::dmdts() const
         this->addField(pair.phase2(), "dmdt", - wDmdt, dmdts);
     }
 
-    return dmdts.xfer();
+    return dmdts;
 }
 
 
@@ -450,8 +450,8 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::correctInterfaceThermo()
         volScalarField H2(heatTransferModelIter().second()->K());
 
         // Limit the H[12] to avoid /0
-        H1.max(small);
-        H2.max(small);
+        H1.max(SMALL);
+        H2.max(SMALL);
 
         Tf = (H1*T1 + H2*T2 + iDmdtNew*L)/(H1 + H2);
 
@@ -476,8 +476,8 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::correctInterfaceThermo()
 
         volScalarField& wDmdt(*this->wDmdt_[pair]);
         volScalarField& wMDotL(*this->wMDotL_[pair]);
-        wDmdt *= 0;
-        wMDotL *= 0;
+        wDmdt.primitiveFieldRef() *= 0;
+        wMDotL.primitiveFieldRef() *= 0;
 
         bool wallBoilingActive = false;
 

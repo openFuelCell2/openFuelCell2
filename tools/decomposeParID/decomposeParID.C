@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
     );
 
     #include "addRegionOption.H"
-    #include "addAllRegionsOption.H"
     #include "setRootCase.H"
     #include "createTime.H"
 
@@ -66,10 +65,24 @@ int main(int argc, char *argv[])
         )
     );
 
-    label nx(readLabel(cellProperties.lookup("nx")));
-    label ny(readLabel(cellProperties.lookup("ny")));
+    label nx(cellProperties.get<label>("nx"));
+    label ny(cellProperties.get<label>("ny"));
 
-    const wordList regionNames(selectRegionNames(args, runTime));
+    // Get all region names
+    wordList regionNames;
+    if (args.found("allRegions"))
+    {
+        regionNames = regionProperties(runTime).names();
+
+        Info<< "Decomposing all regions in regionProperties" << nl
+            << "    " << flatOutput(regionNames) << nl << endl;
+    }
+    else
+    {
+        regionNames.resize(1);
+        regionNames.first() =
+            args.getOrDefault<word>("region", fvMesh::defaultRegion);
+    }
 
     forAll(regionNames, regioni)
     {
@@ -100,7 +113,7 @@ int main(int argc, char *argv[])
             labelList(mesh.nCells(), 1)
         );
 
-        const bool doDecomposeBlock = args.optionFound("coordinate");
+        const bool doDecomposeBlock = args.found("coordinate");
 
         // this is not actually stringent enough:
         if (!doDecomposeBlock)
@@ -113,7 +126,7 @@ int main(int argc, char *argv[])
 
         Pair<vector> c1c2
         (
-            args.optionLookup("coordinate")()
+            args.lookup("coordinate")()
         );
 
         label NpX(0), NpY(0);

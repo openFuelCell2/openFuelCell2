@@ -1,9 +1,12 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
+-------------------------------------------------------------------------------
+    Copyright (C) 2015-2018 OpenFOAM Foundation
+    Copyright (C) 2018 OpenCFD Ltd
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,9 +28,33 @@ Class
     Foam::compressible::alphatWallBoilingWallFunctionFvPatchScalarField
 
 Description
-    A thermal wall function for simulation of subcooled nucleate wall boiling
-    with runtime selctable submodels for:
-      - wall heat flux partitioning model
+    A thermal wall function for simulation of boiling wall.
+
+    This alpha wall function can handle the following regimes:
+        single phase
+        subcooled nucleate wall boiling
+        transitional boiling
+        film boiling.
+
+    The wall function uses a partition method to transfer heat either
+    to the liquid or vapor phase. At the moment, this function works
+    in a wall temperature fixed mode. i.e, there is no consideration
+    for the sudden change of heat transfer coefficient (htc) after
+    reaching TDBN (deviation from nucleate boiling temperature).
+
+     References:
+    \verbatim
+        Numerical simulation of immersion quenching process of an engine cylinder head
+        Vedanth Srinivasan, Kil-Min Moon, David Greif, De Ming Wang, Myung-hwan Kim
+        Applied Mathematical Modelling 34 (2010) 2111-2128
+    \endverbatim
+
+
+    For the single phase non-boiling regime the standard
+    JayatillekeWallFunction is used.
+
+    For the sub-cool nucleate boiling regime the following runtime
+    selectable submodels are used:
       - nucleation site density
       - bubble departure frequency
       - bubble departure diameter
@@ -54,6 +81,42 @@ Description
         Daejeon, Korea, September 10-12 2012
     \endverbatim
 
+
+    The transition boiling regime flux (TBF) is modelled following
+    a temperature based linear interpolation between the critical heat flux
+    (CHF) and the minimum heat flux (MHF) in such a way that when the wall
+    temperature is between the range of TDBN and the Leidenfrost temperature
+    (TLeiden) a linear interpolation is used between CHF and MHF.
+
+    Thus, the following models are required:
+        LeidenfrostModel
+        CHFModel
+        CHFSubCoolModel
+        MHFModel
+        TDNBModel
+        filmBoilingModel
+
+    The linear interpolation is as follows:
+
+        TBF = CHF*phi + (1 - phi)*MHF
+
+        where phi:
+
+            phi = wp*(Tw - TDNB)/(TLeiden - TDNB),
+
+        where:
+            wp model constant
+            Tw wall temperature
+
+
+    The film boiling regime is applied when Tw is larger than TLeiden. In
+    this regime the corrlation from the filmBoilingModel is used for
+    calculating the cht from the wall.
+
+    The filmBoilingModel is needed in the vapor field in order to calculate
+    the heat transfer to the vapor phase in film boiling regime.
+
+
 Usage
     \table
         Property     | Description             | Required    | Default value
@@ -63,19 +126,30 @@ Usage
         Cmu          | inherited from alphatPhaseChangeJayatillekeWallFunction
         kappa        | inherited from alphatPhaseChangeJayatillekeWallFunction
         E            | inherited from alphatPhaseChangeJayatillekeWallFunction
-        dmdt         | phase change mass flux  | yes         |
+        dmdt         | phase change mass flux  | no         |
         value        | initial alphat value    | yes         |
 
         if phaseType 'vapor':
 
-        partitioningModel|                     | yes         |
+        partitioningModel|                     | yes        |
+        filmBoilingModel |                     | yes        |
+        LeidenfrostModel |                     | yes        |
 
         if phaseType 'liquid':
 
-        partitioningModel|                     | yes         |
-        nucleationSiteModel|                     | yes         |
-        departureDiamModel|                     | yes         |
-        departureFreqModel|                     | yes         |
+        partitioningModel|                     | yes        |
+        nucleationSiteModel|                     | yes      |
+        departureDiamModel|                     | yes       |
+        departureFreqModel|                     | yes       |
+        K                | bubbles area constant| no       | 4
+
+        LeidenfrostModel |                      | no       |
+        CHFModel         |                      | no       |
+        CHFSubCoolModel  |                      | no       |
+        MHFModel         |                      | no       |
+        TDNBModel        |                      | no       |
+        filmBoilingModel |                      | no       |
+        wp               |                      | no       | 1
     \endtable
 
     NOTE: Runtime selectabale submodels may require model specific entries
@@ -84,13 +158,13 @@ Usage
     \verbatim
     hotWall
     {
-        type            compressible::alphatWallBoiling2WallFunction;
+        type            compressible::alphatWallBoilingWallFunction;
         phaseType       liquid;
         Prt             0.85;
         Cmu             0.09;
         kappa           0.41;
         E               9.8;
-        relax           0.001;
+        relax           0.1;
         dmdt            uniform 0;
         partitioningModel
         {
@@ -109,6 +183,34 @@ Usage
         {
             type        Cole;
         }
+
+        LeidenfrostModel
+        {
+            type        Spiegler;
+            Tcrit       647;
+        }
+        CHFModel
+        {
+            type        Zuber;
+        }
+        CHFSubCoolModel
+        {
+            type        HuaXu;
+            Kburn       0.5;
+        }
+        MHFModel
+        {
+            type        Jeschar;
+            Kmhf        1;
+        }
+        TDNBModel
+        {
+            type        Schroeder;
+        }
+        filmBoilingModel
+        {
+            type        Bromley;
+        }
         value           uniform 0.01;
     \endverbatim
 
@@ -123,11 +225,20 @@ SourceFiles
 #ifndef compressible_alphatWallBoilingWallFunctionFvPatchScalarField_H
 #define compressible_alphatWallBoilingWallFunctionFvPatchScalarField_H
 
+#include "Function1.H"
+
 #include "alphatPhaseChangeJayatillekeWallFunctionFvPatchScalarField.H"
 #include "partitioningModel.H"
 #include "nucleationSiteModel.H"
 #include "departureDiameterModel.H"
 #include "departureFrequencyModel.H"
+
+#include "LeidenfrostModel.H"
+#include "filmBoilingModel.H"
+#include "CHFModel.H"
+#include "CHFSubCoolModel.H"
+#include "MHFModel.H"
+#include "TDNBModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -160,45 +271,87 @@ private:
 
     // Private data
 
+        //- Enumeration of regimes per face
+        enum regimeType
+        {
+            subcool,
+            transient,
+            film,
+            nonBoiling
+        };
+
         //- name of the other phase (vapor/liquid phase)
         word otherPhaseName_;
 
         //- Heat source type names
-        static const NamedEnum<phaseType, 2> phaseTypeNames_;
+        static const Enum<phaseType> phaseTypeNames_;
 
         //- Heat source type
         phaseType phaseType_;
 
         //- dmdt relaxationFactor
-        scalar relax_;
+        autoPtr<Function1<scalar>> relax_;
 
         //- Patch face area by cell volume
         scalarField AbyV_;
 
-        //- Convective turbulent thermal diffusivity
-        scalarField alphatConv_;
+        // Sub-cooling nucleating boiling
 
-        //- Departure diameter field
-        scalarField dDep_;
+            //- Convective turbulent thermal diffusivity
+            scalarField alphatConv_;
 
-        //- Quenching surface heat flux
-        scalarField qq_;
+            //- Departure diameter field
+            scalarField dDep_;
 
-        //- Run-time selected heat flux partitioning model
-        autoPtr<wallBoilingModels::partitioningModel>
-            partitioningModel_;
+            //- Quenching surface heat flux
+            scalarField qq_;
 
-        //- Run-time selected nucleation site density model
-        autoPtr<wallBoilingModels::nucleationSiteModel>
-            nucleationSiteModel_;
+            //- Model constant for area of bubbles
+            scalar K_;
 
-        //- Run-time selected bubble departure diameter model
-        autoPtr<wallBoilingModels::departureDiameterModel>
-            departureDiamModel_;
+            //- Run-time selected heat flux partitioning model
+            autoPtr<wallBoilingModels::partitioningModel>
+                partitioningModel_;
 
-        //- Run-time selected bubble departure frequency model
-        autoPtr<wallBoilingModels::departureFrequencyModel>
-            departureFreqModel_;
+            //- Run-time selected nucleation site density model
+            autoPtr<wallBoilingModels::nucleationSiteModel>
+                nucleationSiteModel_;
+
+            //- Run-time selected bubble departure diameter model
+            autoPtr<wallBoilingModels::departureDiameterModel>
+                departureDiamModel_;
+
+            //- Run-time selected bubble departure frequency model
+            autoPtr<wallBoilingModels::departureFrequencyModel>
+                departureFreqModel_;
+
+
+        // Film boiling model
+
+            //- Run-time selected for filmBoiling model
+            autoPtr<wallBoilingModels::filmBoilingModel>
+                filmBoilingModel_;
+
+        // Transition boiling model
+
+            //- Run-time selected for Leidenfrost temperature
+            autoPtr<wallBoilingModels::LeidenfrostModel>
+                LeidenfrostModel_;
+
+            //- Run-time selected for CHF
+            autoPtr<wallBoilingModels::CHFModel> CHFModel_;
+
+            //- Run-time selected for CHF sub-cool
+            autoPtr<wallBoilingModels::CHFSubCoolModel> CHFSoobModel_;
+
+            //- Run-time selected for MHF
+            autoPtr<wallBoilingModels::MHFModel> MHFModel_;
+
+             //- Run-time selected for MHF
+            autoPtr<wallBoilingModels::TDNBModel> TDNBModel_;
+
+            //- Wetting parameter for transient boiling
+            scalar wp_;
 
 
 public:

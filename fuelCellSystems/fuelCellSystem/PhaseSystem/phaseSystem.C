@@ -185,18 +185,6 @@ Foam::phaseSystem::phaseSystem
         mesh
     ),
 
-    g_
-    (
-        IOobject
-        (
-            "g",
-            mesh.time().constant(),
-            mesh,
-            IOobject::MUST_READ,
-            IOobject::NO_WRITE
-        )
-    ),
-
     pRefCell_(0),
     pRefValue_(0.0),
     pimple_(const_cast<fvMesh&>(mesh))
@@ -456,11 +444,11 @@ Foam::tmp<Foam::volScalarField> Foam::phaseSystem::dmdt
 }
 
 
-Foam::Xfer<Foam::PtrList<Foam::volScalarField>> Foam::phaseSystem::dmdts() const
+Foam::PtrList<Foam::volScalarField> Foam::phaseSystem::dmdts() const
 {
     PtrList<volScalarField> dmdts(this->phaseModels_.size());
 
-    return dmdts.xfer();
+    return dmdts;
 }
 
 
@@ -533,7 +521,7 @@ Foam::phaseSystem::heatTransfer() const
     {
         const phaseModel& phase = this->phaseModels_[phasei];
 
-        eqns.insert
+        eqns.set
         (
             phase.name(),
             new fvScalarMatrix(phase.thermo().he(), dimEnergy/dimTime)
@@ -573,7 +561,7 @@ void Foam::phaseSystem::setRDeltaT()
 
     scalar maxDeltaT
     (
-        LTSdict.lookupOrDefault<scalar>("maxDeltaT", great)
+        LTSdict.lookupOrDefault<scalar>("maxDeltaT", GREAT)
     );
 
     scalar rDeltaTSmoothingCoeff

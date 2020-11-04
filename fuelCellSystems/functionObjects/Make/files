@@ -1,4 +1,4 @@
 sizeDistribution/sizeDistribution.C
 phaseForces/phaseForces.C
 
-LIB = $(FOAM_USER_LIBBIN)/libfuelCellEulerFoamFunctionObjects
+LIB = $(FOAM_USER_LIBBIN)/libfuelCellEulerianFunctionObjects
