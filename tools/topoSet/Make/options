@@ -1,8 +1,0 @@
-EXE_INC = \
-    -I../masterRegionToCell/lnInclude \
-    -I$(LIB_SRC)/meshTools/lnInclude
-
-EXE_LIBS = \
-    -lmeshTools \
-    -L$(FOAM_USER_LIBBIN) \
-    -lmasterRegionToCell

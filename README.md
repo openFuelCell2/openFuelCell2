@@ -83,13 +83,9 @@ The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the 
     2. The locations of gravity fields, g. The files "g" move to constant/.
     3. The functionObjects library is missing.
     4. Remove some warnings: apply new functions in OpenFOAM-ESI.
-- [Nov. 2021] The new branch for openFOAM-v8
+- [Nov. 2021] The new branch for openFOAM-2106
   > Some bugs were found and fixed:
     1. The method **heatTransfer(T, cellListIO)** in class "TwoResistanceHeatTransferPhaseSystem" is fixed.
-  > Classes were updated:
-    1. The classes: activationOverpotentialModel, nernstModel, and interfaceCompositionModel were updated accordingly.
-    2. The module "derivedFvPatchFields" is updated from the **multiphaseEulerFoam**.
-    3. A module "multiphaseThermophysicalTransportModels" is copied from the **multiphaseEulerFoam**.
   > Dictionary structure is rearranged:
     1. src: source files
     2. appSrc: application source files
