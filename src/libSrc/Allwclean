@@ -1,0 +1,12 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+wclean libso regionCourantNo
+wclean libso interfacialModels
+wclean libso interfacialCompositionModels
+wclean libso derivedFvPatchFields
+wclean libso functionObjects
+wclean libso fuelCellSystems
+wclean libso multiPhaseCompressibleTurbulenceModels
+
+#------------------------------------------------------------------------------
