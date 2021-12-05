@@ -1,0 +1,90 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+    
+    class           volScalarField;
+    object          p;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 1e5;
+
+boundaryField
+{
+
+    airInlet
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    airOutlet
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    airSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    cathodeSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    airInletSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    airOutletSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    cflSides
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    air_to_interconnect
+    {
+        type               calculated;
+        value              $internalField;
+    }
+
+    air_to_electrolyte //cathode
+    {
+        type               calculated;
+        value              $internalField;
+    }
+      
+}
+
+
+// ************************************************************************* //

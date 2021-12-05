@@ -19,7 +19,7 @@ decompose:
 	(decomposeParID -region phiI -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 	(decomposeParID -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 parallel:
-	(./parallel.csh | tee log.parallel);
+	(./parallel.sh | tee log.parallel);
 #############
 run:
 	(mpirun -np 3 openFuelCell -parallel -fileHandler collated | tee log.run);

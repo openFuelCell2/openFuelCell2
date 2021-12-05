@@ -1,0 +1,111 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 973.15;
+
+boundaryField
+{
+    interconnect0
+    {
+        type            zeroGradient;
+    }
+    interconnectSides
+    {
+        type            zeroGradient;
+    }
+    airInlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    airOutlet
+    {
+        type            zeroGradient;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    airSides
+    {
+        type            zeroGradient;
+    }
+    cathodeSides
+    {
+        type            zeroGradient;
+    }
+    cflSides
+    {
+        type            zeroGradient;
+    }
+    electrolyteSides
+    {
+        type            zeroGradient;
+    }
+    aflSides
+    {
+        type            zeroGradient;
+    } 
+    anodeSides
+    {
+        type            zeroGradient;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    fuelOutlet
+    {
+        type		        zeroGradient;
+    }
+    fuelSides
+    {
+        type            zeroGradient;
+    }
+    interconnect1
+    {
+        type            zeroGradient;
+    }
+    interconnect1Sides
+    {
+        type            zeroGradient;
+    }
+
+    airInletSides
+    {
+        type            zeroGradient;
+    }
+
+    airOutletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelInletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelOutletSides
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //

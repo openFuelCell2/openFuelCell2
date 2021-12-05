@@ -1,0 +1,57 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           volScalarField;
+    object          phi;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 1.0;
+
+boundaryField
+{
+
+	phiI_to_phiE1
+    {
+        type            zeroGradient;
+		gradient			uniform -100;
+    }
+    
+    phiI_to_phiE0
+    {
+        type            zeroGradient;
+		gradient		uniform -100;
+    }
+    
+    electrolyteSides
+    {
+        type            zeroGradient;
+    }
+    
+	cathodeSides
+    {
+        type            zeroGradient;
+    }
+    
+	anodeSides
+    {
+        type            zeroGradient;
+    }
+
+}
+
+
+// ************************************************************************* //

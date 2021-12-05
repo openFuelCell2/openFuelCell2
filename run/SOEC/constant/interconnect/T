@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  8
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "1/interconnect";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 973.15;
+
+boundaryField
+{
+    interconnect0
+    {
+        type            zeroGradient;
+    }
+    interconnectSides
+    {
+        type            zeroGradient;
+    }
+    interconnect1
+    {
+        type            fixedValue;
+        value           uniform 973.15;
+    }
+    interconnect_to_air
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    interconnect_to_fuel
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+}
+
+
+// ************************************************************************* //
