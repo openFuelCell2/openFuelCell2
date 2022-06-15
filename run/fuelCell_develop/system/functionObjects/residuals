@@ -1,0 +1,44 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+    
+     residualsAir
+    {  
+      type            solverInfo;
+      libs            ("libutilityFunctionObjects.so");
+      writeResidualFields no;
+
+      writeControl    timeStep;
+      region 	      air;
+
+      fields (p_rgh e.water H2O.air O2.air);
+    }  
+    
+         residualsFuel
+    {  
+      type            solverInfo;
+      libs            ("libutilityFunctionObjects.so");
+      writeResidualFields no;
+
+      writeControl    timeStep;
+      region 	      fuel;
+
+      fields (p_rgh H2.fuel);
+    }
+
+    residualsPhiI
+    {  
+      type            solverInfo;
+      libs            ("libutilityFunctionObjects.so");
+      writeResidualFields no;
+
+      writeControl    timeStep;
+      region 	      phiI;
+
+      fields (phi lambda);
+    }
+// ************************************************************************* //

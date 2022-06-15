@@ -1,9 +1,9 @@
-/*--------------------------------*- C++ -*----------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  1.5                                   |
-|   \\  /    A nd           | Web:      http://www.openfoam.org               |
-|    \\/     M anipulation  |                                                 |
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
@@ -99,7 +99,7 @@ PIMPLE
     nCorrectors      4;
     nNonOrthogonalCorrectors 0;
 
-    faceMomentum     no;//yes;
+    consistent     true;
 }
 
 relaxationFactors
@@ -108,15 +108,13 @@ relaxationFactors
     {
         default     1;
          p_rgh         0.3;
-//         iDmdt         0.9;
     }
 
     equations
     {
         default     1;
-//        "(e|h).*"      0.1;
-         "U.*"         0.7;
-         "H2.*"        0.995;
+        "U.*"         0.7;
+        "H2.*"        0.995;
     }
 }
 

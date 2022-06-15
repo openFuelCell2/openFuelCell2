@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2013 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -33,9 +33,10 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
     const dictionary& dict
 )
 {
+    //- By default the none type is selected
     word modelType
     (
-        dict.lookup("type")
+        dict.getOrDefault<word>("type", "none")
     );
 
     Info << "Selecting dissolved water transfer Type: "
@@ -54,7 +55,13 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
            << exit(FatalError);
     }
 
-    return cstrIter()(mesh, dict, modelType);
+    return cstrIter()
+    (
+        mesh,
+        modelType == "none"
+      ? dict
+      : dict.subDict(modelType + "Coeffs")
+    );
 }
 
 // ************************************************************************* //

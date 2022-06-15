@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -54,6 +54,11 @@ class regionType
 :
     public fvMesh
 {
+    // Private functions
+
+      //- IOobject
+      IOobject createIOobject(const fvMesh&) const;
+
 protected:
         //- mesh
         const fvMesh& mesh_;
@@ -116,6 +121,16 @@ public:
         );
 
     // Member Functions
+
+        //- Dictionary name
+        static const word dictName;
+
+        //- This dictionary
+        const dictionary& dict() const
+        {
+            return dict_;
+        }
+
         const labelList& faceRegionAddressingIO() const
         {
             return faceRegionAddressingIO_;

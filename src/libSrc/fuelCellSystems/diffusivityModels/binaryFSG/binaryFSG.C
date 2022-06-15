@@ -10,26 +10,28 @@
 
 namespace Foam
 {
-namespace diffusivityModels
-{
-    defineTypeNameAndDebug(binaryFSG, 0);
-    addToRunTimeSelectionTable(diffusivityModel, binaryFSG, dictionary);
+    namespace diffusivityModels
+    {
+        defineTypeNameAndDebug(binaryFSG, 0);
+        addToRunTimeSelectionTable(diffusivityModel, binaryFSG, dictionary);
+    }
+}
 
-    // Standard atmosphere pressure [Pa]
-    // BIPM 10th Conferance Generale des Poids et Mesures (resolution 4)
-    const dimensionedScalar pAtm("pAtm", dimPressure, 1.01325e5);
+// Standard atmosphere pressure [Pa]
+// BIPM 10th Conferance Generale des Poids et Mesures (resolution 4)
+const Foam::dimensionedScalar pAtm("pAtm", Foam::dimPressure, 1.01325e5);
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-binaryFSG::binaryFSG
+Foam::diffusivityModels::binaryFSG::binaryFSG
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 :
-    diffusivityModel(mesh, diff, cells, dict),
+    diffusivityModel(name, mesh, diff, dict),
     Tname_(dict_.lookup("Tname")),
     pName_(dict_.lookup("pName")),
     spA_(dict_.lookup("speciesA")),
@@ -69,18 +71,18 @@ binaryFSG::binaryFSG
 }
 
 
-binaryFSG::binaryFSG
+Foam::diffusivityModels::binaryFSG::binaryFSG
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     word Tname,
     word pName,
     word spA,
     word spB
 )
 :
-    diffusivityModel(mesh, diff, cells),
+    diffusivityModel(name, mesh, diff),
     Tname_(Tname),
     pName_(pName),
     spA_(spA),
@@ -97,31 +99,35 @@ binaryFSG::binaryFSG
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-
-void binaryFSG::setSpecies(word spA, word spB)
+void Foam::diffusivityModels::binaryFSG::setSpecies(word spA, word spB)
 {
     spA_ = spA;
     spB_ = spB;
 
     mA_ = fsgMolecularWeights(spA_);
     vA_ = fsgDiffusionVolumes(spA_);
- 
+
     mB_ = fsgMolecularWeights(spB_);
     vB_ = fsgDiffusionVolumes(spB_);
 }
 
 
-void binaryFSG::writeData()
+void Foam::diffusivityModels::binaryFSG::writeData()
 {
-    Info<< "diffusivityModels::binaryFSG:" << nl;
-    Info<< "    diffusing speciesA molWt diffVol: "
-        << spA_ << " " << mA_ << " " << vA_ << nl;
-    Info<< "   background speciesB molWt diffVol: "
-        << spB_ << " " << mB_ << " " << vB_ << nl;
+    if (firstIndex_)
+    {
+        Info<< "diffusivityModels::binaryFSG:" << nl;
+        Info<< "    diffusing speciesA molWt diffVol: "
+            << spA_ << " " << mA_ << " " << vA_ << nl;
+        Info<< "   background speciesB molWt diffVol: "
+            << spB_ << " " << mB_ << " " << vB_ << nl;
+
+        firstIndex_ = false;
+    }
 }
 
 
-void binaryFSG::evaluate()
+void Foam::diffusivityModels::binaryFSG::evaluate()
 {
     //             1e-3 * T^{1.75} * sqrt(1/mA + 1/mB)
     //  D = 1e-4 * -----------------------------------
@@ -143,17 +149,10 @@ void binaryFSG::evaluate()
     using Foam::sqrt;
     using Foam::cbrt;
 
-#ifdef OF_VER_15
-    // When using OpenFOAM-1.5, 1.5-dev
-    const volScalarField& T = mesh_.db().lookupObject<volScalarField>(Tname_);
-    const volScalarField& p = mesh_.db().lookupObject<volScalarField>(pName_);
-#else
-    // When using OpenFOAM-1.6.x, ...
     const volScalarField& T =
-        mesh_.thisDb().lookupObject<volScalarField>(Tname_);
+        mesh_.lookupObject<volScalarField>(Tname_);
     const volScalarField& p =
-        mesh_.thisDb().lookupObject<volScalarField>(pName_);
-#endif
+        mesh_.lookupObject<volScalarField>(pName_);
 
 
     scalarField pTot = p/pAtm;
@@ -166,12 +165,6 @@ void binaryFSG::evaluate()
 
     }
 }
-
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace diffusivityModels
-} // End namespace Foam
 
 // ************************************************************************* //
 

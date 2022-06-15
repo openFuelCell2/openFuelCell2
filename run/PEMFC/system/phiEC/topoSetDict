@@ -1,0 +1,64 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    cathode;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-40 -12.0 0.05e-3) (40.0 12.0 0.25e-3);
+        }
+    }
+
+    {
+        name    cmpl;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-40 -12.0 0.03e-3) (40.0 12.0 0.05e-3);
+        }
+    }
+
+    {
+        name    ccl;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-40 -12.0 0.01e-3) (40.0 12.0 0.03e-3);
+        }
+    }
+
+    {
+        name    bpp;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-40 -12.0 0.25e-3) (40.0 12.0 10);
+        }
+    }
+);
+// ************************************************************************* //

@@ -1,9 +1,9 @@
 /*---------------------------------------------------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  1.5                                   |
-|   \\  /    A nd           | Web:      http://www.openfoam.org               |
-|    \\/     M anipulation  |                                                 |
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
 FoamFile
@@ -15,8 +15,6 @@ FoamFile
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-// ( without "(" and ")"
 
 anode
 {
@@ -43,26 +41,8 @@ anode
         }
     }
 
-        Cp 568;
-        k  1.7;
-
-// ------------------------ diffusivity model ----------------------------//
-        diffusivity
-        {
-//            type        fixedDiffusivity;
-//            diff0       diff0 [0 2 -1 0 0 0 0]  5e-5;
-            // ------------------------------------------ //
-            type        porousFSG;
-            Tname       T.fuel;
-            pName       p_rgh;
-            alphaName   alpha.fuel;
-            speciesA    H2;     // diffusing species
-            speciesB    H2O;    // background species
-            porosity    0.7;
-            tortuosity  1.15;
-            dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
-            doBinary    false;
-        }
+    Cp        568;
+    k         1.7;
 }
 
 mpl
@@ -90,26 +70,8 @@ mpl
         }
     }
 
-	Cp 3300;
-	k 1;
-
-// ------------------------ diffusivity model ----------------------------//
-        diffusivity
-        {
-//            type        fixedDiffusivity;
-//            diff0       diff0 [0 2 -1 0 0 0 0]  5e-5;
-            // ------------------------------------------ //
-            type        porousFSG;
-            Tname       T.fuel;
-            pName       p_rgh;
-            alphaName   alpha.fuel;
-            speciesA    H2;     // diffusing species
-            speciesB    H2O;    // background species
-            porosity    0.4;
-            tortuosity  1.6;
-            dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
-            doBinary    false;
-        }
+    Cp      3300;
+    k       1;
 }
 
 acl
@@ -137,24 +99,6 @@ acl
         }
     }
 
-	Cp 3300;
-	k 1;
-
-// ------------------------ diffusivity model ----------------------------//
-        diffusivity
-        {
-//            type        fixedDiffusivity;
-//            diff0       diff0 [0 2 -1 0 0 0 0]  5e-5;
-            // ------------------------------------------ //
-            type        porousFSG;
-            Tname       T.fuel;
-            pName       p_rgh;
-            alphaName   alpha.fuel;
-            speciesA    H2;     // diffusing species
-            speciesB    H2O;    // background species
-            porosity    0.3;
-            tortuosity  1.8;
-            dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
-            doBinary    false;
-        }
+    Cp      3300;
+    k       1;
 }

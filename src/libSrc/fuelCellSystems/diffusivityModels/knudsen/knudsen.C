@@ -10,40 +10,42 @@
 
 namespace Foam
 {
-namespace diffusivityModels
-{
-    defineTypeNameAndDebug(knudsen, 0);
-    addToRunTimeSelectionTable(diffusivityModel, knudsen, dictionary);
+    namespace diffusivityModels
+    {
+        defineTypeNameAndDebug(knudsen, 0);
+        addToRunTimeSelectionTable(diffusivityModel, knudsen, dictionary);
+    }
+}
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-knudsen::knudsen
+Foam::diffusivityModels::knudsen::knudsen
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 :
-    diffusivityModel(mesh, diff, cells, dict),
+    diffusivityModel(name, mesh, diff, dict),
     Tname_(dict_.lookup("Tname")),
     dPore_(dict_.get<dimensionedScalar>("dPore")),
     MW_(dict_.get<dimensionedScalar>("MW"))
 {}
 
 
-knudsen::knudsen
+Foam::diffusivityModels::knudsen::knudsen
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     word Tname,
     const dimensionedScalar& dPore,
     const dimensionedScalar& MW
 )
 :
-    diffusivityModel(mesh, diff, cells),
+    diffusivityModel(name, mesh, diff),
     Tname_(Tname),
     dPore_(dPore),
     MW_(MW)
@@ -53,15 +55,20 @@ knudsen::knudsen
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 
-void knudsen::writeData()
+void Foam::diffusivityModels::knudsen::writeData()
 {
-    Info<< "diffusivityModels::knudsen:" << nl
-        << "dPore = " << dPore_ << nl
-        << "MW = " << MW_ << endl;
+    if (firstIndex_)
+    {
+        Info<< "diffusivityModels::knudsen:" << nl
+            << "dPore = " << dPore_ << nl
+            << "MW = " << MW_ << endl;
+
+        firstIndex_ = false;
+    }
 }
 
 
-void knudsen::evaluate()
+void Foam::diffusivityModels::knudsen::evaluate()
 {
     //  D_{knudsen} = (poreDiameter/2)*97*sqrt(T/MW)
     //  where
@@ -72,15 +79,9 @@ void knudsen::evaluate()
     //  second edition (1983), Allyn and Bacon Series in Engineering,
     //  ISBN 0-205-07788-9, page 452.
 
-#ifdef OF_VER_15
-    // When using OpenFOAM-1.5, 1.5-dev
-    const volScalarField& T =
-        mesh_.db().lookupObject<volScalarField>(Tname_);
-#else
     // When using OpenFOAM-1.6.x, ...
     const volScalarField& T =
-        mesh_.thisDb().lookupObject<volScalarField>(Tname_);
-#endif
+        mesh_.lookupObject<volScalarField>(Tname_);
 
     forAll(cells_, i)
     {
@@ -89,12 +90,6 @@ void knudsen::evaluate()
             *Foam::sqrt(T.internalField()[cells_[i]]/MW_.value());
     }
 }
-
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace diffusivityModels
-} // End namespace Foam
 
 // ************************************************************************* //
 

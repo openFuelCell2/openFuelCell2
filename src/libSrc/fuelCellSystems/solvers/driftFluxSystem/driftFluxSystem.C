@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2013-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -160,7 +160,7 @@ bool Foam::driftFluxSystem::isSinglePhase() const
 
 void Foam::driftFluxSystem::solve()
 {
-    Info << "Solve for mixture phase flow:" << endl;
+    Info << "\nSolving for mixture phase flow:" << endl;
 
     fvMesh& mesh = const_cast<fvMesh&>(mesh_);
 
@@ -168,42 +168,42 @@ void Foam::driftFluxSystem::solve()
 
     pimpleControl pimple(mesh);
 
-    #include "createFields.H"
+    #include "./createFields.H"
 
     Switch faceMomentum
     (
         pimple.dict().lookupOrDefault<Switch>("faceMomentum", false)
     );
 
-    #include "pUf/createRDeltaTf.H"
+    #include "./pUf/createRDeltaTf.H"
 
     if (LTS && faceMomentum)
     {
-        #include "setRDeltaTf.H"
+        #include "./setRDeltaTf.H"
     }
 
     // --- Pressure-velocity PIMPLE corrector loop
     while (pimple.loop())
     {
-        #include "alphaEqn.H"
+        #include "./alphaEqn.H"
 
         correct();
 
         mixture_->correct();
 
-        #include "YEqns.H"
+        #include "./YEqns.H"
 
         if (faceMomentum)
         {
-            #include "pUf/UEqns.H"
-            #include "EEqns.H"
-            #include "pUf/pEqn.H"
+            #include "./pUf/UEqns.H"
+            #include "./EEqns.H"
+            #include "./pUf/pEqn.H"
         }
         else
         {
-            #include "pU/UEqns.H"
-            #include "EEqns.H"
-            #include "pU/pEqn.H"
+            #include "./pU/UEqns.H"
+            #include "./EEqns.H"
+            #include "./pU/pEqn.H"
         }
 
         correctKinematics();

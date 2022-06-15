@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -61,7 +61,7 @@ Foam::phaseModel::phaseModel
     ),
 
     fluid_(fluid),
-    name_(phaseName),
+    name_(word::null),
     index_(index),
     residualAlpha_
     (
@@ -75,7 +75,13 @@ Foam::phaseModel::phaseModel
     if (word(fluid.lookup("type")) != "singlePhaseSystem")
     {
         diameterModel_ = diameterModel::New(fluid.subDict(phaseName), *this);
+
+        //- Set name for multi-phase flows
+        name_ = phaseName;
     }
+
+    //- Rename this field
+    this->rename(IOobject::groupName(this->member(), name_));
 }
 
 

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2012-2014 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -57,9 +57,11 @@ class porousZoneList
 :
     public PtrList<porousZone>
 {
-private:
 
     // Private Member Functions
+
+        //- Create IO object if dictionary is present
+        IOobject createIOobject(const fvMesh& mesh) const;
 
         //- Disallow default bitwise copy construct
         porousZoneList(const porousZoneList&);
@@ -75,7 +77,7 @@ protected:
         //- Reference to the mesh database
         const fvMesh& mesh_;
 
-        const dictionary dict_;
+        const IOdictionary dict_;
 
 
 public:
@@ -88,6 +90,8 @@ public:
 
 
     // Member Functions
+
+        static const word dictName;
 
         //- Return active status
         bool active(const bool active = false) const;

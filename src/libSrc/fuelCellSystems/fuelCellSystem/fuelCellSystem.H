@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2013-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -56,6 +56,13 @@ class fuelCellSystem
 :
     public IOdictionary
 {
+    // Private functions
+
+        //- Create IO object if dictionary is present
+        IOobject createIOobject(const fvMesh& mesh) const;
+
+    // Private members
+
         //- Reference to the mesh
         const fvMesh& mesh_;
 
@@ -83,9 +90,8 @@ class fuelCellSystem
         //- flux
         surfaceScalarField phi_;
 
-        //- lists of fluid, solid, electrons, ions, dissolved and activation overpotential
+        //- lists of fluid, solid, electric
         autoPtr<regionTypeList> regions_;
-
 
 public:
 

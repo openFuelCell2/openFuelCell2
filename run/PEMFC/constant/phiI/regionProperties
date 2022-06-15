@@ -1,0 +1,86 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          cellProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//- Add information here
+
+control          false;
+
+relax           -4.0e-11;
+
+dissolveOnOff   true;
+
+dissolved
+{
+    type        standard;
+
+    standardCoeffs
+    {
+        region      phiI; //- region name where the dissolved water is applied
+        nd          0.12; //- 2.5/22
+        rhoOnEW     1964; //- Density devided by equivalent weight
+
+        ksi
+        (
+            acl 1.3       //- Anode adsorb/desorb rate
+            ccl 1.3
+        );
+
+        relax 5.0e-4;     //- Relaxation factor
+    }
+}
+
+sigma
+{
+    ccl
+    {
+        sigmaModel          lambdaSigma;
+
+        lambdaSigmaCoeffs
+        {
+            cellZone            ccl;
+            catalyst            yes;
+
+            porosity            0.3;
+            porNaf              0.3;
+            lambdaName          lambda;
+        }
+    }
+
+    acl
+    {
+        sigmaModel          lambdaSigma;
+
+        lambdaSigmaCoeffs
+        {
+            cellZone            acl;
+            catalyst            yes;
+
+            porosity            0.3;
+            porNaf              0.3;
+            lambdaName          lambda;
+        }
+    }
+
+    membrane
+    {
+        sigmaModel          lambdaSigma;
+        lambdaSigmaCoeffs
+        {
+            cellZone            membrane;
+            lambdaName          lambda;
+        }
+    }
+}

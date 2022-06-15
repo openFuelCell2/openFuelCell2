@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2013-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -73,25 +73,14 @@ Foam::singlePhaseSystem::phiMagMax() const
 
 void Foam::singlePhaseSystem::solve()
 {
-    Info << "Solve for single phase flow:" << endl;
+    Info << "\nSolve for single phase flow:" << endl;
 
     fvMesh& mesh = const_cast<fvMesh&>(mesh_);
 
     const Time& runTime = mesh.time();
 
-    #include "createFields.H"
-
-    Switch faceMomentum
-    (
-        pimple_.dict().lookupOrDefault<Switch>("faceMomentum", false)
-    );
-
-    #include "pUf/createRDeltaTf.H"
-
-    if (LTS && faceMomentum)
-    {
-        #include "setRDeltaTf.H"
-    }
+    #include "./createFields.H"
+    #include "./createRhoUfIfPresent.H"
 
     Switch Y
     (
@@ -101,19 +90,26 @@ void Foam::singlePhaseSystem::solve()
     // --- Pressure-velocity PIMPLE corrector loop
     while (pimple_.loop())
     {
+//        if (pimple_.firstIter() && !pimple_.SIMPLErho())
+//        {
+//            #include "rhoEqn.H"
+//        }
+
         correct();
 
-        #include "YEqns.H"
+        #include "./YEqns.H"
+        #include "./UEqn.H"
 
-        if (faceMomentum)
+        while (pimple_.correct())
         {
-            #include "pUf/UEqn.H"
-            #include "pUf/pEqn.H"
-        }
-        else
-        {
-            #include "pU/UEqn.H"
-            #include "pU/pEqn.H"
+            if (pimple_.consistent())
+            {
+                #include "./pcEqn.H"
+            }
+            else
+            {
+                #include "./pEqn.H"
+            }
         }
 
         correctKinematics();

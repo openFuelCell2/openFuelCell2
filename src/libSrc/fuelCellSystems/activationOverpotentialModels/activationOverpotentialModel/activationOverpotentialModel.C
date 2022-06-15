@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -27,7 +27,11 @@ License
 #include "phaseSystem.H"
 #include "constants.H"
 
+// * * * * * * * * * * * * * * * * Static members  * * * * * * * * * * * * * * //
+
 const Foam::scalar F = Foam::constant::physicoChemical::F.value();
+const Foam::word Foam::activationOverpotentialModel::phiName("phi");
+const Foam::word Foam::activationOverpotentialModel::jName("J");
 
 namespace Foam
 {
@@ -36,6 +40,7 @@ namespace Foam
 }
 
 // * * * * * * * * * * * * * * * * Protected function  * * * * * * * * * * * * * * //
+
 void Foam::activationOverpotentialModel::createNernst()
 {
     //- Create nernst model

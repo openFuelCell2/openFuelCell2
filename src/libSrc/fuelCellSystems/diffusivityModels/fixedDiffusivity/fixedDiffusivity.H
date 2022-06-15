@@ -66,9 +66,9 @@ public:
         //- construct from mesh, diffusivity field, cell list, and dictionary
         fixedDiffusivity
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 

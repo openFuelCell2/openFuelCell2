@@ -1,0 +1,58 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSchemes;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         steadyState;
+}
+
+gradSchemes
+{
+    default         Gauss weightedFlux "k";
+}
+
+divSchemes
+{
+    default                 none;
+    div(rhoCpPhi,T)         Gauss upwind;
+}
+
+laplacianSchemes
+{
+    default              none;
+    laplacian(k,T)       Gauss weightedFlux "k" corrected;
+}
+
+interpolationSchemes
+{
+    default         weightedFlux "k";
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+fluxRequired
+{
+    default         no;
+    T;
+}
+
+
+// ************************************************************************* //

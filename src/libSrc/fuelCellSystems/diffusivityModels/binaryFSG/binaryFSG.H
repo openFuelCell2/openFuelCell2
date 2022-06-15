@@ -112,18 +112,18 @@ public:
         //- construct from mesh, scalarField, labelList and dictionary
         binaryFSG
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 
         //- construct from components
         binaryFSG
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             word Tname_,
             word pName_,
             word spA_,

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -48,7 +48,7 @@ Foam::nernstModel::New
     );
 
     Info<< "Selecting nernstModel for "
-        << phase1.name() << " and " << phase2.name() << ": "
+        << phase1.mesh().name() << ": "
         << nernstModelType << endl;
 
     dictionaryConstructorTable::iterator cstrIter =

@@ -1,5 +1,6 @@
 diffusivityModels/diffusivityModel/diffusivityModel.C
 diffusivityModels/diffusivityModel/newDiffusivityModel.C
+diffusivityModels/diffusivityModel/diffusivityModelList.C
 
 diffusivityModels/fixedDiffusivity/fixedDiffusivity.C
 diffusivityModels/knudsen/knudsen.C
@@ -36,7 +37,7 @@ regions/region/newRegionType.C
 regions/region/regionTypeList.C
 regions/fluid/fluid.C
 regions/solid/solid.C
-regions/electronIon/electronIon.C
+regions/electric/electric.C
 sigmaModels/sigmaModel/sigmaModel.C
 sigmaModels/sigmaModel/newSigmaModel.C
 sigmaModels/sigmaModel/sigmaModelList.C

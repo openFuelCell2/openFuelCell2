@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright held by original author
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -60,9 +60,6 @@ SourceFiles
 namespace Foam
 {
 
-namespace diffusivityModels
-{
-
 /*---------------------------------------------------------------------------*\
                 Class diffusivityModel Declaration
 \*---------------------------------------------------------------------------*/
@@ -80,12 +77,16 @@ protected:
         // Reference to the diffusivity field
         scalarField& diff_;
 
-        // Reference to the list of cell labels for which
+        // The list of cell labels for which
         // diffusivity is to be calculated
-        const labelList& cells_;
+        word zoneName_;
+        labelList cells_;
 
         // Dictionary containing the parameters
         const dictionary dict_;
+
+        //- First time index
+        bool firstIndex_;
 
 
     // Protected member functions
@@ -111,12 +112,12 @@ public:
             diffusivityModel,
             dictionary,
             (
+                const word& name,
                 const fvMesh& mesh,
                 scalarField& diff,
-                const labelList& cells,
                 const dictionary& dict
             ),
-            (mesh, diff, cells, dict)
+            (name, mesh, diff, dict)
         );
 
 
@@ -125,9 +126,9 @@ public:
         //- Return a reference to the selected diffusivity model
         static autoPtr<diffusivityModel> New
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 
@@ -137,17 +138,17 @@ public:
         //- Construct null
         diffusivityModel
         (
+            const word& name,
             const fvMesh& mesh,
-            scalarField& diff,
-            const labelList& cells
+            scalarField& diff
         );
 
         //- Construct from mesh, field, labelList, and dictionary
         diffusivityModel
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 
@@ -201,7 +202,6 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace diffusivityModels
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

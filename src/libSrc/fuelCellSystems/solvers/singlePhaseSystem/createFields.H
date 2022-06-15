@@ -1,3 +1,5 @@
+#include "createRDeltaT.H"
+
 const uniformDimensionedVectorField& g =
   runTime.lookupObject<uniformDimensionedVectorField>("g");
 
@@ -5,9 +7,9 @@ const uniformDimensionedVectorField& g =
 #include "gh.H"
 
 volVectorField& U = phase_.URef();
-surfaceScalarField& phi = phase_.phiRef();
+//surfaceScalarField& phi = phase_.phiRef();
 // const surfaceScalarField& alphaPhi = phase_.alphaPhi();
-surfaceScalarField& rhoPhi = phase_.alphaRhoPhiRef();
+surfaceScalarField& phi = phase_.alphaRhoPhiRef();
 
 rhoThermo& thermo = phase_.thermoRef();
 
@@ -23,4 +25,24 @@ dimensionedScalar pMin
     *this
 );
 
+dimensionedScalar rhoMin
+(
+    "rhoMin",
+    dimDensity,
+    Zero,
+    pimple_.dict()
+);
+
+dimensionedScalar rhoMax
+(
+    "rhoMax",
+    dimDensity,
+    GREAT,
+    pimple_.dict()
+);
+
+p_rgh_ = p - rho*gh;
+
 fv::options& fvOptions = this->fvOptions();
+
+#include "createDpdt.H"

@@ -86,18 +86,18 @@ public:
         //- construct from mesh, diffsivity field labelList and dictionary
         knudsen
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 
         //- construct from components
         knudsen
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             word Tname,
             const dimensionedScalar& dPore,
             const dimensionedScalar& MW

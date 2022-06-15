@@ -24,6 +24,10 @@
 
             Y1[i].max(SMALL);
             Y1[i].min(1.0);
+
+            Info << "Y: " << Y1[i].name() << ":"
+                 << gMin(Y1[i]) << " -> " << gMax(Y1[i])
+                 << endl;
         }
     }
 
@@ -46,6 +50,10 @@
 
             Y2[i].max(SMALL);
             Y2[i].min(1.0);
+
+            Info << "Y: " << Y2[i].name() << ":"
+                 << gMin(Y2[i]) << " -> " << gMax(Y2[i])
+                 << endl;
         }
     }
 }

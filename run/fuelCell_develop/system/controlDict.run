@@ -1,0 +1,143 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     openFuelCell;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         20;
+
+deltaT          0.001;
+
+writeControl    runTime;
+
+writeInterval   5;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  7;
+
+writeCompression  off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+// ************************************************************************* //
+
+functions
+{  
+    #include "functionObjects/pressureLoss_air" 
+    #include "functionObjects/pressureLoss_fuel"
+    #include "functionObjects/residuals"
+
+    
+    probesAir
+    {
+        libs            (sampling);
+        type            probes;
+        region air;
+        name            probes;
+        writeControl    timeStep;
+        writeInterval   1;
+
+        // Fields to be probed
+        fields
+        (
+            j alpha.water O2.air
+        );
+
+        probeLocations
+        (
+            (0.02 0 0.0000105)
+        );
+    }
+    
+        probesFuel
+    {
+        libs            (sampling);
+        type            probes;
+        region fuel;
+        name            probes;
+        writeControl    timeStep;
+        writeInterval   1;
+        fields
+        (
+            j H2.fuel
+        );
+
+        probeLocations
+        (
+            (0.02 0 -0.0000105)
+        );
+    }
+    
+    probePressureAir
+    {
+        libs            (sampling);
+        type            probes;
+        region air;
+        name            probes;
+        writeControl    timeStep;
+        writeInterval   1;
+
+        // Fields to be probed
+        fields
+        (
+            p_rgh U.air
+        );
+
+        probeLocations
+        (
+            (0.015 0 0.00075)
+            (0.035 0 0.00075)
+        );
+    }
+    
+        probePressureFuel
+    {
+        libs            (sampling);
+        type            probes;
+        region fuel;
+        name            probes;
+        writeControl    timeStep;
+        writeInterval   1;
+
+        // Fields to be probed
+        fields
+        (
+            p_rgh U.fuel
+        );
+
+        probeLocations
+        (
+            (0.015 0 -0.00075)
+            (0.035 0 -0.00075)
+        );
+    }
+    
+    
+}
+
+

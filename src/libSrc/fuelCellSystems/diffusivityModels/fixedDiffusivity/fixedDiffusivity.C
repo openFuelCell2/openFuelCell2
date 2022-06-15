@@ -8,23 +8,25 @@
 
 namespace Foam
 {
-namespace diffusivityModels
-{
-    defineTypeNameAndDebug(fixedDiffusivity, 0);
-    addToRunTimeSelectionTable(diffusivityModel, fixedDiffusivity, dictionary);
+    namespace diffusivityModels
+    {
+        defineTypeNameAndDebug(fixedDiffusivity, 0);
+        addToRunTimeSelectionTable(diffusivityModel, fixedDiffusivity, dictionary);
+    }
+}
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-fixedDiffusivity::fixedDiffusivity
+Foam::diffusivityModels::fixedDiffusivity::fixedDiffusivity
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 :
-    diffusivityModel(mesh, diff, cells, dict),
+    diffusivityModel(name, mesh, diff, dict),
     diff0_(dict_.get<dimensionedScalar>("diff0"))
 {}
 
@@ -32,26 +34,25 @@ fixedDiffusivity::fixedDiffusivity
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 
-void fixedDiffusivity::writeData()
+void Foam::diffusivityModels::fixedDiffusivity::writeData()
 {
-    Info<< "diffusivityModels::fixedDiffusivity: " << nl
-        << "   diff0 = " << diff0_ << endl;
-}
-
-
-void fixedDiffusivity::evaluate()
-{
-    forAll(cells_, i)
+    if (firstIndex_)
     {
-	diff_[cells_[i]] = diff0_.value();
+        Info<< "diffusivityModels::fixedDiffusivity: " << nl
+            << "   diff0 = " << diff0_ << endl;
+
+        firstIndex_ = false;
     }
 }
 
 
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace diffusivityModels
-} // End namespace Foam
+void Foam::diffusivityModels::fixedDiffusivity::evaluate()
+{
+    forAll(cells_, i)
+    {
+        diff_[cells_[i]] = diff0_.value();
+    }
+}
 
 // ************************************************************************* //
 
