@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright held by original author
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -31,53 +31,84 @@ License
 
 namespace Foam
 {
-namespace diffusivityModels
-{
-  defineTypeNameAndDebug(diffusivityModel, 0);
-  defineRunTimeSelectionTable(diffusivityModel, dictionary);
+    defineTypeNameAndDebug(diffusivityModel, 0);
+    defineRunTimeSelectionTable(diffusivityModel, dictionary);
+}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-diffusivityModel::diffusivityModel
+Foam::diffusivityModel::diffusivityModel
 (
+    const word& name,
     const fvMesh& mesh,
-    scalarField& diff,
-    const labelList& cells
+    scalarField& diff
 )
 :
     mesh_(mesh),
     diff_(diff),
-    cells_(cells)
-{}
+    zoneName_(name),
+    cells_(),
+    firstIndex_(true)
+{
+    labelList cellZoneIDs = mesh.cellZones().indices(zoneName_);
 
-diffusivityModel::diffusivityModel
+    if (cellZoneIDs.empty())
+    {
+        FatalErrorInFunction
+            << "cannot find cellZone " << zoneName_
+            << exit(FatalError);
+    }
+
+    for (auto& id : cellZoneIDs)
+    {
+        for (auto& cellI : mesh.cellZones()[id])
+        {
+            cells_.append(cellI);
+        }
+    }
+}
+
+Foam::diffusivityModel::diffusivityModel
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 :
     mesh_(mesh),
     diff_(diff),
-    cells_(cells),
-    dict_(dict)
-{}
+    zoneName_(name),
+    cells_(),
+    dict_(dict),
+    firstIndex_(true)
+{
+    labelList cellZoneIDs = mesh.cellZones().indices(zoneName_);
 
+    if (cellZoneIDs.empty())
+    {
+        FatalErrorInFunction
+            << "cannot find cellZone " << zoneName_
+            << exit(FatalError);
+    }
+
+    for (auto& id : cellZoneIDs)
+    {
+        for (auto& cellI : mesh.cellZones()[id])
+        {
+            cells_.append(cellI);
+        }
+    }
+}
 
 // * * * * * * * * * * * * * * * * Destructors * * * * * * * * * * * * * * * //
 
-diffusivityModel::~diffusivityModel()
+Foam::diffusivityModel::~diffusivityModel()
 {}
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 // none
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace diffusivityModels
-} // End namespace Foam
 
 // ************************************************************************* //

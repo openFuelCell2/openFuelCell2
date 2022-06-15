@@ -1,9 +1,9 @@
 /*---------------------------------------------------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  1.5                                   |
-|   \\  /    A nd           | Web:      http://www.openfoam.org               |
-|    \\/     M anipulation  |                                                 |
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
 FoamFile
@@ -19,7 +19,7 @@ FoamFile
 
 dimensions      [1 2 -3 0 0 -1 0];
 
-internalField   uniform 0.1; // uniform (0.566711 0 0);
+internalField   uniform 1.0; // uniform (0.566711 0 0);
 
 boundaryField
 {
@@ -27,23 +27,23 @@ boundaryField
     {
         type            zeroGradient;
     }
-    
+
     phiI_to_phiE0
     {
         type            zeroGradient;
     }
-    
+
     electrolyteSides
     {
         type            zeroGradient;
     }
-    
-	cathodeSides
+
+    cathodeSides
     {
         type            zeroGradient;
     }
-    
-	anodeSides
+
+    anodeSides
     {
         type            zeroGradient;
     }

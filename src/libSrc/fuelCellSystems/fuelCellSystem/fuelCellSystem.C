@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2013-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -32,6 +32,36 @@ License
 
 // * * * * * * * * * * * * * * * Private functions * * * * * * * * * * * * * //
 
+Foam::IOobject Foam::fuelCellSystem::createIOobject
+(
+    const fvMesh& mesh
+) const
+{
+    IOobject io
+    (
+        "cellProperties",
+        mesh.time().constant(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::NO_WRITE
+    );
+
+    if (io.typeHeaderOk<IOdictionary>(true))
+    {
+        Info<< "Get cell properties from " << io.name() << nl << endl;
+
+        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+    }
+    else
+    {
+        Info<< "No cell properties are provided... " << nl << endl;
+
+        io.readOpt(IOobject::NO_READ);
+    }
+
+    return io;
+}
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::fuelCellSystem::fuelCellSystem
@@ -39,17 +69,7 @@ Foam::fuelCellSystem::fuelCellSystem
     const fvMesh& mesh
 )
 :
-    IOdictionary
-    (
-        IOobject
-        (
-            "cellProperties",
-            mesh.time().constant(),
-            mesh,
-            IOobject::MUST_READ_IF_MODIFIED,
-            IOobject::NO_WRITE
-        )
-    ),
+    IOdictionary(createIOobject(mesh)),
 
     mesh_(mesh),
 
@@ -98,9 +118,8 @@ Foam::fuelCellSystem::fuelCellSystem
         mesh,
         dimensionedScalar
         (
-            "contErrCp",
             dimDensity/dimTime*dimSpecificHeatCapacity,
-            0.0
+            Zero
         )
     ),
 
@@ -117,9 +136,8 @@ Foam::fuelCellSystem::fuelCellSystem
         mesh,
         dimensionedScalar
         (
-            "Cp",
             dimSpecificHeatCapacity,
-            0.0
+            Zero
         )
     ),
 
@@ -136,9 +154,8 @@ Foam::fuelCellSystem::fuelCellSystem
         mesh,
         dimensionedScalar
         (
-            "rhoCp",
             dimDensity*dimSpecificHeatCapacity,
-            0.0
+            Zero
         )
     ),
 
@@ -155,9 +172,8 @@ Foam::fuelCellSystem::fuelCellSystem
         mesh,
         dimensionedScalar
         (
-            "rc", 
             dimVelocity*dimDensity*dimSpecificHeatCapacity*dimArea,
-            0
+            Zero
         )
     ),
 
@@ -172,10 +188,10 @@ Foam::fuelCellSystem::fuelCellSystem
             IOobject::AUTO_WRITE
         ),
         mesh,
-        dimensionedScalar("phi", dimVelocity*dimArea, 0)
+        dimensionedScalar(dimVelocity*dimArea, Zero)
     )
 {
-    Info << "Creating regions:" << endl;
+    Info << nl << "Creating regions: " << endl;
     regions_.set
     (
         new regionTypeList
@@ -220,7 +236,7 @@ void Foam::fuelCellSystem::mapToCell()
 
     Qdot_ *= 0.0;
 
-    Info<< "Map to cell" << endl;
+    Info<< "\nMap to cell \n" << endl;
 
     regions_->mapToCell(*this);
 }
@@ -228,7 +244,7 @@ void Foam::fuelCellSystem::mapToCell()
 
 void Foam::fuelCellSystem::mapFromCell()
 {
-    Info<< "Map from cell" << endl;
+    Info<< "\nMap from cell \n" << endl;
 
     regions_->mapFromCell(*this);
 }

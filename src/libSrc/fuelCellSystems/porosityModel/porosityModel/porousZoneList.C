@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2012-2014 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -27,6 +27,42 @@ License
 #include "volFields.H"
 #include "IOdictionary.H"
 
+// * * * * * * * * * * * * * * * * Static data  * * * * * * * * * * * * * * //
+
+const Foam::word Foam::porousZoneList::dictName("porousZones");
+
+// * * * * * * * * * * * * * * Private Functions * * * * * * * * * * * * * * //
+
+Foam::IOobject Foam::porousZoneList::createIOobject
+(
+    const fvMesh& mesh
+) const
+{
+    IOobject io
+    (
+        dictName,
+        mesh.time().constant(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::NO_WRITE
+    );
+
+    if (io.typeHeaderOk<IOdictionary>(true))
+    {
+        Info<< "Creating porous model list from " << io.name() << nl << endl;
+
+        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+    }
+    else
+    {
+        Info<< "No porous models present... " << nl << endl;
+
+        io.readOpt(IOobject::NO_READ);
+    }
+
+    return io;
+}
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::porousZoneList::porousZoneList
@@ -36,20 +72,7 @@ Foam::porousZoneList::porousZoneList
 :
     PtrList<porousZone>(),
     mesh_(mesh),
-    dict_
-    (
-        IOdictionary 
-        (
-            IOobject
-            (
-                "porousZones",
-                mesh.time().constant(),
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            )
-        )
-    )
+    dict_(createIOobject(mesh))
 {
     reset(dict_);
 

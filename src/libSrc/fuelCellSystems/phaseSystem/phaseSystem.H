@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -196,6 +196,9 @@ protected:
 
 
     // Protected member functions
+
+        //- Create IO dictionary
+        IOobject createIOobject(const fvMesh& mesh) const;
 
         //- Calculate and return the mixture flux
         tmp<surfaceScalarField> calcPhi

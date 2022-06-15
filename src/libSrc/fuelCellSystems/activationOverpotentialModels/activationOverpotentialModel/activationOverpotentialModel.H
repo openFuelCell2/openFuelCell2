@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -135,6 +135,10 @@ public:
         );
 
     // Member Functions
+
+        //- Names of phi and j
+        static const word phiName;
+        static const word jName;
 
         //- Lookup regionType
         const regionType& region(const word& name) const

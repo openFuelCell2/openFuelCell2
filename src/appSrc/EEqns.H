@@ -11,15 +11,11 @@
       - QdotCell
     );
 
-    // Apply under-relaxation: not allowed
-    // Under-relaxation in solid conduction (which dominates) creates a large
-    // thermal inertia.  HJ, 25/May/2011
+    // We have to relax the equation sometimes...
+    // But this greatly decreases convergence speed.
     E1Eqn.relax();
 
     E1Eqn.solve();
-
-//     TCell.max(273);
-//     TCell.min(373);
 
 Info<< "T"
         << ": min = " << Foam::min(TCell.primitiveField())

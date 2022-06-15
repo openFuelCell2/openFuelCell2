@@ -1,0 +1,51 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    T1
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-6;
+        relTol           0;
+    }
+
+    T2
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-6;
+        relTol           0;
+    }
+
+    T
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-11;
+        relTol           0;
+    }
+}
+
+relaxationFactors
+{
+//    T               0.99;
+}
+
+
+// ************************************************************************* //

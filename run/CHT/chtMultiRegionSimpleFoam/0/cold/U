@@ -1,0 +1,48 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           volVectorField;
+    object          U;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField    uniform (0. 0 0);  // uniform (0.209933 0 0);
+
+boundaryField
+{
+    ".*"
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    coldInlet
+    {
+        type            fixedValue;
+    		value		        uniform (-2.36 0 0);
+    }
+
+    coldOutlet
+    {
+        type           inletOutlet;
+        phi            phi;
+        value          $internalField;
+        inletValue     uniform (0 0 0);
+    }
+}
+
+
+// ************************************************************************* //

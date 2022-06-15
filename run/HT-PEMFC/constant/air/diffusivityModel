@@ -1,0 +1,85 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      diffusivityModel.air;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+air
+{
+    type            binaryFSG;
+
+    binaryFSGCoeffs
+    {
+        Tname       T;
+        pName       p;
+        speciesA    N2;
+        speciesB    O2;
+    }
+}
+
+cathode
+{
+    type              porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p;
+        alphaName   alpha;
+        speciesA    N2;     // diffusing species
+        speciesB    O2;     // background species
+        porosity    0.7;
+        tortuosity  1.15;
+        dPore       dPore [0 1 0 0 0 0 0] 16.5e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+mpl
+{
+    type             porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p;
+        alphaName   alpha;
+        speciesA    N2;     // diffusing species
+        speciesB    O2;     // background species
+        porosity    0.4;
+        tortuosity  1.6;
+        dPore       dPore [0 1 0 0 0 0 0] 46e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+ccl
+{
+    type              porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p;
+        alphaName   alpha;
+        speciesA    N2;     // diffusing species
+        speciesB    O2;     // background species
+        porosity    0.3;
+        tortuosity  1.83;
+        dPore       dPore [0 1 0 0 0 0 0] 36e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+// ************************************************************************* //

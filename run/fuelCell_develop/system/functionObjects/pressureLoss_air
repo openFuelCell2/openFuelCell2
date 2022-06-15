@@ -1,0 +1,100 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+    pressureInletAir
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        log             true;
+        writeControl    timeStep;
+        writeFields     no;
+        surfaceFormat   none;
+        regionType      patch;
+        name            airInlet;
+        region 		    air;	
+        operation       areaAverage;
+        fields
+        (
+            p
+        );
+    }
+    
+        pressureOutletAir
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        log             true;
+        writeControl    timeStep;
+        writeFields     no;
+        surfaceFormat   none;
+        regionType      patch;
+        name            airOutlet;
+        region 		    air;	
+        operation       areaAverage;
+        fields
+        (
+            p
+        );
+    }
+    
+//             pressureLoss_Tot
+//     {
+//         type            pressure;
+//         libs            ("libfieldFunctionObjects.so");
+//         log             true;
+//         writeControl    writeTime;
+//         writeFields     no;
+//         region 		   air;	
+//         mode            total;
+//         U               U.air;    // Problem since U.water has impact too
+//         fields
+//         (
+//             "total(p)"
+//         );
+//         calcTotal   yes;
+//         calcCoeff   no;
+//     }
+//     
+//         pressureLoss_Tot_Inlet_Air
+//     {
+//         type            surfaceFieldValue;
+//         libs            ("libfieldFunctionObjects.so");
+//         log             true;
+//         writeControl    timeStep;
+//         writeFields     no;
+//         surfaceFormat   none;
+//         region 		air;
+//         regionType      patch;
+//         name            airInlet;	
+//         operation       areaAverage;
+//         fields
+//         (
+//             "total(p)"
+//         );
+//     }
+//     
+//     
+//           pressureLoss_Tot_Outlet_Air
+//     {
+//         type            surfaceFieldValue;
+//         libs            ("libfieldFunctionObjects.so");
+//         log             true;
+//         writeControl    timeStep;
+//         writeFields     no;
+//         surfaceFormat   none;
+//                 region 		air;
+//                 regionType      patch;
+//         name            airOutlet;	
+//         operation       areaAverage;
+//         fields
+//         (
+//             "total(p)"
+//         );
+//     }
+
+// ************************************************************************* //
+

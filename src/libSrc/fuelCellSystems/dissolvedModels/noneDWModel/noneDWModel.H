@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -66,8 +66,7 @@ public:
         noneDWModel
         (
             const fvMesh& mesh,
-            const dictionary& dict,
-            word modelType
+            const dictionary& dict
         );
 
     //- Destructor

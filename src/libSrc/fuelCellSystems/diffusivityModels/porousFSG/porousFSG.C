@@ -11,27 +11,28 @@
 
 namespace Foam
 {
-namespace diffusivityModels
-{
-    defineTypeNameAndDebug(porousFSG, 0);
-    addToRunTimeSelectionTable(diffusivityModel, porousFSG, dictionary);
+    namespace diffusivityModels
+    {
+        defineTypeNameAndDebug(porousFSG, 0);
+        addToRunTimeSelectionTable(diffusivityModel, porousFSG, dictionary);
+    }
+}
 
-    // Standard atmosphere pressure [Pa]
-    // BIPM 10th Conferance Generale des Poids et Mesures (resolution 4)
-    const dimensionedScalar pAtm("pAtm", dimPressure, 1.01325e5);
+// Standard atmosphere pressure [Pa]
+// BIPM 10th Conferance Generale des Poids et Mesures (resolution 4)
+const Foam::dimensionedScalar pAtm("pAtm", Foam::dimPressure, 1.01325e5);
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-
-porousFSG::porousFSG
+Foam::diffusivityModels::porousFSG::porousFSG
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 :
-    diffusivityModel(mesh, diff, cells, dict),
+    diffusivityModel(name, mesh, diff, dict),
     Tname_(dict_.lookup("Tname")),
     pName_(dict_.lookup("pName")),
     alphaName_(dict_.lookup("alphaName")),
@@ -40,8 +41,6 @@ porousFSG::porousFSG
     eps_(1),
     tau_(1),
     dPore_(dict_.get<dimensionedScalar>("dPore"))
-    //,
-    //doBinary_(dict_.lookup("doBinary"))
 {
     // molecular weights and diffusion volumes
     // spA
@@ -116,8 +115,7 @@ porousFSG::porousFSG
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-
-void porousFSG::setSpecies(word spA, word spB)
+void Foam::diffusivityModels::porousFSG::setSpecies(word spA, word spB)
 {
     spA_ = spA;
     spB_ = spB;
@@ -131,40 +129,44 @@ void porousFSG::setSpecies(word spA, word spB)
 
 
 
-void porousFSG::writeData()
+void Foam::diffusivityModels::porousFSG::writeData()
 {
-    Info<< "diffusivityModels::porousFSG:" << nl;
-    Info<< "    diffusing speciesA molWt diffVol:  "
-        << spA_ << " " << mA_ << " " << vA_ << nl;
-    Info<< "    background speciesB molWt diffVol: "
-        << spB_ << " " << mB_ << " " << vB_ << nl;
-    Info<< "    dPore      = " << dPore_ << nl
-        << "    porosity   = " << eps_ << nl
-        << "    tortuosity = " << tau_ << endl;
+    if (firstIndex_)
+    {
+        Info<< "diffusivityModels::porousFSG:" << nl;
+        Info<< "    diffusing speciesA molWt diffVol:  "
+            << spA_ << " " << mA_ << " " << vA_ << nl;
+        Info<< "    background speciesB molWt diffVol: "
+            << spB_ << " " << mB_ << " " << vB_ << nl;
+        Info<< "    dPore      = " << dPore_ << nl
+            << "    porosity   = " << eps_ << nl
+            << "    tortuosity = " << tau_ << endl;
+
+        firstIndex_ = false;
+    }
 }
 
 
-void porousFSG::evaluate()
+void Foam::diffusivityModels::porousFSG::evaluate()
 {
     // binaryFSG
     // ---------
     //if (doBinary_)
     //{
-        diffusivityModels::binaryFSG bfsg =
-               binaryFSG(this->mesh_, this->diff_, this->cells_,
+        binaryFSG bfsg =
+               binaryFSG(this->zoneName_, this->mesh_, this->diff_,
                          this->Tname_, this->pName_,
                          this->spA_, this->spB_);
         bfsg.evaluate();
     //}
-
 
     // knudsen
     // -------
     scalarField diffK(diff_);
     dimensionedScalar MW ("MW", dimensionSet(1,0,0,0,-1,0,0), mA_);
 
-    diffusivityModels::knudsen knud =
-        knudsen(this->mesh_, diffK, this->cells_,
+    knudsen knud =
+        knudsen(this->zoneName_, this->mesh_, diffK,
                 this->Tname_, this->dPore_, MW);
     knud.evaluate();
 
@@ -183,12 +185,6 @@ void porousFSG::evaluate()
             //(tau_*(diff_[cells_[i]] + diffK[cells_[i]]));
     }
 }
-
-    
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace diffusivityModels
-} // End namespace Foam
 
 // ************************************************************************* //
 

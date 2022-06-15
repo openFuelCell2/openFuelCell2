@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -49,13 +49,12 @@ namespace dissolvedModels
 Foam::dissolvedModels::noneDWModel::noneDWModel
 (
     const fvMesh& mesh,
-    const dictionary& dict,
-    word modelType
+    const dictionary& dict
 )
 :
     dissolvedModel(mesh),
 
-    dict_(dict.subDict(modelType + "Coeffs"))
+    dict_(dict)
 {}
 
 

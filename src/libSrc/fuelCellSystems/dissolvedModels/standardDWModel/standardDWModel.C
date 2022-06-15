@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -99,13 +99,12 @@ Foam::scalar Foam::dissolvedModels::standardDWModel::effLam(const scalar& act) c
 Foam::dissolvedModels::standardDWModel::standardDWModel
 (
     const fvMesh& mesh,
-    const dictionary& dict,
-    word modelType
+    const dictionary& dict
 )
 :
     dissolvedModel(mesh),
 
-    dict_(dict.subDict(modelType + "Coeffs")),
+    dict_(dict),
     ksi_(dict_.lookup("ksi")),
     nd_("nd", dimless, dict_),
     rhoOnEW_("rhoOnEW", dimMoles/dimVol, dict_),
@@ -131,11 +130,27 @@ void Foam::dissolvedModels::standardDWModel::solve()
 
     tmp<fvScalarMatrix> wEqn
     (
-//         fvm::ddt(rhoOnEW_, lambda)
-        fvm::div(phiI*nd_/F, lambda_, "div(D,lambda)")
+        fvm::ddt(rhoOnEW_, lambda_)
+      + fvm::div(phiI*nd_/F, lambda_, "div(D,lambda)")
       - fvm::laplacian(rhoOnEW_*Dwm_, lambda_, "laplacian(diff,lambda)")
       - dmdt_
     );
+
+    //- Set reference values
+    {
+        const scalarField& source = dmdt_;
+        const scalarField& volume = mesh().V();
+
+        // Update the water content
+        // Water intake = water uptake
+        scalarField sum = source*volume;
+        scalar iDot(Foam::gSum(sum)/Foam::gSum(volume));
+
+        for (label i = 0; i < lambda_.size(); i++)
+        {
+            wEqn->setReference(i, lambda_[i] + iDot*relax_);
+        }
+    }
 
     wEqn->relax();
     wEqn->solve();
@@ -157,15 +172,6 @@ void Foam::dissolvedModels::standardDWModel::correct()
 
     Dwm_.correctBoundaryConditions();
     act_.correctBoundaryConditions();
-
-    const scalarField& source = dmdt_;
-    const scalarField& volume = mesh().V();
-
-    // Update the water content
-    // Water intake = water uptake
-    scalarField sum = source*volume;
-    scalar iDot(Foam::gSum(sum)/Foam::gSum(volume));
-    this->lambda_.primitiveFieldRef() += iDot*relax_;
 }
 
 

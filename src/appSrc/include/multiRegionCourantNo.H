@@ -4,7 +4,7 @@
     {
         if(regions[i].type() == "fluid")
         {
-            const phaseSystem& phase = regions[i].lookupObject<phaseSystem>("phaseProperties");
+            const phaseSystem& phase = regions[i].lookupObject<phaseSystem>(phaseSystem::propertiesName);
 
             CoNum = max
             (

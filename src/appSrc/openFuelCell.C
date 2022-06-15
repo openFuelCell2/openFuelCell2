@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -22,11 +22,15 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Application
-    twoPhaseEulerFoam
+    openFuelCell
 
 Description
-    Solver for a system of 2 compressible fluid phases with one phase
-    dispersed, e.g. gas bubbles in a liquid including heat-transfer.
+    Solver for electrochemical devices...
+
+Contributors
+    Shidong Zhang (s.zhang@fz-juelich.de)
+    Steven B. Beale (s.beale@fz-juelich.de)
+    Steffen Hess (s.hess@fz-juelich.de)
 
 \*---------------------------------------------------------------------------*/
 
@@ -65,6 +69,9 @@ int main(int argc, char *argv[])
 
     while (runTime.run())
     {
+        runTime++;
+        Info<< "\nTime = " << runTime.timeName() << nl << endl;
+
         if (!LTS)
         {
             #include "createTimeControls.H"
@@ -76,10 +83,6 @@ int main(int argc, char *argv[])
             fuelCell.setRDeltaT();
         }
 
-        runTime++;
-
-        Info<< "Time = " << runTime.timeName() << nl << endl;
-
         fuelCell.mapFromCell();
 
         fuelCell.correct();
@@ -88,7 +91,6 @@ int main(int argc, char *argv[])
 
         fuelCell.mapToCell();
 
-//         #include "solveEnergy.H"
         #include "EEqns.H"
 
         runTime.write();

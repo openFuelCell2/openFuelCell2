@@ -1,9 +1,9 @@
 /*---------------------------------------------------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  1.5                                   |
-|   \\  /    A nd           | Web:      http://www.openfoam.org               |
-|    \\/     M anipulation  |                                                 |
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
@@ -16,8 +16,18 @@ FoamFile
 
 //- Add information here
 
-active          true;
-relax           1.0e-5;
+control           true;
+relax             1.0e-5;
+
+galvanostatic
+{
+    active      true;
+    region      phiEC;
+    patchName   interconnect0;
+
+    ibar 5000;
+}
+
 sigma
 {
     bpp

@@ -122,9 +122,9 @@ public:
         //- construct from mesh, diffusivity field, cell list, and dictionary
         porousFSG
         (
+            const word& name,
             const fvMesh& mesh,
             scalarField& diff,
-            const labelList& cells,
             const dictionary& dict
         );
 

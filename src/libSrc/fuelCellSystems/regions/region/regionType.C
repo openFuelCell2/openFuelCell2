@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -32,6 +32,42 @@ namespace Foam
     defineRunTimeSelectionTable(regionType, dictionary);
 }
 
+// * * * * * * * * * * * * * * * * Static data  * * * * * * * * * * * * * * //
+
+const Foam::word Foam::regionType::dictName("regionProperties");
+
+// * * * * * * * * * * * * * * Private Functions * * * * * * * * * * * * * * //
+
+Foam::IOobject Foam::regionType::createIOobject
+(
+    const fvMesh& mesh
+) const
+{
+    IOobject io
+    (
+        dictName,
+        mesh.time().constant(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::NO_WRITE,
+        false
+    );
+
+    if (io.typeHeaderOk<IOdictionary>(true))
+    {
+        Info<< "Get region properties from " << io.name() << nl << endl;
+
+        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+    }
+    else
+    {
+        Info<< "No regionProperties presented..." << nl << endl;
+
+        io.readOpt(IOobject::NO_READ);
+    }
+
+    return io;
+}
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 Foam::regionType::regionType
@@ -53,17 +89,7 @@ Foam::regionType::regionType
 
     mesh_(mesh),
 
-    dict_
-    (
-        IOobject
-        (
-            "regionProperties",
-            this->time().constant(),
-            *this,
-            IOobject::MUST_READ_IF_MODIFIED,
-            IOobject::NO_WRITE
-        )
-    ),
+    dict_(createIOobject(*this)),
 
     faceRegionAddressingIO_
     (

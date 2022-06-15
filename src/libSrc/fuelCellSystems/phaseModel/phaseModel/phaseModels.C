@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -35,7 +35,7 @@ License
 #include "IsothermalPhaseModel.H"
 #include "AnisothermalPhaseModel.H"
 #include "PurePhaseModel.H"
-#include "MultiComponentFickPhaseModel.H"
+#include "MultiComponentPhaseModel.H"
 #include "InertPhaseModel.H"
 #include "ReactingPhaseModel.H"
 #include "MovingPhaseModel.H"
@@ -144,7 +144,7 @@ namespace Foam
     typedef
         AnisothermalPhaseModel
         <
-            MultiComponentFickPhaseModel
+            MultiComponentPhaseModel
             <
                 InertPhaseModel
                 <
@@ -155,20 +155,20 @@ namespace Foam
                 >
             >
         >
-        multiComponentFickPhaseModel;
+        multiComponentPhaseModel;
 
     addNamedToRunTimeSelectionTable
     (
         phaseModel,
-        multiComponentFickPhaseModel,
+        multiComponentPhaseModel,
         dictionary,
-        multiComponentFickPhaseModel
+        multiComponentPhaseModel
     );
 
     typedef
         AnisothermalPhaseModel
         <
-            MultiComponentFickPhaseModel
+            MultiComponentPhaseModel
             <
                 ReactingPhaseModel
                 <
@@ -180,14 +180,14 @@ namespace Foam
                 >
             >
         >
-        reactingFickPhaseModel;
+        reactingPhaseModel;
 
     addNamedToRunTimeSelectionTable
     (
         phaseModel,
-        reactingFickPhaseModel,
+        reactingPhaseModel,
         dictionary,
-        reactingFickPhaseModel
+        reactingPhaseModel
     );
 }
 

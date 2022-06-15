@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -103,7 +103,8 @@ void Foam::regionTypes::solid::mapToCell
     fuelCellSystem& fuelCell
 )
 {
-    Info << "Map " << name() << " to Cell" << endl;
+    Info << "Map " << name() << " to Cell" << nl << endl;
+
     //- heat source
     volScalarField heatSource0
     (
@@ -148,7 +149,7 @@ void Foam::regionTypes::solid::mapFromCell
     fuelCellSystem& fuelCell
 )
 {
-    Info << "Map " << name() << " from Cell" << endl;
+    Info << "Map " << name() << " from Cell" << nl << endl;
 
     volScalarField& he = thermo_->he();
     volScalarField& p = thermo_->p();

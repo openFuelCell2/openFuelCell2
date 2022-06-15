@@ -1,8 +1,8 @@
-/*--------------------------------*- C++ -*----------------------------------*\
+/*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  6
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -45,7 +45,7 @@ mixture
     thermodynamics
     {
         Hf              0;
-        Cv              1980;
+        Cp              1980;
     }
 }
 

@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -99,6 +99,12 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     //- Lable of water (H2O)
     const label specieI =
         thermo_.composition().species()[water];
+
+    //- In case no water exists
+    if (specieI == -1)
+    {
+        return;
+    }
 
     //- Get the specieStoichCoeff
     dimensionedScalar specieStoichCoeff

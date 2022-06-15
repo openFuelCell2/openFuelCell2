@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2012-2014 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -63,7 +63,7 @@ bool Foam::regionTypeList::active(const bool warn) const
 
     if (warn && this->size() && !a)
     {
-        Info<< "No porosity models active" << endl;
+        Info<< "Cannot find active regions..." << endl;
     }
 
     return a;
@@ -89,18 +89,28 @@ void Foam::regionTypeList::reset(const regionProperties& rp)
 
     this->setSize(regionNames.size());
 
+    //- Creating the regions in order:
+    //- fluid-->solid-->electric
+    //- It is found solving in this order
+    //- makes the solution more stable
+    //
+    wordList modelTypes = {"fluid", "solid", "electric"};
+
+    //- Add other types in needed..
+    for (auto& typeI : regionNames)
+    {
+        modelTypes.appendUniq(typeI);
+    }
+
     label i = 0;
 
-    forAllConstIter(HashTable<wordList>, rp, iter)
+    for (auto& modelType : modelTypes)
     {
-        const word& modelType = iter.key();
-        const wordList& regions = iter();
-
-        if (regions.size())
+        if (rp.found(modelType))
         {
-            forAll(regions, regionI)
+            for (auto& region : rp[modelType])
             {
-                Info << "Creating " << regions[regionI] << endl;
+                Info << "Creating " << region << endl;
 
                 this->set
                 (
@@ -108,7 +118,7 @@ void Foam::regionTypeList::reset(const regionProperties& rp)
                     regionType::New
                     (
                         mesh_,
-                        regions[regionI],
+                        region,
                         modelType
                     )
                 );

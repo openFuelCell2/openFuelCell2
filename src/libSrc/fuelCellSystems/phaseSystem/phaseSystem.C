@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2015-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -44,10 +44,42 @@ namespace Foam
     defineRunTimeSelectionTable(phaseSystem, dictionary);
 }
 
-const Foam::word Foam::phaseSystem::propertiesName("phaseProperties");
+const Foam::word Foam::phaseSystem::propertiesName("regionProperties");
 
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
+
+Foam::IOobject Foam::phaseSystem::createIOobject
+(
+    const fvMesh& mesh
+) const
+{
+    IOobject io
+    (
+        propertiesName,
+        mesh.time().constant(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::NO_WRITE
+    );
+
+    if (io.typeHeaderOk<IOdictionary>(true))
+    {
+        Info<< "Creating phaseSystem from " << io.name() << nl << endl;
+
+        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+    }
+    else
+    {
+        Info<< "No phaseSystem present" << nl << endl;
+        Info<< "Single phase solver assumed" << nl << endl;
+
+        io.readOpt(IOobject::NO_READ);
+    }
+
+    return io;
+}
+
 
 Foam::tmp<Foam::surfaceScalarField> Foam::phaseSystem::calcPhi
 (
@@ -130,17 +162,7 @@ Foam::phaseSystem::phaseSystem
     const fvMesh& mesh
 )
 :
-    IOdictionary
-    (
-        IOobject
-        (
-            "phaseProperties",
-            mesh.time().constant(),
-            mesh,
-            IOobject::MUST_READ_IF_MODIFIED,
-            IOobject::NO_WRITE
-        )
-    ),
+    IOdictionary(createIOobject(mesh)),
 
     mesh_(mesh),
 

@@ -1,17 +1,39 @@
 /*---------------------------------------------------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  1.5                                   |
-|   \\  /    A nd           | Web:      http://www.openfoam.org               |
-|    \\/     M anipulation  |                                                 |
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version         2.0;
-    format          ascii;
-    class           dictionary;
-    object          cellProperties;
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      phaseProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-//- Add information here
+type          singlePhaseSystem;
+//type          basicTwoPhaseSystem;
+
+phases (air);
+
+air
+{
+    type            reactingPhaseModel;
+    diameterModel   isothermal;
+    isothermalCoeffs
+    {
+        d0              1e-3;
+        p0              1e5;
+    }
+
+    residualAlpha   1e-6;
+}
+
+// Minimum allowable pressure
+pMin            10000;
+
+// ************************************************************************* //

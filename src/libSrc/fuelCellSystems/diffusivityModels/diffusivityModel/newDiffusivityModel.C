@@ -8,16 +8,14 @@
 
 namespace Foam
 {
-namespace diffusivityModels
-{
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 autoPtr<diffusivityModel> diffusivityModel::New
 (
+    const word& name,
     const fvMesh& mesh,
     scalarField& diff,
-    const labelList& cells,
     const dictionary& dict
 )
 {
@@ -41,13 +39,21 @@ autoPtr<diffusivityModel> diffusivityModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<diffusivityModel>(cstrIter()(mesh, diff, cells, dict));
+    return autoPtr<diffusivityModel>
+    (
+        cstrIter()
+        (
+            name,
+            mesh,
+            diff,
+            dict.subDict(diffTypeName + "Coeffs")
+        )
+    );
 }
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace diffusivityModels
 } // End namespace Foam
 
 // ************************************************************************* //

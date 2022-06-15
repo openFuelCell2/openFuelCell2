@@ -1,8 +1,8 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Copyright (C) 2013-2018 OpenFOAM Foundation
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -69,7 +69,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
     // Construct the dilatation rate source term
     tmp<volScalarField::Internal> tdgdt;
 
-    if (!phase1.divU().empty() && !phase2.divU().empty())
+    if (phase1.divU().valid() && phase2.divU().valid())
     {
         tdgdt =
         (
@@ -79,7 +79,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
            *phase2.divU()()()
         );
     }
-    else if (!phase1.divU().empty())
+    else if (phase1.divU().valid())
     {
         tdgdt =
         (
@@ -87,7 +87,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
            *phase1.divU()()()
         );
     }
-    else if (!phase2.divU().empty())
+    else if (phase2.divU().valid())
     {
         tdgdt =
         (
@@ -143,7 +143,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             fvc::div(phi_)*min(alpha1, scalar(1))
         );
 
-        if (!tdgdt.empty())
+        if (tdgdt.valid())
         {
             scalarField& dgdt = tdgdt.ref();
 
@@ -238,7 +238,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             phase1.alphaPhiRef() = alphaPhi1;
         }
 
-        if (!alphaDbyA.empty())
+        if (alphaDbyA.valid())
         {
             fvScalarMatrix alpha1Eqn
             (
@@ -387,14 +387,14 @@ Foam::twoPhaseSystem::phirMag() const
 
 void Foam::twoPhaseSystem::solve()
 {
-    Info << "Solve for two phase flow:" << endl;
+    Info << "\nSolving for two phase flow:" << endl;
 
     fvMesh& mesh = const_cast<fvMesh&>(mesh_);
 
     const Time& runTime = mesh.time();
 
-    #include "createFields.H"
-    #include "createFieldRefs.H"
+    #include "./createFields.H"
+    #include "./createFieldRefs.H"
 
     Switch faceMomentum
     (
@@ -406,11 +406,11 @@ void Foam::twoPhaseSystem::solve()
         pimple_.dict().lookupOrDefault<word>("activePhase", phase1_.name())
     );
 
-    #include "pUf/createRDeltaTf.H"
+    #include "./pUf/createRDeltaTf.H"
 
     if (LTS && faceMomentum)
     {
-        #include "setRDeltaTf.H"
+        #include "./setRDeltaTf.H"
     }
 
     int nEnergyCorrectors
@@ -433,19 +433,19 @@ void Foam::twoPhaseSystem::solve()
 
         correct();
 
-        #include "YEqns.H"
+        #include "./YEqns.H"
 
         if (faceMomentum)
         {
-            #include "pUf/UEqns.H"
-            #include "EEqn.H"
-            #include "pUf/pEqn.H"
+            #include "./pUf/UEqns.H"
+            #include "./EEqn.H"
+            #include "./pUf/pEqn.H"
         }
         else
         {
-            #include "pU/UEqns.H"
-            #include "EEqn.H"
-            #include "pU/pEqn.H"
+            #include "./pU/UEqns.H"
+            #include "./EEqn.H"
+            #include "./pU/pEqn.H"
         }
 
         correctKinematics();

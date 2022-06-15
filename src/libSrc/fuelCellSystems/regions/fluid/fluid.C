@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | openFuelCell
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -97,7 +97,7 @@ void Foam::regionTypes::fluid::mapToCell
     fuelCellSystem& fuelCell
 )
 {
-    Info << "Map " << name() << " to Cell" << endl;
+    Info << "Map " << name() << " to Cell" << nl << endl;
 
     const uniformDimensionedVectorField& g =
         this->time().lookupObject<uniformDimensionedVectorField>("g");
@@ -319,7 +319,7 @@ void Foam::regionTypes::fluid::mapFromCell
     fuelCellSystem& fuelCell
 )
 {
-    Info << "Map " << name() << " from Cell" << endl;
+    Info << "Map " << name() << " from Cell" << nl << endl;
 
     const word& continuous = phases_->continuous();
 
