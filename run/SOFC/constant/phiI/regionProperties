@@ -59,7 +59,7 @@ sigma
 
         constantSigmaCoeffs
         {
-            cellZone            ccl;
+            cellZone            acl;
             sigma               10;
         }
     }
@@ -70,7 +70,7 @@ sigma
 
         constantSigmaCoeffs
         {
-            cellZone            ccl;
+            cellZone            membrane;
             sigma               10;
         }
     }
