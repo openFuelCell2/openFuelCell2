@@ -80,7 +80,7 @@ protected:
         // The list of cell labels for which
         // diffusivity is to be calculated
         word zoneName_;
-        labelList cells_;
+        DynamicList<label> cells_;
 
         // Dictionary containing the parameters
         const dictionary dict_;
