@@ -1,0 +1,39 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/solid";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [ 0 0 0 1 0 0 0 ];
+
+internalField   uniform 343.15;
+
+boundaryField
+{
+    electrolyteSides
+    {
+        type            zeroGradient;
+    }
+    electrolyte_to_air
+    {
+        type            zeroGradient;
+    }
+    electrolyte_to_fuel
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //

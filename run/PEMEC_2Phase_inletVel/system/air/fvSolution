@@ -1,0 +1,128 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "alpha.*"
+    {
+        nAlphaCorr      3;
+        nAlphaSubCycles 1;
+    }
+
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            tolerance       2e-09;
+            relTol          0;
+            smoother        DICGaussSeidel;
+            nPreSweeps      1;
+            nPostSweeps     2;
+            nFinestSweeps   2;
+            cacheAgglomeration on;
+            nCellsInCoarsestLevel 10;
+            agglomerator    faceAreaPair;
+            mergeLevels     1;
+        }
+        tolerance       1e-10;
+        relTol          0.001;
+        maxIter         50;
+    }
+
+    p_rghFinal
+    {
+        solver          PCG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            tolerance       2e-09;
+            relTol          0;
+            smoother        DICGaussSeidel;
+            nPreSweeps      1;
+            nPostSweeps     2;
+            nFinestSweeps   2;
+            cacheAgglomeration on;
+            nCellsInCoarsestLevel 10;
+            agglomerator    faceAreaPair;
+            mergeLevels     1;
+        }
+        tolerance       1e-10;
+        relTol          0;
+        maxIter         150;
+    }
+
+    "(e|h).*"
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-11;
+        relTol           0;
+    }
+
+    "U.*"
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-9;
+        relTol           0;
+    }
+
+    Yi
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-11;
+        relTol           0;
+
+        residualAlpha    1.0e-6;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors 1;
+    nCorrectors      4;
+    nNonOrthogonalCorrectors 0;
+
+    faceMomentum     yes;
+//    activePhase      water;
+}
+
+relaxationFactors
+{
+    fields
+    {
+        default     1;
+//	nernst	    0.7;
+       p_rgh         0.3;
+       iDmdt       0.7;
+    }
+    equations
+    {
+        default     1;
+//        "(e|h).*"      0.1;
+       "U.*"        0.7;
+        "O2.*"       	0.8;
+        "H2O.*"       0.9;
+    }
+}
+
+
+// ************************************************************************* //

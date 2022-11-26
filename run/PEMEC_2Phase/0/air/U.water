@@ -1,0 +1,53 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | openFuelCell
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0/air";
+    object      U.water;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0.01 0 0);
+
+boundaryField
+{
+    airInlet
+    {
+        type            fixedValue;
+        value           uniform (0.01 0 0);
+    }
+    airOutlet
+    {
+        type            pressureInletOutletVelocity;
+        phi             phi.water;
+        value           $internalField;
+    }
+    cathodeSides
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    air_to_electrolyte
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    air_to_interconnect
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+}
+
+
+// ************************************************************************* //
