@@ -1,8 +1,8 @@
-/*---------------------------------------------------------------------------*\
+/*--------------------------------*- C++ -*----------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -29,7 +29,6 @@ boundaryField
     airOutlet
     {
         type            inletOutlet;
-        phi             phi;
         inletValue      uniform (0 0 0);
         value           $internalField;
     }

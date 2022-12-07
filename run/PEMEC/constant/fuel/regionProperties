@@ -15,10 +15,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-//type    singlePhaseSystem;
-type          interfaceCompositionPhaseChangeTwoPhaseSystem;
+type    singlePhaseSystem;
 
-phases (fuel water);
+phases (fuel);
 
 LTS
 {

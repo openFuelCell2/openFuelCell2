@@ -26,12 +26,11 @@ thermoType
     energy          sensibleInternalEnergy;
 }
 
-//inertSpecie H2O;
+inertSpecie O2;
 
 species
 (
     O2
-//    N2
     H2O
 );
 

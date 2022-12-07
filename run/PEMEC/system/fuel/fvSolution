@@ -25,45 +25,17 @@ solvers
     p_rgh
     {
         solver          PCG;
-        preconditioner
-        {
-            preconditioner  GAMG;
-            tolerance       2e-09;
-            relTol          0;
-            smoother        DICGaussSeidel;
-            nPreSweeps      1;
-            nPostSweeps     2;
-            nFinestSweeps   2;
-            cacheAgglomeration on;
-            nCellsInCoarsestLevel 10;
-            agglomerator    faceAreaPair;
-            mergeLevels     1;
-        }
+        preconditioner  DIC;
         tolerance       1e-10;
         relTol          0.001;
-        maxIter         50;
     }
 
     p_rghFinal
     {
         solver          PCG;
-        preconditioner
-        {
-            preconditioner  GAMG;
-            tolerance       2e-09;
-            relTol          0;
-            smoother        DICGaussSeidel;
-            nPreSweeps      1;
-            nPostSweeps     2;
-            nFinestSweeps   2;
-            cacheAgglomeration on;
-            nCellsInCoarsestLevel 10;
-            agglomerator    faceAreaPair;
-            mergeLevels     1;
-        }
+        preconditioner  DIC;
         tolerance       1e-10;
         relTol          0;
-        maxIter         150;
     }
 
     "(e|h).*"
@@ -99,7 +71,7 @@ PIMPLE
     nCorrectors      4;
     nNonOrthogonalCorrectors 0;
 
-    faceMomentum     yes;
+    consistent     	yes;
 }
 
 relaxationFactors
@@ -107,17 +79,14 @@ relaxationFactors
     fields
     {
         default     1;
-//         p_rgh         0.1;
-//         iDmdt         0.9;
+        p_rgh       0.7;
     }
 
     equations
     {
         default     1;
-//        "(e|h).*"      0.1;
-//         "U.*"         0.1;
-         "H2.*"        0.99;
-         "H2O.*"       0.99;
+         "U.*"      0.7;
+         "H2.*"     0.99;
     }
 }
 

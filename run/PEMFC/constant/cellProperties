@@ -15,7 +15,7 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
-nx    2;    //- Manual decomposition in x and y directions
+nx    4;    //- Manual decomposition in x and y directions
 ny    1;
 
 // ************************************************************************* //

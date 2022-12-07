@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains 2;		//numberOfSubdomains= nx*ny*nz
+numberOfSubdomains 4;		//numberOfSubdomains= nx*ny*nz
 
 method              manual;	
 

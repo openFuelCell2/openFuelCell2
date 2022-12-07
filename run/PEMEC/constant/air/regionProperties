@@ -38,7 +38,7 @@ air
     diameterModel   isothermal;
     isothermalCoeffs
     {
-        d0              5e-5;
+        d0              5e-4;
         p0              1e5;
     }
 
@@ -51,7 +51,7 @@ water
     diameterModel constant;
     constantCoeffs
     {
-        d               1.5e-4;
+        d               1e-4;
     }
 
     residualAlpha   1e-6;
