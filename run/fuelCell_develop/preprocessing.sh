@@ -1,10 +1,10 @@
-#!/bin/bash
-# create mesh
-
-# we have to split the mesh in three steps
-# air fuel electrolyte interconnect
-# phiEA phiEC phi0
-# phiI phiE0 phiE1
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
 
 # Rename the initial field
 # mv 0 0.orig

@@ -1,10 +1,10 @@
-#!/usr/bin/python3
-
-import numpy as np
-
-#current
-current = 6000  # A/m^3
-
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
 nProc = 4
 
 # ================== Case geometry parameter ====================#
