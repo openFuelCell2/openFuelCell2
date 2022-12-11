@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -155,7 +155,7 @@ void Foam::diffusivityModelList::correct
                 // copy calculated zone diffusivity from diffModel to diffSp[i]
                 for (auto k : this->operator[](j).cells())
                 {
-                    diffSp[k] = this->operator[](j).diff()[k];
+                    diffSp[i][k] = this->operator[](j).diff()[k];
                 }
             }
             else if(!this->operator[](j).isBinary())

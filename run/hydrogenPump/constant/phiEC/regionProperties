@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -25,7 +25,7 @@ galvanostatic
     region      phiEC;
     patchName   interconnect0;
 
-    ibar -6000;
+    ibar -8000;
 }
 
 sigma

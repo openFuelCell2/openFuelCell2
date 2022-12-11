@@ -1,0 +1,77 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           volScalarField;
+    object          yH2;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0.999;
+
+boundaryField
+{
+    fuelInlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    fuelOutlet
+    {
+        type            inletOutlet;
+        value           $internalField;
+        inletValue      $internalField;
+    }
+
+    fuelSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelInletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelOutletSides
+    {
+        type            zeroGradient;
+    }
+    
+    anodeSides
+    {
+        type            zeroGradient;
+    }
+    
+    aflSides
+    {
+        type            zeroGradient;
+    }
+    
+    fuel_to_electrolyte //anode
+    {
+        type            fixedGradient;
+        gradient        uniform 0;
+    }
+
+    fuel_to_interconnect
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //

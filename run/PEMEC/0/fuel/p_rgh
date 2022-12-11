@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -32,53 +32,43 @@ boundaryField
 
     fuelInlet
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     fuelOutlet
     {
-        type               prghTotalPressure;
-        p                  $internalField;
-        p0                 $internalField;
+        type               fixedValue;
         value              $internalField;
-	U                  U.fuel;
     }
 
     fuelSides
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     fuelInletSides
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     fuelOutletSides
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     anodeSides
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     fuel_to_interconnect
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 
     fuel_to_electrolyte //cathode
     {
-        type               fixedFluxPressure;
-        value              $internalField;
+        type               zeroGradient;
     }
 }
 

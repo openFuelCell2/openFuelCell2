@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -183,17 +183,17 @@ void Foam::regionTypes::electric::solve()
     Info << "\nSolve for region " << name() << ":\n" << endl;
 
     //- Here we define a sgn to make sure the coefficient in the matrix positive
-    scalar sgn = 1;
-
-    if (phi_.needReference())
-    {
-        sgn = -1;
-    }
+//    scalar sgn = 1;
+//
+//    if (phi_.needReference())
+//    {
+//        sgn = -1;
+//    }
 
     tmp<fvScalarMatrix> phiEqn
     (
-      - fvm::laplacian(sigmaField_*sgn, phi_, "laplacian(sigma,phi)")
-      - j_*sgn
+      - fvm::laplacian(sigmaField_, phi_, "laplacian(sigma,phi)")
+      - j_
     );
 
     //- Set reference values
@@ -262,7 +262,7 @@ void Foam::regionTypes::electric::correct()
 
             phi_.boundaryFieldRef()[patchID] == phiBoundary + relax_*(ibar0 - ibar_);
 
-            Info << "ibar: " << ibar0 << "\t"<< "voltage: " << phiBoundary[0] << endl;
+            Info << "ibar: " << ibar0 << "\t"<< "voltage: " << Foam::gAverage(phiBoundary) << endl;
         }
     }
 

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -20,11 +20,10 @@ solvers
 {
     phi
     {
-        solver           GAMG;
+        solver           PCG;
         tolerance        1e-11;
         relTol           0;
-        smoother         DIC;
-        maxIter          100;
+        preconditioner   DIC;
     }
 
     lambda
@@ -54,7 +53,7 @@ PISO
 
 relaxationFactors
 {
-    lambda              0.9;
+//    lambda              0.9;
 //    phi                 0.8;
 }
 

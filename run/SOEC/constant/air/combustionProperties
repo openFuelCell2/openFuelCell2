@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -67,7 +67,7 @@ activationOverpotentialModel
         ion         phi
     );
 
-    j0              1.0e8;
+    j0              1.0e9;
     relax           0.5;
     alpha           0.5;
     gamma           1.5;

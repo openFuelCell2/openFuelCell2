@@ -1,14 +1,15 @@
-/*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
-     \\/     M anipulation  |
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2106                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
     location    "0";
     object      T;
@@ -24,7 +25,7 @@ boundaryField
     interconnect0
     {
         type            fixedValue;
-        value           $internalField;
+        value           uniform 313.15;
     }
     interconnectSides
     {
@@ -33,15 +34,9 @@ boundaryField
     airInlet
     {
         type            fixedValue;
-        value           $internalField;
+        value           uniform 313.15;
     }
     airOutlet
-    {
-        type            zeroGradient;
-        inletValue      $internalField;
-        value           $internalField;
-    }
-    airSides
     {
         type            zeroGradient;
     }
@@ -49,18 +44,10 @@ boundaryField
     {
         type            zeroGradient;
     }
-    cflSides
-    {
-        type            zeroGradient;
-    }
     electrolyteSides
     {
         type            zeroGradient;
     }
-    aflSides
-    {
-        type            zeroGradient;
-    } 
     anodeSides
     {
         type            zeroGradient;
@@ -68,46 +55,16 @@ boundaryField
     fuelInlet
     {
         type            fixedValue;
-        value           $internalField;
+        value           uniform 313.15;
     }
     fuelOutlet
-    {
-        type		zeroGradient;
-        inletValue      $internalField;
-        value           $internalField;
-    }
-    fuelSides
     {
         type            zeroGradient;
     }
     interconnect1
     {
         type            fixedValue;
-        value           $internalField;
-    }
-    interconnect1Sides
-    {
-        type            zeroGradient;
-    }
-
-    airInletSides
-    {
-        type            zeroGradient;
-    }
-
-    airOutletSides
-    {
-        type            zeroGradient;
-    }
-
-    fuelInletSides
-    {
-        type            zeroGradient;
-    }
-
-    fuelOutletSides
-    {
-        type            zeroGradient;
+        value           uniform 313.15;
     }
 }
 

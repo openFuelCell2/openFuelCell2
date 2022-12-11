@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -31,7 +31,6 @@ boundaryField
     fuelOutlet
     {
         type            inletOutlet;
-        phi             phi;
         value           $internalField;
         inletValue      uniform 1;
     }

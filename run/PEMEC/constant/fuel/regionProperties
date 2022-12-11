@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -15,10 +15,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-//type    singlePhaseSystem;
-type          interfaceCompositionPhaseChangeTwoPhaseSystem;
+type    singlePhaseSystem;
 
-phases (fuel water);
+phases (fuel);
 
 LTS
 {

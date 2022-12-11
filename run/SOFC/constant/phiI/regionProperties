@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -49,7 +49,7 @@ sigma
         constantSigmaCoeffs
         {
             cellZone            ccl;
-            sigma               10;
+            sigma               15;
         }
     }
 
@@ -60,7 +60,7 @@ sigma
         constantSigmaCoeffs
         {
             cellZone            acl;
-            sigma               10;
+            sigma               15;
         }
     }
 
@@ -71,7 +71,7 @@ sigma
         constantSigmaCoeffs
         {
             cellZone            membrane;
-            sigma               10;
+            sigma               15;
         }
     }
 }

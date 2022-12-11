@@ -1,0 +1,95 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "alpha.*"
+    {
+        nAlphaCorr      1;
+        nAlphaSubCycles 3;
+    }
+
+    p_rgh
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0.001;
+    }
+
+    p_rghFinal
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-10;
+        relTol          0;
+    }
+
+    "(e|h).*"
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-11;
+        relTol           0;
+    }
+
+    "U.*"
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-9;
+        relTol           0;
+    }
+
+    Yi
+    {
+        solver           PBiCGStab;
+        preconditioner   DILU;
+        tolerance        1e-9;
+        relTol           0;
+
+        residualAlpha    1.0e-6;
+    }
+}
+
+PIMPLE
+{
+    nOuterCorrectors 1;
+    nCorrectors      3;
+    nNonOrthogonalCorrectors 0;
+
+    consistent      true;
+}
+
+relaxationFactors
+{
+    fields
+    {
+        default      1;
+        p_rgh         0.7;
+    }
+    equations
+    {
+        "U.*"        0.7;
+        "O2.*"       0.999;
+        "H2O.*"      0.999;
+    }
+}
+
+
+// ************************************************************************* //

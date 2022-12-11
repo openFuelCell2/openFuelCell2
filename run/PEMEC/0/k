@@ -1,16 +1,17 @@
-/*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
-     \\/     M anipulation  |
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2106                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
-    location    "20";
+    location    "0";
     object      k;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -23,79 +24,43 @@ boundaryField
 {
     interconnect0
     {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     interconnectSides
     {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     airInlet
     {
-        type         fixedValue;
-        //value        uniform 0.0692;
-        value        uniform 1e-15;    //disallow outward diffusion at inlet
-                                       // value 0 causes harmonic averaging FPE
+        type            fixedValue;
+        value           uniform 1e-15;
     }
     airOutlet
     {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     cathodeSides
     {
-        type         zeroGradient;
-    }
-    cflSides
-    {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     electrolyteSides
     {
-        type         zeroGradient;
-    }
-    aflSides
-    {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     anodeSides
     {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     fuelInlet
     {
-        type         fixedValue;
-        //value        uniform 0.432;
-        value        uniform 1e-15;    //disallow outward diffusion at inlet
-                                       // value 0 causes harmonic averaging FPE
+        type            fixedValue;
+        value           uniform 1e-15;
     }
     fuelOutlet
     {
-        type         zeroGradient;
-    }
-    interconnect1Sides
-    {
-        type         zeroGradient;
+        type            zeroGradient;
     }
     interconnect1
-    {
-        type         zeroGradient;
-    }
-
-    airInletSides
-    {
-        type            zeroGradient;
-    }
-
-    airOutletSides
-    {
-        type            zeroGradient;
-    }
-
-    fuelInletSides
-    {
-        type            zeroGradient;
-    }
-
-    fuelOutletSides
     {
         type            zeroGradient;
     }

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -18,7 +18,7 @@ FoamFile
 
 ddtSchemes
 {
-    default         localEuler;//steadyState;
+    default         steadyState;
 }
 
 gradSchemes

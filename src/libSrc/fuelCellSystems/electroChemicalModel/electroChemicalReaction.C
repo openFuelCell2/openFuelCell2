@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -169,9 +169,6 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     //- Update the source/sink term dmdt
     dW.update(eta_->zoneName());
 
-    //- Relax
-    scalar iDmdtRelax(this->mesh().fieldRelaxationFactor("iDmdt")); 
-
     //- Update the water production in phase model
     forAll(cells, cellI)
     {
@@ -190,8 +187,7 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
             volScalarField& iDmdtWater = const_cast<volScalarField&>
                 (phase.iDmdt(water));
 
-            iDmdtWater[fluidId] = (1 - iDmdtRelax)*iDmdtWater[fluidId]
-                + iDmdtRelax*(wSpecie[fluidId] - dmdt[ionId]*Wi.value());
+            iDmdtWater[fluidId] = wSpecie[fluidId] - dmdt[ionId]*Wi.value();
         }
         else
         {
@@ -206,8 +202,7 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
             scalarField& iDmdtWater = const_cast<volScalarField&>
                 (phaseSys.phases()[name1].iDmdt(water));
 
-            iDmdtWater[fluidId] = (1 - iDmdtRelax)*iDmdtWater[fluidId]
-                + iDmdtRelax*(wSpecie[fluidId] - dmdt[ionId]*Wi.value());
+            iDmdtWater[fluidId] = wSpecie[fluidId] - dmdt[ionId]*Wi.value();
         }
     }
 }
@@ -231,7 +226,7 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
 
     if (Y.member() == water)
     {
-        return phase.iDmdt(water) + fvm::Sp(phase.iDmdt(water)*0.0, Y);
+        return fvm::Sp(phase.iDmdt(water)/(Y + SMALL), Y);
     }
 
     const label specieI =
@@ -259,15 +254,11 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
         eta_->j()*Wi*specieStoichCoeff/dimF
     );
 
-
-    //- Relax
-    scalar iDmdtRelax(this->mesh().fieldRelaxationFactor("iDmdt")); 
-
     volScalarField& iDmdtWater = const_cast<volScalarField&>(phase.iDmdt(Y.member()));
 
-    iDmdtWater = (1 - iDmdtRelax)*iDmdtWater + iDmdtRelax*wSpecie; 
+    iDmdtWater = wSpecie;
 
-    return iDmdtWater + fvm::Sp(wSpecie*0.0, Y);
+    return fvm::Sp(wSpecie/(Y + SMALL), Y);
 }
 
 

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -23,8 +23,7 @@ boundaryField
 {
     interconnect0
     {
-        type            fixedValue;
-        value           uniform 973.15;
+        type            zeroGradient;
     }
     interconnectSides
     {
@@ -41,8 +40,7 @@ boundaryField
 
     interconnect1
     {
-        type            fixedValue;
-        value           uniform 343.15;
+        type            zeroGradient;
     }
 }
 

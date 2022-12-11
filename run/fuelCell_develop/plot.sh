@@ -1,10 +1,10 @@
-#!/bin/bash
-################################################################################
-                                                                               #
-#----------------------------------------------------------------------#       #
-# Contributor |                                                        #       #
-# Email       |   Shidong Zhang (s.zhang@fz-juelich.de)                #       #
-# Email       |   Steffen Hess  (s.hess@fz-juelich.de)                 #       #
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
 #----------------------------------------------------------------------#       #
 # Solver      |   openFuelCell                                         #       #
 # OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #       #

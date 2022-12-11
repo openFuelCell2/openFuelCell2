@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -33,37 +33,36 @@ boundaryField
     {
         type            inletOutlet;
         inletValue      uniform (0 0 0);
-        phi             phi;
         value           $internalField;
     }
 
     airSides
     {
-       type            fixedValue;
-       value           uniform (0 0 0);
+       type             fixedValue;
+       value            uniform (0 0 0);
     }
 
     airInletSides
     {
-       type            fixedValue;
-       value           uniform (0 0 0);
+       type             fixedValue;
+       value            uniform (0 0 0);
     }
 
     airOutletSides
     {
-       type            fixedValue;
-       value           uniform (0 0 0);
+       type             fixedValue;
+       value            uniform (0 0 0);
     }
 
     cathodeSides
     {
-       type            fixedValue;
-       value           uniform (0 0 0);
+       type             fixedValue;
+       value            uniform (0 0 0);
     }    
 /*    cflSides
     {
-       type            fixedValue;
-       value           uniform (0 0 0);
+       type             fixedValue;
+       value            uniform (0 0 0);
     }
 */        
     air_to_interconnect

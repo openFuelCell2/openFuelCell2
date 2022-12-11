@@ -1,0 +1,85 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      diffusivityModel;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+fuel
+{
+    type            binaryFSG;
+
+    binaryFSGCoeffs
+    {
+        Tname       T;
+        pName       p_rgh;
+        speciesA    H2;
+        speciesB    H2O;
+    }
+}
+
+anode
+{
+    type              porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p_rgh;
+        alphaName   alpha;
+        speciesA    H2;     // diffusing species
+        speciesB    H2O;    // background species
+        porosity    0.7;
+        tortuosity  1.15;
+        dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+mpl
+{
+    type             porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p_rgh;
+        alphaName   alpha;
+        speciesA    H2;     // diffusing species
+        speciesB    H2O;    // background species
+        porosity    0.4;
+        tortuosity  1.6;
+        dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+acl
+{
+    type              porousFSG;
+
+    porousFSGCoeffs
+    {
+        Tname       T;
+        pName       p_rgh;
+        alphaName   alpha;
+        speciesA    H2;     // diffusing species
+        speciesB    H2O;    // background species
+        porosity    0.3;
+        tortuosity  1.8;
+        dPore       dPore [0 1 0 0 0 0 0] 1.333333e-06;   // pore size
+        doBinary    false;
+    }
+}
+
+// ************************************************************************* //

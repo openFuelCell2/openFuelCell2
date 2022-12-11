@@ -1,9 +1,9 @@
-/*--------------------------------*- C++ -*----------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2106                                 |
-|   \\  /    A nd           | Website:  www.openfoam.com                      |
-|    \\/     M anipulation  |                                                 |
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
@@ -33,7 +33,7 @@ boundaryField
     airInlet
     {
         type            fixedValue;
-        value           uniform 973.15;
+        value           uniform 873.15;
     }
     airOutlet
     {
@@ -54,7 +54,7 @@ boundaryField
     fuelInlet
     {
         type            fixedValue;
-        value           uniform 973.15;
+        value           uniform 873.15;
     }
     fuelOutlet
     {

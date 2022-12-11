@@ -1,4 +1,4 @@
-# openFuelCell-V2
+# openFuelCell2
 
 A computational fluid dynamics (CFD) solver for electrochemical devices, including fuel cell and electrolysis. The solver is developed based on the open-source library, OpenFOAM.
 
@@ -25,6 +25,8 @@ cd openFuelCell/src
 # Compile the source code with
 ./Allwmake
 
+# Or compile in parallel
+./Allwmake -j n
 ```
 
 You can also clear the libraries and executable files with
@@ -130,6 +132,9 @@ The local regions can be classified as three different types, namely fluid, soli
     6. Making the "porousZone" flexable to read. If the file doesn't exist, no porous zones are applied.
     7. Update the test cases: rewrite the scripts.
     8. Change the header of each file. openFuelCell is included.
+- [Dec. 2022] Update the repository
+    1. Fixed a bug in diffusivityList
+    2. Update the tutorial
 
 ## Related publications
 
@@ -138,6 +143,8 @@ The local regions can be classified as three different types, namely fluid, soli
   - **Zhang, Shidong, Steven B. Beale, Uwe Reimer, Martine Andersson, and Werner Lehnert. "Polymer electrolyte fuel cell modeling-A comparison of two models with different levels of complexity." International Journal of Hydrogen Energy 45, no. 38 (2020): 19761-19777.**
 
   - **Zhang, Shidong, Steven B. Beale, Yan Shi, Holger Janßen, Uwe Reimer, and Werner Lehnert. "Development of an Open-Source Solver for Polymer Electrolyte Fuel Cells." ECS Transactions 98, no. 9 (2020): 317.**
+
+  - **Zhang, Shidong. "Low-Temperature Polymer Electrolyte Fuel Cells." In Electrochemical Cell Calculations with OpenFOAM, pp. 59-85. Springer, Cham, 2022.**
 
 - *Thesis*
 

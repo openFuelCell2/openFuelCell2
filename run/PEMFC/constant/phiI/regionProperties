@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -17,11 +17,9 @@ FoamFile
 //- Add information here
 
 control          false;
-
 relax           -4.0e-11;
 
 dissolveOnOff   true;
-
 dissolved
 {
     type        standard;

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | openFuelCell
+    \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
@@ -31,7 +31,9 @@ boundaryField
 
     airOutlet
     {
-        type            zeroGradient;
+        type            inletOutlet;
+        inletValue	    $internalField;
+        value		        $internalField;
     }
 
     airSides
@@ -64,10 +66,9 @@ boundaryField
         type            zeroGradient;
     }
 
-    air_to_electrolyte //cathode
+    air_to_electrolyte
     {
-        type            fixedGradient;
-        gradient        uniform 0;
+        type            zeroGradient;
     }
 }
 

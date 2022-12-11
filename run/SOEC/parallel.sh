@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/bash
 
 ## edit system/decomposeParDict for the desired decomposition
 ## set environment variable NPROCS to number of processors.

@@ -46,7 +46,7 @@ parallel:
 ################################################################################
 
 run:
-	(mpirun -np 2 openFuelCell -parallel -fileHandler collated | tee log.run);
+	(mpirun -np 4 openFuelCell -parallel -fileHandler collated | tee log.run);
 
 ################################################################################
 
