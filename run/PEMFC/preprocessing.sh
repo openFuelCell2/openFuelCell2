@@ -6,8 +6,9 @@
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
-# Rename the initial field
-# mv 0 0.orig
+# Rename the original field to 0
+rm -rf 0
+cp -r 0.orig 0
 
 SECONDS=0
 
@@ -73,9 +74,9 @@ rm -rf 0/phiE0
 rm constant/polyMesh/cellZones
 topoSet -dict ./system/topoSetDict.parallel.afei -noZero -constant
 
-# Rename the original field to 0
-#rm -rf 0
-#mv 0.orig 0
+# # Rename the original field to 0
+# rm -rf 0
+# cp -r 0.orig 0
 
 duration=$SECONDS
 echo -e "  -Executation time for preprocessing is : $duration Sec \n\n"

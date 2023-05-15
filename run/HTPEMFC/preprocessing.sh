@@ -6,8 +6,9 @@
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 
-# Rename the initial field
-# mv 0 0.orig
+# Rename the original field to 0
+rm -rf 0
+cp -r 0.orig 0
 
 SECONDS=0
 

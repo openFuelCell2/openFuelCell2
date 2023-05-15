@@ -1,0 +1,99 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+    
+    class           volScalarField;
+    object          p;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 1e5;
+
+boundaryField
+{
+
+    airInlet
+    {
+        type               zeroGradient;//fixedFluxPressure;
+        value              $internalField;
+    }
+
+    airOutlet
+    {
+        type               fixedValue;//prghTotalPressure;
+        p                  $internalField;
+        p0                 $internalField;
+        value              $internalField;
+	U                  U.air;
+    }
+
+    airSides
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    airInletSides
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    airOutletSides
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    cathodeSides
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    cflSides
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    air_to_interconnect
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+
+    air_to_electrolyte //cathode
+    {
+        type               zeroGradient;//fixedFluxPressure;
+//        type               fixedFluxPressure;
+        value              $internalField;
+    }
+}
+
+
+// ************************************************************************* //

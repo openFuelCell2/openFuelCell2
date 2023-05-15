@@ -1,0 +1,89 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+    
+    class           volScalarField;
+    object          T;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 343.15;
+
+boundaryField
+{
+
+    airInlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    airOutlet
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    airSides
+    {
+        type            zeroGradient;
+    }
+
+    airInletSides
+    {
+        type            zeroGradient;
+    }
+
+    airOutletSides
+    {
+        type            zeroGradient;
+    }
+
+    cathodeSides
+    {
+        type            zeroGradient;
+    }
+
+    cflSides
+    {
+        type            zeroGradient;
+    }
+
+    air_to_interconnect
+    {
+        type            zeroGradient;
+//        type            copiedFixedValue;
+//        sourceFieldName T.water;
+//        value           $internalField;
+    }
+
+    air_to_electrolyte //cathode
+    {
+        type            zeroGradient;
+//        type            copiedFixedValue;
+//        sourceFieldName T.water;
+//        value           $internalField;
+    }
+}
+
+
+// ************************************************************************* //

@@ -9,9 +9,8 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
-    location    "0";
+    location    "20";
     object      k;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -24,43 +23,79 @@ boundaryField
 {
     interconnect0
     {
-        type            zeroGradient;
+        type         zeroGradient;
     }
     interconnectSides
     {
-        type            zeroGradient;
+        type         zeroGradient;
     }
     airInlet
     {
-        type            fixedValue;
-        value           uniform 1e-15;
+        type         fixedValue;
+        //value        uniform 0.0692;
+        value        uniform 1e-15;    //disallow outward diffusion at inlet
+                                       // value 0 causes harmonic averaging FPE
     }
     airOutlet
     {
-        type            zeroGradient;
+        type         zeroGradient;
     }
     cathodeSides
     {
-        type            zeroGradient;
+        type         zeroGradient;
+    }
+    cflSides
+    {
+        type         zeroGradient;
     }
     electrolyteSides
     {
-        type            zeroGradient;
+        type         zeroGradient;
+    }
+    aflSides
+    {
+        type         zeroGradient;
     }
     anodeSides
     {
-        type            zeroGradient;
+        type         zeroGradient;
     }
     fuelInlet
     {
-        type            fixedValue;
-        value           uniform 1e-15;
+        type         fixedValue;
+        //value        uniform 0.432;
+        value        uniform 1e-15;    //disallow outward diffusion at inlet
+                                       // value 0 causes harmonic averaging FPE
     }
     fuelOutlet
     {
-        type            zeroGradient;
+        type         zeroGradient;
+    }
+    interconnect1Sides
+    {
+        type         zeroGradient;
     }
     interconnect1
+    {
+        type         zeroGradient;
+    }
+
+    airInletSides
+    {
+        type            zeroGradient;
+    }
+
+    airOutletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelInletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelOutletSides
     {
         type            zeroGradient;
     }

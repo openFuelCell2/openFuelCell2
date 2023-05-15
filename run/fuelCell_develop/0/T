@@ -9,7 +9,6 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
     location    "0";
     object      T;
@@ -25,7 +24,7 @@ boundaryField
     interconnect0
     {
         type            fixedValue;
-        value           uniform 353.15;
+        value           $internalField;
     }
     interconnectSides
     {
@@ -34,9 +33,15 @@ boundaryField
     airInlet
     {
         type            fixedValue;
-        value           uniform 353.15;
+        value           $internalField;
     }
     airOutlet
+    {
+        type            zeroGradient;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    airSides
     {
         type            zeroGradient;
     }
@@ -44,10 +49,18 @@ boundaryField
     {
         type            zeroGradient;
     }
+    cflSides
+    {
+        type            zeroGradient;
+    }
     electrolyteSides
     {
         type            zeroGradient;
     }
+    aflSides
+    {
+        type            zeroGradient;
+    } 
     anodeSides
     {
         type            zeroGradient;
@@ -55,16 +68,46 @@ boundaryField
     fuelInlet
     {
         type            fixedValue;
-        value           uniform 353.15;
+        value           $internalField;
     }
     fuelOutlet
+    {
+        type		zeroGradient;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    fuelSides
     {
         type            zeroGradient;
     }
     interconnect1
     {
         type            fixedValue;
-        value           uniform 353.15;
+        value           $internalField;
+    }
+    interconnect1Sides
+    {
+        type            zeroGradient;
+    }
+
+    airInletSides
+    {
+        type            zeroGradient;
+    }
+
+    airOutletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelInletSides
+    {
+        type            zeroGradient;
+    }
+
+    fuelOutletSides
+    {
+        type            zeroGradient;
     }
 }
 
