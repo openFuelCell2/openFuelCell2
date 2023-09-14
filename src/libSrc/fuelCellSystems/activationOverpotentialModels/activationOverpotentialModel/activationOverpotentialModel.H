@@ -24,6 +24,16 @@ License
 Class
     Foam::activationOverpotentialModel.C
 
+Description
+    Activation overpotential is a phenomenon in electrochemistry
+    that arises when a chemical reaction, typically involving the flow of
+    electrons at an electrode, requires an additional energy input to
+    initiate the reaction. This extra energy, known as activation energy,
+    is needed to overcome various barriers and constraints within the electrochemical system,
+    such as the physical and chemical properties of the reactants and the electrode surface.
+
+    This is an abstract class defined for activation overpotential model.
+
 SourceFiles
     activationOverpotentialModel.C
 
@@ -51,7 +61,6 @@ namespace Foam
 class activationOverpotentialModel
 {
 protected:
-
         //- Phase
         const phaseModel& phase_;
 
@@ -62,15 +71,25 @@ protected:
         volScalarField eta_;
 
         //- Phase change
+        //- This is used for the nernst potential
+        //- In low-temperature PEMFC/PEMEC, the product and reactant
+        //- exist in different phases. The calculation of nernst potential
+        //- can be different.
         Switch phaseChange_;
 
         //- Nernst model
         autoPtr<nernstModel> nernst_;
 
         //- Acitve zone name
+        //- Where the electrochemical reaction takes place.
         word zoneName_;
 
-        //- Catalyst layer adjacent regions
+        //- Region dictionary
+        // for example
+        // fluid
+        // {
+        //     name    air;
+        // }
         const dictionary& regions_;
 
         // Species dictionary

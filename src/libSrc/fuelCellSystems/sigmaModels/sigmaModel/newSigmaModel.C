@@ -41,10 +41,10 @@ Foam::autoPtr<Foam::sigmaModel> Foam::sigmaModel::New
     Info << "Selecting sigmaModel: "
         << sigmaModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(sigmaModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(sigmaModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorIn("sigmaModel::New")
            << "Unknown sigmaModelType type "
@@ -54,7 +54,7 @@ Foam::autoPtr<Foam::sigmaModel> Foam::sigmaModel::New
            << exit(FatalError);
     }
 
-    return cstrIter()(mesh, dict.subDict(sigmaModelType + "Coeffs"));
+    return ctorPtr(mesh, dict.subDict(sigmaModelType + "Coeffs"));
 }
 
 

@@ -24,6 +24,24 @@ License
 Class
     Foam::ChangJaffe.C
 
+Description
+    The linear relation in electrochemistry refers to a simplified
+    approximation of the kinetics of electrochemical reactions.
+    Unlike the more detailed Butler-Volmer and Tafel relations,
+    the linear relation assumes a simplified, linear relationship
+    between the rate of an electrochemical reaction and the overpotential
+    (the difference between the actual electrode potential and the equilibrium potential).
+
+    \f[
+        j = j_0 \prod_i\left(\frac{p_i}{p_{ref}}\right)^\ksi (1 - s)^\gamma \eta
+    \f]
+
+    Read more:
+    \vartable
+        Chang, Hung‐Chi, and George Jaffé. "Polarization in electrolytic solutions.
+        Part I. Theory." The Journal of Chemical Physics 20.7 (1952): 1071-1077.
+    \endvartable
+
 SourceFiles
     ChangJaffe.C
 

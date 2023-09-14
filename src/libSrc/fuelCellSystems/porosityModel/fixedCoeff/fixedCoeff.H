@@ -34,6 +34,9 @@ Description
     In the case of compressible flow, a value for the reference density is
     required
 
+Note
+    Capillary pressure in two-phase system not included.
+
 SourceFiles
     fixedCoeff.C
 

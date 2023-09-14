@@ -24,8 +24,12 @@ License
 Class
     Foam::phaseModel
 
+Description
+    Base class for diversed phases
+
 SourceFiles
     phaseModel.C
+    newPhaseModel.C
 
 \*---------------------------------------------------------------------------*/
 

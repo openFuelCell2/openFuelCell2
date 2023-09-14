@@ -40,10 +40,10 @@ Foam::swarmCorrection::New
     Info<< "Selecting swarmCorrection for "
         << pair << ": " << swarmCorrectionType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(swarmCorrectionType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(swarmCorrectionType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown swarmCorrectionType type "
@@ -53,7 +53,7 @@ Foam::swarmCorrection::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair);
+    return ctorPtr(dict, pair);
 }
 
 

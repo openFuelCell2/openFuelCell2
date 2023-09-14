@@ -24,8 +24,12 @@ License
 Class
     Foam::regionType.C
 
+Description
+    The abstract class for region types.
+
 SourceFiles
     regionType.C
+    newRegionType.C
 
 \*---------------------------------------------------------------------------*/
 

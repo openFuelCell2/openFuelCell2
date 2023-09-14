@@ -203,5 +203,4 @@ void Foam::phaseModel::correctInflowOutflow(surfaceScalarField& alphaPhi) const
     }
 }
 
-
 // ************************************************************************* //

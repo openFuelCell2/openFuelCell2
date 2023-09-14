@@ -30,13 +30,13 @@ Description
 
     The input dictionary, diffsivity, is of the following form:
 
-    @verbatim
+    \vartable
     diffusivity
     {
         type        fixedDiffusivity;
         diff0       diff0 [0 2 -1 0 0 0 0]  2.0e-4;    [m^2/s]
     }
-    @endverbatim
+    \endvartable
 
 
 SourceFiles

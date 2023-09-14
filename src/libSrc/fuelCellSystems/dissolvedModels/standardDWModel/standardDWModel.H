@@ -22,10 +22,15 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::epRegionModel.C
+    Foam::standardDWModel.C
+
+Description
+    This class is named as standardDWModel. It only means a typical way to solve
+    dissolved water transfer through the Nafion membrane.
+    The diffusion and electro-osmotic drag are taken into account.
 
 SourceFiles
-    epRegionModel.C
+    standardDWModel.C
 
 \*---------------------------------------------------------------------------*/
 

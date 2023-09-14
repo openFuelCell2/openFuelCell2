@@ -168,14 +168,14 @@ void Foam::driftFluxSystem::solve()
 
     pimpleControl pimple(mesh);
 
-    #include "./createFields.H"
+    #include "createFields.H"
 
     Switch faceMomentum
     (
         pimple.dict().lookupOrDefault<Switch>("faceMomentum", false)
     );
 
-    #include "./pUf/createRDeltaTf.H"
+    #include "pUf/createRDeltaTf.H"
 
     if (LTS && faceMomentum)
     {
@@ -185,25 +185,25 @@ void Foam::driftFluxSystem::solve()
     // --- Pressure-velocity PIMPLE corrector loop
     while (pimple.loop())
     {
-        #include "./alphaEqn.H"
+        #include "alphaEqn.H"
 
         correct();
 
         mixture_->correct();
 
-        #include "./YEqns.H"
+        #include "YEqns.H"
 
         if (faceMomentum)
         {
-            #include "./pUf/UEqns.H"
-            #include "./EEqns.H"
-            #include "./pUf/pEqn.H"
+            #include "pUf/UEqns.H"
+            #include "EEqns.H"
+            #include "pUf/pEqn.H"
         }
         else
         {
-            #include "./pU/UEqns.H"
-            #include "./EEqns.H"
-            #include "./pU/pEqn.H"
+            #include "pU/UEqns.H"
+            #include "EEqns.H"
+            #include "pU/pEqn.H"
         }
 
         correctKinematics();

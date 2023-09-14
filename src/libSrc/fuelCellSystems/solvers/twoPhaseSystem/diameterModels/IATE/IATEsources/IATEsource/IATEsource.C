@@ -50,10 +50,10 @@ Foam::diameterModels::IATEsource::New
     const dictionary& dict
 )
 {
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(type);
+    auto* ctorPtr =
+        dictionaryConstructorTable(type);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown IATE source type "
@@ -63,7 +63,7 @@ Foam::diameterModels::IATEsource::New
             << exit(FatalError);
     }
 
-    return autoPtr<IATEsource>(cstrIter()(iate, dict));
+    return autoPtr<IATEsource>(ctorPtr(iate, dict));
 }
 
 

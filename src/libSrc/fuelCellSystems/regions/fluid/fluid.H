@@ -24,6 +24,11 @@ License
 Class
     Foam::fluid.C
 
+Description
+    The 'fluid' region considers the fluid part, for example, channels, porous zones.
+    Temperature and thermal properties will be mapped from and mapped to the main domain.
+    All of the flow related physical processes in this region are considered in the form of phaseSystem.
+
 SourceFiles
     fluid.C
 

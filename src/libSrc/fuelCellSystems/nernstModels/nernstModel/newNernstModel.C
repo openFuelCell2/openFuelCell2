@@ -51,10 +51,10 @@ Foam::nernstModel::New
         << phase1.mesh().name() << ": "
         << nernstModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(nernstModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(nernstModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown nernstModelType type "
@@ -64,7 +64,7 @@ Foam::nernstModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(phase1, phase2, dict);
+    return ctorPtr(phase1, phase2, dict);
 }
 
 

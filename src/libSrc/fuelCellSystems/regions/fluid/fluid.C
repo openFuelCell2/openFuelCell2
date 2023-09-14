@@ -199,22 +199,9 @@ void Foam::regionTypes::fluid::mapToCell
         internalFaceMap
     );
 
-    // Name of the other phase
-    // If not existed, name = word::null
-//    word otherName = word::null;
-//
-//    if (!phases_->isSinglePhase())
-//    {
-//        otherName = Pair<word>
-//            (
-//                phases_->phases()[0].name(),
-//                phases_->phases()[1].name()
-//            ).other(continuous);
-//    }
     // Do flux boundary conditions
     forAll (patchesMapIO_, patchI)
     {
-        // Map only real matching patches.  HJ, 22/May/2011
         if
         (
             patchesMapIO_[patchI] > -1
@@ -250,12 +237,6 @@ void Foam::regionTypes::fluid::mapToCell
                 (
                     (
                         rhoPhi.boundaryFieldRef()[patchI]
-//                      + (
-//                            otherName == word::null
-//                          ? rhoPhi.boundaryFieldRef()[patchI]*0.0
-//                          : phases_->phases()[otherName].
-//                            alphaRhoPhiRef().boundaryFieldRef()[patchI]
-//                        )
                     )*curMask,
                     curFpm
                 );
@@ -266,15 +247,6 @@ void Foam::regionTypes::fluid::mapToCell
                     (
                         phase.thermo().Cp().ref().boundaryFieldRef()[patchI]
                       * rhoPhi.boundaryFieldRef()[patchI]
-//                      + (
-//                            otherName == word::null                                            
-//                          ? phase.thermo().Cp().ref().boundaryFieldRef()[patchI]
-//                          * rhoPhi.boundaryFieldRef()[patchI]*0.0                                                                
-//                          : phases_->phases()[otherName].
-//                            alphaRhoPhiRef().boundaryFieldRef()[patchI]
-//                          * phases_->phases()[otherName].
-//                            thermo().Cp().ref().boundaryFieldRef()[patchI]
-//                        )
                     )*curMask,
                     curFpm
                 );

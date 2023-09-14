@@ -393,8 +393,8 @@ void Foam::twoPhaseSystem::solve()
 
     const Time& runTime = mesh.time();
 
-    #include "./createFields.H"
-    #include "./createFieldRefs.H"
+    #include "createFields.H"
+    #include "createFieldRefs.H"
 
     Switch faceMomentum
     (
@@ -406,11 +406,11 @@ void Foam::twoPhaseSystem::solve()
         pimple_.dict().lookupOrDefault<word>("activePhase", phase1_.name())
     );
 
-    #include "./pUf/createRDeltaTf.H"
+    #include "pUf/createRDeltaTf.H"
 
     if (LTS && faceMomentum)
     {
-        #include "./setRDeltaTf.H"
+        #include "setRDeltaTf.H"
     }
 
     int nEnergyCorrectors
@@ -433,19 +433,19 @@ void Foam::twoPhaseSystem::solve()
 
         correct();
 
-        #include "./YEqns.H"
+        #include "YEqns.H"
 
         if (faceMomentum)
         {
-            #include "./pUf/UEqns.H"
-            #include "./EEqn.H"
-            #include "./pUf/pEqn.H"
+            #include "pUf/UEqns.H"
+            #include "EEqn.H"
+            #include "pUf/pEqn.H"
         }
         else
         {
-            #include "./pU/UEqns.H"
-            #include "./EEqn.H"
-            #include "./pU/pEqn.H"
+            #include "pU/UEqns.H"
+            #include "EEqn.H"
+            #include "pU/pEqn.H"
         }
 
         correctKinematics();
@@ -456,6 +456,7 @@ void Foam::twoPhaseSystem::solve()
         }
     }
 }
+
 
 bool Foam::twoPhaseSystem::isSinglePhase() const
 {

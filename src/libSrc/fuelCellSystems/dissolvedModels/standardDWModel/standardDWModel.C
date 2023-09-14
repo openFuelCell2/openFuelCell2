@@ -22,12 +22,11 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
-#include "fvCFD.H"
 
+#include "fvCFD.H"
 #include "standardDWModel.H"
 #include "regionType.H"
 #include "fuelCellSystem.H"
-
 #include "constants.H"
 #include "addToRunTimeSelectionTable.H"
 

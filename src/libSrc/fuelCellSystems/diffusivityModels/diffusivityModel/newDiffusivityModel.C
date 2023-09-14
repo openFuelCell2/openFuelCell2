@@ -46,10 +46,10 @@ autoPtr<diffusivityModel> diffusivityModel::New
 
     Info<< "Selecting diffusivity model " << diffTypeName << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(diffTypeName);
+    auto* ctorPtr =
+        dictionaryConstructorTable(diffTypeName);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorIn
         (
@@ -64,7 +64,7 @@ autoPtr<diffusivityModel> diffusivityModel::New
 
     return autoPtr<diffusivityModel>
     (
-        cstrIter()
+        ctorPtr
         (
             name,
             mesh,

@@ -22,10 +22,14 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::epRegionModel.C
+    Foam::noneDWModel.C
+
+Description
+    No dissolved water transfer is taken into account.
+    This is the default selection if no dissolved water model is selected.
 
 SourceFiles
-    epRegionModel.C
+    noneDWModel.C
 
 \*---------------------------------------------------------------------------*/
 

@@ -25,7 +25,7 @@ Class
     Foam::sigmaModels::lambdaSigma
 
 Description
-    Constant dispersed-phase particle sigma model.
+    Electric conductivity of material in a function of lambda (water content).
 
 SourceFiles
     lambdaSigma.C

@@ -41,10 +41,10 @@ Foam::autoPtr<Foam::mixtureViscosityModel> Foam::mixtureViscosityModel::New
 
     Info<< "Selecting incompressible transport model " << modelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(modelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(modelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown mixtureViscosityModel type "
@@ -55,7 +55,7 @@ Foam::autoPtr<Foam::mixtureViscosityModel> Foam::mixtureViscosityModel::New
     }
 
     return autoPtr<mixtureViscosityModel>
-        (cstrIter()(name, viscosityProperties, U, phi));
+        (ctorPtr(name, viscosityProperties, U, phi));
 }
 
 

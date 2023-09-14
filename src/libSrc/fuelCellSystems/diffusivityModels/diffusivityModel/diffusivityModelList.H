@@ -25,7 +25,7 @@ Class
     Foam::diffusivityModelList
 
 Description
-    List container for porosity models
+    List container for diffusivity models
 
 SourceFiles
     diffusivityModelList.C

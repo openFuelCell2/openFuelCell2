@@ -25,6 +25,9 @@ Class
     Foam::fuelCellSystem
 
 Description
+    This is the top-level class representing the overall system of the solution framework.
+    The class creates the temperature and thermal properties on the main domain, as well as
+    the interface to the sub-domains, i.e. mapToCell(), mapFromCell(), solve(), and correct().
 
 SourceFiles
     fuelCellSystem.C

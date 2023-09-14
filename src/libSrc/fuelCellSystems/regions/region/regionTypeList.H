@@ -25,7 +25,19 @@ Class
     Foam::regionTypeList
 
 Description
-    List container for regions
+    List container for various region types.
+    Read input from constant/regionProperties.
+
+    For example:
+
+    \vartable
+    regions
+    (
+        fluid       (air fuel)
+        solid       (interconnect electrode)
+        electric    (phiE phiI)
+    )
+    \endvartable
 
 SourceFiles
     regionTypeList.C

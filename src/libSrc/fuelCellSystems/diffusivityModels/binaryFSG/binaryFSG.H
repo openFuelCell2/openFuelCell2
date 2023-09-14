@@ -31,6 +31,7 @@ Description
                1e-3 * T^{1.75} * sqrt(1/mA + 1/mB)
     D = 1e-4 * -----------------------------------
                   p * [ vA^{1/3} + vB^{1/3} ]^2
+
     where
         D = diffusivity ......... [m^2/s]
         T = temperature ......... [K]
@@ -45,16 +46,17 @@ Description
 
     The input dictionary, diffsivity, is of the following form:
 
-    @verbatim
+    \vartable
     diffusivity
     {
         type        binaryFSG;
+        alphaName   alpha.air;        // Volume fraction, by default 1
         Tname       T;                // T (temperature) file name
         pName       p;                // p (pressure/density) file name
         speciesA    O2;               // diffusing species
         speciesB    N2;               // background species
     }
-    @endverbatim
+    \endvartable
 
     The model uses the fsgMolecularWeights and fsgDiffusionVolumes lookup
     tables to obtain the species molecular weights and diffusion volumes.

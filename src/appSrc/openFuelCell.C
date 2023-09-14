@@ -25,7 +25,10 @@ Application
     openFuelCell
 
 Description
-    Solver for electrochemical devices...
+    Steady (transient) solver for multiple region heat and mass transfer problems:
+    e.g. fuel cells and electrolyzers...
+    The solver works for several types of fuel cell and electrolyzer applications.
+    The solver also provides a framework for multiple region and multiphysical modeling and simulations.
 
 Contributors
     Shidong Zhang (s.zhang@fz-juelich.de)
@@ -49,6 +52,14 @@ Contributors
 
 int main(int argc, char *argv[])
 {
+    argList::addNote
+    (
+        "Steady (transient) solver for multiple region heat and mass transfer problems: "
+        "e.g. fuel cells and electrolyzers..."
+        " The solver works for several types of fuel cell and electrolyzer applications."
+        " The solver also provides a framework for multiple region and multiphysical modeling and simulations."
+    );
+
     #include "setRootCaseLists.H"
     #include "createTime.H"
     #include "createMesh.H"

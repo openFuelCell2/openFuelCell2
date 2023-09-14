@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::massTransferModel> Foam::massTransferModel::New
     Info<< "Selecting massTransferModel for "
         << pair << ": " << massTransferModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(massTransferModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(massTransferModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown massTransferModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::massTransferModel> Foam::massTransferModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair);
+    return ctorPtr(dict, pair);
 }
 
 

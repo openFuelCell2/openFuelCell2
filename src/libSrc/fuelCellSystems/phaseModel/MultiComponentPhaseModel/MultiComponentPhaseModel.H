@@ -28,6 +28,8 @@ Description
     Class which represents a phase with multiple species. Returns the species'
     mass fractions, and their governing equations.
 
+    The diffusion coefficient is described by Fick's law.
+
 SourceFiles
     MultiComponentPhaseModel.C
 

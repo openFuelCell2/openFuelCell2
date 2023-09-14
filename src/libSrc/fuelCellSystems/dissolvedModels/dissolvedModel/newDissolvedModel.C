@@ -42,10 +42,10 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
     Info << "Selecting dissolved water transfer Type: "
         << modelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(modelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(modelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorIn("dissolvedModel::New")
            << "Unknown dissolvedModel type "
@@ -55,7 +55,7 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
            << exit(FatalError);
     }
 
-    return cstrIter()
+    return ctorPtr
     (
         mesh,
         modelType == "none"

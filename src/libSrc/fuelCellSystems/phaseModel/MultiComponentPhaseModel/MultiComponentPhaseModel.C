@@ -34,6 +34,7 @@ License
 #include "fvcDdt.H"
 #include "fvcDiv.H"
 #include "fvMatrix.H"
+#include "zeroGradientFvPatchFields.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -144,7 +145,8 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
                     IOobject::AUTO_WRITE
                 ),
                 this->mesh(),
-                dimensionedScalar("diff", this->muEff()->dimensions()/dimDensity, SMALL)
+                dimensionedScalar("diff", this->muEff()->dimensions()/dimDensity, SMALL),
+                zeroGradientFvPatchVectorField::typeName
             )
         );
     }
@@ -261,7 +263,7 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::YiEqn(volScalarField& Yi)
             "laplacian(diff,Yi)"
         )
       ==
-        alpha*this->R(Yi)
+        alpha*this->R(Yi)                   // TODO: check this term
 
       + fvc::ddt(residualAlpha_*rho, Yi)
       - fvm::ddt(residualAlpha_*rho, Yi)

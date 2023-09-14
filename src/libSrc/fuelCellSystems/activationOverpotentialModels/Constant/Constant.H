@@ -24,6 +24,10 @@ License
 Class
     Foam::Constant.C
 
+Description
+    This is a simplified expression by assuming a constant value.
+    It is not tested. Be careful.
+
 SourceFiles
     Constant.C
 

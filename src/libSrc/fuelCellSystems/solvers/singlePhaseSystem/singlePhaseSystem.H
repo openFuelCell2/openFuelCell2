@@ -25,7 +25,7 @@ Class
     Foam::singlePhaseSystem
 
 Description
-    To solve the governing equations of single phase flows
+    To solve the governing equations of single phase system, like SIMPLE(C).
 
 SourceFiles
     singlePhaseSystem.C

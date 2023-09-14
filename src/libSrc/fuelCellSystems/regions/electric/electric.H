@@ -26,6 +26,7 @@ Class
 
 Description
     The 'electric' region considers electron and ion/proton transfer in electrochemical devices.
+    Temperature and thermal properties will be mapped from and mapped to the main domain.
     Fuel cell and electrolyzer can operate under galvanostatic or potentostatic mode, which means
     the current density or voltage is prescribed, respectively.
     Possion equations are solved accordingly in electrically conductive regions.
@@ -44,6 +45,7 @@ SourceFiles
 #include "volFields.H"
 #include "wordList.H"
 #include "HashTable.H"
+#include "Function1.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -106,16 +108,24 @@ private:
         //- The reference boundary for the prescribed current density or voltage
         word patchName_;
 
+        //- Zone name
+        //- A reference reacting zone to collect the amount of current flow
+        //- By default, it is the whole domain.
+        word zoneName_;
+
+        //- Cell zone ids <-- zoneName
+        labelList cellZoneIDs_;
+
         //- Operation mode: (currentCollector_ true)
         Switch galvanostatic_;
 
         //- Mean current density
         //- Make sense when galvanostatic_ is true
-        scalar ibar_;
+        autoPtr<Function1<scalar>> ibar_;
 
         //- Voltage
         //- Make semse when galvanostatic_ is false
-        scalar voltage_;
+        autoPtr<Function1<scalar>> voltage_;
 
 public:
         TypeName("electric");

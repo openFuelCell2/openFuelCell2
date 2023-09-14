@@ -35,7 +35,7 @@ Description
 
     The input dictionary, diffsivity, is of the following form:
 
-    @verbatim
+    \vartable
     diffusivity
     {
         type        porousFSG;
@@ -47,7 +47,7 @@ Description
         tortuosity  3.0;
         dPore       dPore [0 1 0 0 0 0 0] 8e-06;   // pore size
     }
-    @endverbatim
+    \endvartable
 
 SourceFiles
     porousFSG.C

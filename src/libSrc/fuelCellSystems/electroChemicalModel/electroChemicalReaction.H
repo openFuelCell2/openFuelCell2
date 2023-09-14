@@ -25,7 +25,11 @@ Class
     Foam::electroChemicalReaction
 
 Description
-    Base class for electroChemicalReaction models
+    Class for electroChemicalReactions.
+
+TODO
+    Multiple electrochemical reactions
+    Combined chemical reactions
 
 SourceFiles
     electroChemicalReaction.C

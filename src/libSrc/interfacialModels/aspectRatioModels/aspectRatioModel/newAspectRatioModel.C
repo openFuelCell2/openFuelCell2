@@ -40,10 +40,10 @@ Foam::aspectRatioModel::New
     Info<< "Selecting aspectRatioModel for "
         << pair << ": " << aspectRatioModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(aspectRatioModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(aspectRatioModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown aspectRatioModelType type "
@@ -53,7 +53,7 @@ Foam::aspectRatioModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair);
+    return ctorPtr(dict, pair);
 }
 
 

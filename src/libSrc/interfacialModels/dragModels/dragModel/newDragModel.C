@@ -32,17 +32,17 @@ Foam::autoPtr<Foam::dragModel> Foam::dragModel::New
 (
     const dictionary& dict,
     const phasePair& pair
-)
+)   
 {
     word dragModelType(dict.lookup("type"));
 
     Info<< "Selecting dragModel for "
-        << pair << ": " << dragModelType << endl;
+        << pair << ": "  << dragModelType << endl;
+ 
+    auto* ctorPtr =
+        dictionaryConstructorTable(dragModelType);
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(dragModelType);
-
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown dragModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::dragModel> Foam::dragModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair, true);
+    return ctorPtr(dict, pair, true);
 }
 
 

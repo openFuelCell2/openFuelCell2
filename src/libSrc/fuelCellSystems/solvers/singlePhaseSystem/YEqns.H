@@ -15,7 +15,7 @@
             Y1iEqn.relax();
             Y1iEqn.solve(mesh.solver("Yi"));
 
-            Y1[i].max(0.0);
+            Y1[i].max(SMALL);
             Y1[i].min(1.0);
 
             Info << "Y: " << Y1[i].name() << ":"

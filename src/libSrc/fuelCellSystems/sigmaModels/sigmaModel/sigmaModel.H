@@ -25,7 +25,7 @@ Class
     Foam::sigmaModel
 
 Description
-    A2stract base-class for dispersed-phase particle diameter models.
+    Abstract base-class for electric conductivity models.
 
 SourceFiles
     sigmaModel.C

@@ -139,6 +139,9 @@ Usage
     }
     \endverbatim
 
+Note
+    The base and derived classes are the same as the classes in OpenFOAM.
+
 See also
     Foam::diameterModels::sizeGroup
     Foam::diameterModels::velocityGroup

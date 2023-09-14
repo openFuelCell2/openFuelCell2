@@ -251,5 +251,4 @@ bool Foam::porousZone::read(const dictionary& dict)
     return true;
 }
 
-
 // ************************************************************************* //

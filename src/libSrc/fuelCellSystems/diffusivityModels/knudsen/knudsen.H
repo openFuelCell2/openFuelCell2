@@ -39,7 +39,7 @@ Description
 
     The input dictionary, diffusivity, is of the following form:
 
-    @verbatim
+    \vartable
     diffusivity
     {
         type     knudsen;
@@ -47,7 +47,7 @@ Description
         dPore    dPore [0 3 0 0 0 0 0] 8e-06;    // density
         MW       MW [1 0 0 0 -1 0 0] 31.9988;    // O2 [kg/kmol]
     }
-    @endverbatim
+    \endvartable
 
 SourceFiles
     knudsen.C

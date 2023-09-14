@@ -24,8 +24,12 @@ License
 Class
     Foam::nernstModel.C
 
+Description
+    The nernst potential calculated on each electrode.
+
 SourceFiles
     nernstModel.C
+    newNernstModel.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -75,7 +79,7 @@ protected:
 
 public:
     //- Runtime type information
-    TypeName("nernstModel");
+    ClassName("nernstModel");
 
     // Declare runtime construction
 

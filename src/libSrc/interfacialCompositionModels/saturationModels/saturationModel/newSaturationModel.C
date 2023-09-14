@@ -38,10 +38,10 @@ Foam::autoPtr<Foam::saturationModel> Foam::saturationModel::New
     Info<< "Selecting saturationModel: "
         << saturationModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(saturationModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(saturationModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown saturationModelType type "
@@ -51,7 +51,7 @@ Foam::autoPtr<Foam::saturationModel> Foam::saturationModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, db);
+    return ctorPtr(dict, db);
 }
 
 

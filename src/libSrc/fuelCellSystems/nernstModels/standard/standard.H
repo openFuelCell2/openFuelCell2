@@ -24,6 +24,27 @@ License
 Class
     Foam::standard.C
 
+Description
+    A standard way to calculate the Nernst potential.
+
+    \f[
+        E = \frac{-\Delta G}{nF}
+        - \frac{RT}{nF} \ln\prod_i\frac{p^w_{rxt}}{p^w_{prd}}
+    \f]
+
+    where
+    \vartable
+        G               | Gibbs free energy
+        n               | Number of electron transfer
+        F               | Faraday's constant
+        R               | Universal gas constant
+        T               | Temperature
+        p               | Partial pressure
+        w               | Stoichiometric coefficient
+        rxt             | Reactant
+        prd             | Product
+    \endvartable
+
 SourceFiles
     standard.C
 

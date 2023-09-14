@@ -36,7 +36,9 @@ Description
         C_0      | model linear coefficient
         C_1      | model exponent coefficient
     \endvartable
-
+    
+Note
+    Capillary pressure in two-phase system not included.
 
 SourceFiles
     powerLaw.C

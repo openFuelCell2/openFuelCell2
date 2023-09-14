@@ -25,7 +25,7 @@ Class
     Foam::masterRegionToCell
 
 Description
-    A topoSetSource to select faces based on masterCellZone.
+    A topoSetSource to select zone based on masterCellZone.
 
 SourceFiles
     masterRegionToCell.C

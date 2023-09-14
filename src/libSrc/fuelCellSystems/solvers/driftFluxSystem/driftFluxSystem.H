@@ -25,6 +25,8 @@ Class
     Foam::driftFluxSystem
 
 Description
+    The class to solve a two-phase drift-flux system
+    Note: the solver is still under test. To be updated.
 
 SourceFiles
     driftFluxSystem.C

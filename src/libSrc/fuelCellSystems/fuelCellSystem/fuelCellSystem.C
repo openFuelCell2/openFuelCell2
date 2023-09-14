@@ -201,7 +201,6 @@ Foam::fuelCellSystem::fuelCellSystem
     );
 }
 
-
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 Foam::fuelCellSystem::~fuelCellSystem()

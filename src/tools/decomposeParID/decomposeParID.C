@@ -25,6 +25,32 @@ Application
     decomposePar IDs
 
 Description
+    Generate the cellIDs for mesh decomposition (manual) in parallel simulations.
+
+       1     2          .....         nx-1    nx  
+    -----------------------------------------------
+    '     '     '       .....       '       '     ' 1
+    '---------------------------------------------'
+    '     '     '       .....       '       '     ' 2
+    '---------------------------------------------'
+    '     '     '       .....       '       '     ' .
+    '---------------------------------------------'
+    '     '     '       .....       '       '     ' ny-1
+    '---------------------------------------------'
+    '     '     '       .....       '       '     ' ny
+    '---------------------------------------------'
+
+    Data communicate between different overlapped regions. Decomposition has to make sure
+    these overlapped zones are accessible to each other. Manual decomposition is a solution.
+    The domain (above) can be decomposed into nx*ny small domains.
+
+    However, the manual decomposition can limit the parallel performance if the mesh is not uniform.
+    Even if the main domain is uniform, the sub-regions can be non-uniform.
+
+    If you have a better approach, feel free to suggest. We appreciate your feedback.
+
+SourceFiles
+    decomposeParID.C
 
 \*---------------------------------------------------------------------------*/
 

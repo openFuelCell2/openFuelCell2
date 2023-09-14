@@ -52,10 +52,10 @@ Foam::diameterModels::daughterSizeDistributionModel::New
         dict.lookup("daughterSizeDistributionModel")
     );
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(daughterSizeDistributionModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(daughterSizeDistributionModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown daughter size distribution model type "
@@ -65,7 +65,7 @@ Foam::diameterModels::daughterSizeDistributionModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(breakup, dict);
+    return ctorPtr(breakup, dict);
 }
 
 

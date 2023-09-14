@@ -5,7 +5,7 @@ wclean libso regionCourantNo
 wclean libso interfacialModels
 wclean libso interfacialCompositionModels
 wclean libso derivedFvPatchFields
-wclean libso functionObjects
+wclean libso thermalTools
 wclean libso fuelCellSystems
 wclean libso multiPhaseCompressibleTurbulenceModels
 

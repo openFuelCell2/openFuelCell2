@@ -135,16 +135,18 @@ Foam::regionTypes::electric::electric
     control_(dict_.lookupOrDefault<Switch>("control", false)),
     dissolveOnOff_(dict_.lookupOrDefault<Switch>("dissolveOnOff", false)),
     patchName_(word::null),
+    zoneName_(word::null),
+    cellZoneIDs_(),
     galvanostatic_(true),
-    ibar_(0.0),
-    voltage_(0.0)
+    ibar_(nullptr),
+    voltage_(nullptr)
 {
     if (dissolveOnOff_)
     {
         dissolved_ = dissolvedModel::New(*this, dict_.subDict("dissolved"));
     }
 
-    sigma_.set
+    sigma_.reset
     (
         new sigmaModelList
         (
@@ -161,11 +163,16 @@ Foam::regionTypes::electric::electric
 
         if (galvanostatic_)
         {
-            controlDict.lookup("ibar") >> ibar_;
+            ibar_.reset(Function1<scalar>::New("ibar", controlDict, this));
         }
         else
         {
-            controlDict.lookup("voltage") >> voltage_;
+            voltage_.reset(Function1<scalar>::New("voltage", controlDict, this));
+        }
+
+        {
+            zoneName_ = controlDict.getOrDefault<word>("zoneName", name());
+            cellZoneIDs_ = this->cellZones().indices(zoneName_);
         }
     }
 }
@@ -182,14 +189,6 @@ void Foam::regionTypes::electric::solve()
 {
     Info << "\nSolve for region " << name() << ":\n" << endl;
 
-    //- Here we define a sgn to make sure the coefficient in the matrix positive
-//    scalar sgn = 1;
-//
-//    if (phi_.needReference())
-//    {
-//        sgn = -1;
-//    }
-
     tmp<fvScalarMatrix> phiEqn
     (
       - fvm::laplacian(sigmaField_, phi_, "laplacian(sigma,phi)")
@@ -200,7 +199,7 @@ void Foam::regionTypes::electric::solve()
     if (phi_.needReference())
     {
         //- Update the potential field.
-        //- ElectroNatural, the total electron+proton flux should be zero
+        //- Electro-Neutral, the total electron+proton flux should be zero
         const scalarField& source = j_;
         const scalarField& volume = this->V();
         scalarField sum = source*volume;
@@ -240,11 +239,23 @@ void Foam::regionTypes::electric::correct()
     if (control_)
     {
         //- Update the potential field.
-        //- ElectroNatural, the total electron+proton flux should be zero
         const scalarField& source = j_;
         const scalarField& volume = this->V();
-        scalarField sum = source*volume;
-        scalar iDot(Foam::gSum(sum));
+        scalar iDot(0.0);
+
+        forAll(cellZoneIDs_, zoneI)
+        {
+            const labelList& cells = this->cellZones()[cellZoneIDs_[zoneI]];
+
+            forAll(cells, i)
+            {
+                const label cellI = cells[i];
+
+                iDot += source[cellI] * volume[cellI];
+            }
+        }
+
+        reduce(iDot, sumOp<scalar>());
 
         {
             label patchID = this->boundaryMesh().findPatchID(patchName_);
@@ -260,8 +271,16 @@ void Foam::regionTypes::electric::correct()
 
             scalar ibar0 = iDot/Foam::gSum(this->magSf().boundaryField()[patchID]);
 
-            phi_.boundaryFieldRef()[patchID] == phiBoundary + relax_*(ibar0 - ibar_);
-
+            if (galvanostatic_)
+            {
+                phi_.boundaryFieldRef()[patchID] ==
+                    phiBoundary + relax_*(ibar0 - ibar_->value(time().value()));
+            }
+            else
+            {
+                phi_.boundaryFieldRef()[patchID] == voltage_->value(time().value());
+            }
+            
             Info << "ibar: " << ibar0 << "\t"<< "voltage: " << Foam::gAverage(phiBoundary) << endl;
         }
     }

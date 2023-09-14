@@ -25,7 +25,7 @@ Class
     Foam::sigmaModels::constantSigma
 
 Description
-    Constant dispersed-phase particle sigma model.
+    Electric conductivity is a constant.
 
 SourceFiles
     constantSigma.C

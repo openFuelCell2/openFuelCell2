@@ -48,10 +48,10 @@ Foam::diameterModels::driftModel::New
     const dictionary& dict
 )
 {
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(type);
+    auto* ctorPtr =
+        dictionaryConstructorTable(type);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown drift model type "
@@ -61,7 +61,7 @@ Foam::diameterModels::driftModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<driftModel>(cstrIter()(popBal, dict));
+    return autoPtr<driftModel>(ctorPtr(popBal, dict));
 }
 
 

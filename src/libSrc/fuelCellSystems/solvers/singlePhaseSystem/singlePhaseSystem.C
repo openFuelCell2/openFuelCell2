@@ -79,8 +79,8 @@ void Foam::singlePhaseSystem::solve()
 
     const Time& runTime = mesh.time();
 
-    #include "./createFields.H"
-    #include "./createRhoUfIfPresent.H"
+    #include "createFields.H"
+    #include "createRhoUfIfPresent.H"
 
     Switch Y
     (
@@ -97,18 +97,18 @@ void Foam::singlePhaseSystem::solve()
 
         correct();
 
-        #include "./YEqns.H"
-        #include "./UEqn.H"
+        #include "YEqns.H"
+        #include "UEqn.H"
 
         while (pimple_.correct())
         {
             if (pimple_.consistent())
             {
-                #include "./pcEqn.H"
+                #include "pcEqn.H"
             }
             else
             {
-                #include "./pEqn.H"
+                #include "pEqn.H"
             }
         }
 

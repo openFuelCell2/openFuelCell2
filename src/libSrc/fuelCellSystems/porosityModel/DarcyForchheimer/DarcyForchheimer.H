@@ -43,6 +43,9 @@ Description
     The orientation of the porous region is defined with the same notation as
     a co-ordinate system, but only a Cartesian co-ordinate system is valid.
 
+Note:
+    The capillary pressure in two-phase system are considered with a function dpcds().
+
 SourceFiles
     DarcyForchheimer.C
     DarcyForchheimerTemplates.C

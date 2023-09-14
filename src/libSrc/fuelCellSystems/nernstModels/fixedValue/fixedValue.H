@@ -24,6 +24,27 @@ License
 Class
     Foam::fixedValue.C
 
+Description
+    A prescribed reference potential to calculate the Nernst potential.
+
+    \f[
+        E = E_0
+        - \frac{RT}{nF} \ln\prod_i\frac{p^w_{rxt}}{p^w_{prd}}
+    \f]
+
+    where
+    \vartable
+        E_0             | Reference potential
+        n               | Number of electron transfer
+        F               | Faraday's constant
+        R               | Universal gas constant
+        T               | Temperature
+        p               | Partial pressure
+        w               | Stoichiometric coefficient
+        rxt             | Reactant
+        prd             | Product
+    \endvartable
+
 SourceFiles
     fixedValue.C
 

@@ -30,6 +30,7 @@ Description
 
 SourceFiles
     phaseSystem.C
+    newPhaseSystem.C
 
 \*---------------------------------------------------------------------------*/
 

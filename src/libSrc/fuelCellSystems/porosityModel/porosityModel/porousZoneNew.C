@@ -40,10 +40,10 @@ Foam::autoPtr<Foam::porousZone> Foam::porousZone::New
     Info<< "Porosity region " << name << ":" << nl
         << "    selecting model: " << modelType << endl;
 
-    meshConstructorTable::iterator cstrIter =
-        meshConstructorTablePtr_->find(modelType);
+    auto* ctorPtr =
+        meshConstructorTable(modelType);
 
-    if (cstrIter == meshConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown " << typeName << " type " << modelType << nl << nl
@@ -54,7 +54,7 @@ Foam::autoPtr<Foam::porousZone> Foam::porousZone::New
 
     return autoPtr<porousZone>
     (
-        cstrIter()
+        ctorPtr
         (
             name,
             modelType,

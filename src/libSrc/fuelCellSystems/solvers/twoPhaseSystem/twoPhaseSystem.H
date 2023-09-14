@@ -25,7 +25,8 @@ Class
     Foam::twoPhaseSystem
 
 Description
-    Class which solves the volume fraction equations for two phases.
+    Class which solves the equations for two phase systems.
+    See availabel types in twoPhaseSystems.C.
 
 SourceFiles
     twoPhaseSystem.C

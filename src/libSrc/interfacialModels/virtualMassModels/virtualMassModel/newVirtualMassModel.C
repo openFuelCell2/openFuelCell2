@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::virtualMassModel> Foam::virtualMassModel::New
     Info<< "Selecting virtualMassModel for "
         << pair << ": " << virtualMassModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(virtualMassModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(virtualMassModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown virtualMassModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::virtualMassModel> Foam::virtualMassModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair, true);
+    return ctorPtr(dict, pair, true);
 }
 
 

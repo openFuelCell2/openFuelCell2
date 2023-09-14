@@ -26,6 +26,8 @@ Class
 
 Description
     Top level model for porosity models
+    Among the derived porosity models, only DarcyForchheimer model considres the
+    capillary pressure in two-phase porous flows.
 
 SourceFiles
     porousZone.C

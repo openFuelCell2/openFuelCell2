@@ -24,6 +24,23 @@ License
 Class
     Foam::Tafel.C
 
+Description
+    The Tafel relation is an abstract concept in electrochemistry that
+    provides insight into how the rate of an electrochemical reaction
+    depends on the electrode potential. Specifically, it describes the
+    relationship between the rate of an electrochemical reaction and
+    the overpotential (the difference between the actual electrode potential
+    and the equilibrium potential) experienced by an electrode.
+
+    The mathematic expression is a simplification of a Butler-Volmer relation.
+
+    \f[
+        j = j_0 \prod_i\left(\frac{p_i}{p_{ref}}\right)^\ksi (1 - s)^\gamma
+        \left(
+            \exp{\frac{n\alpha F}{RT}\eta}
+        \right)
+    \f]
+
 SourceFiles
     Tafel.C
 

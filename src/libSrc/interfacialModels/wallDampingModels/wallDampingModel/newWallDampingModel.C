@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::wallDampingModel> Foam::wallDampingModel::New
     Info<< "Selecting wallDampingModel for "
         << pair << ": " << wallDampingModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(wallDampingModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(wallDampingModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown wallDampingModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::wallDampingModel> Foam::wallDampingModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair);
+    return ctorPtr(dict, pair);
 }
 
 

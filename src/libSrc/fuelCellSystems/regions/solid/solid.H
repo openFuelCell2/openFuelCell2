@@ -24,6 +24,11 @@ License
 Class
     Foam::solid.C
 
+Description
+    The 'solid' region considers the solid part, for example, interconnect, electrode.
+    Temperature and thermal properties will be mapped from and mapped to the main domain.
+    Used as a heat dissipator
+
 SourceFiles
     solid.C
 
@@ -37,6 +42,7 @@ SourceFiles
 #include "fuelCellSystem.H"
 #include "solidThermo.H"
 #include "volFields.H"
+#include "radiationModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -56,8 +62,11 @@ class solid
         //- mesh
         const fvMesh& mesh_;
 
-       //- solid thermo model
-       autoPtr<solidThermo> thermo_;
+        //- solid thermo model
+        autoPtr<solidThermo> thermo_;
+
+        //- Radiation model
+        autoPtr<radiation::radiationModel> radiation_;
 
         //- Heat source/sink
         volScalarField Qdot_;

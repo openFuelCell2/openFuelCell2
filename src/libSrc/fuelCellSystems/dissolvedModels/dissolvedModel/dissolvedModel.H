@@ -22,10 +22,15 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::epRegionModel.C
+    Foam::dissolvedModel.C
+
+Description
+    With the Nafion membrane, water can transfer from one side to the other.
+    The mechanism includes hydraulic permeability, diffusion, and electro-osmotic drag.
+    The permeability is usually small, therefore, it is not considred here.
 
 SourceFiles
-    epRegionModel.C
+    dissolvedModel.C
 
 \*---------------------------------------------------------------------------*/
 

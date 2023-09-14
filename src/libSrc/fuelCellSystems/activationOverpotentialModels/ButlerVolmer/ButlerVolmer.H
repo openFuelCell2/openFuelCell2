@@ -24,6 +24,21 @@ License
 Class
     Foam::ButlerVolmer.C
 
+Description
+    The Butler-Volmer relation is an abstract concept in electrochemistry
+    that describes the mathematical relationship between the rate of
+    an electrochemical reaction and the overpotential
+    (the deviation from the equilibrium potential) experienced
+    by an electrode during that reaction.
+
+    \f[
+        j = j_0 \prod_i\left(\frac{p_i}{p_{ref}}\right)^\ksi (1-s)^\gamma
+        \left(
+            \exp{\frac{n\alpha F}{RT}\eta}
+          - \exp{-\frac{n(1 - \alpha)F}{RT}\eta}
+        \right)
+    \f]
+
 SourceFiles
     ButlerVolmer.C
 

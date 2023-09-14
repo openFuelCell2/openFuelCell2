@@ -60,7 +60,6 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::electroChemical
     eta_ = activationOverpotentialModel::New(phase, this->subDict("activationOverpotentialModel"));
 }
 
-
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class ReactionThermo>
@@ -129,6 +128,8 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     (
         eta_->j()*Wi*specieStoichCoeff/dimF
     );
+
+    // TODO: A better way to handle the dissolved water transfer.
 
     //- Dissolved water model
     dissolvedModel& dW = const_cast<dissolvedModel&>
@@ -226,7 +227,7 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
 
     if (Y.member() == water)
     {
-        return fvm::Sp(phase.iDmdt(water)/(Y + SMALL), Y);
+        return fvm::Sp(phase.iDmdt(water)/(Y + SMALL), Y);      // TODO: is this a good approach.
     }
 
     const label specieI =
@@ -254,11 +255,11 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
         eta_->j()*Wi*specieStoichCoeff/dimF
     );
 
-    volScalarField& iDmdtWater = const_cast<volScalarField&>(phase.iDmdt(Y.member()));
+    volScalarField& iDmdt = const_cast<volScalarField&>(phase.iDmdt(Y.member()));
 
-    iDmdtWater = wSpecie;
+    iDmdt = wSpecie;
 
-    return fvm::Sp(wSpecie/(Y + SMALL), Y);
+    return fvm::Sp(wSpecie/(Y + SMALL), Y);     // TODO: is this a good approach.
 }
 
 

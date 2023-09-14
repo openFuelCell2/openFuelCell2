@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::phaseTransferModel> Foam::phaseTransferModel::New
     Info<< "Selecting phaseTransferModel for "
         << pair << ": " << phaseTransferModelType << endl;
 
-    dictionaryConstructorTable::iterator cstrIter =
-        dictionaryConstructorTablePtr_->find(phaseTransferModelType);
+    auto* ctorPtr =
+        dictionaryConstructorTable(phaseTransferModelType);
 
-    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    if (!ctorPtr)
     {
         FatalErrorInFunction
             << "Unknown phaseTransferModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::phaseTransferModel> Foam::phaseTransferModel::New
             << exit(FatalError);
     }
 
-    return cstrIter()(dict, pair);
+    return ctorPtr(dict, pair);
 }
 
 

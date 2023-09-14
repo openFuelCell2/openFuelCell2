@@ -25,8 +25,23 @@ Class
     Foam::sigmaModels::generalSigma
 
 Description
-    Constant general type sigma model.
-    sigma = a + b*T + c*exp(-d/T)
+    Electric conductivity is defined as a temperature dependent function.
+    The percolation theory is also used.
+    \f[
+        \sigma_0 = a + b*T + c*exp(-d/T)
+    \f]
+
+    and
+
+    \f[
+        \sigma = \sigma_0 * probablity
+    \f]
+
+    where
+    \vartable
+        \sigma_0        | Electric conductivity of electron/ion [S/m]
+        probablity      | Probability calculated from percolation theory [-]
+    \endvartable
 
 SourceFiles
     generalSigma.C

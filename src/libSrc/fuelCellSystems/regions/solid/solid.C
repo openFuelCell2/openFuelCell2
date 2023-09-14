@@ -70,6 +70,8 @@ Foam::regionTypes::solid::solid
 {
     //- Solid thermo model
     thermo_ = solidThermo::New(*this);
+
+    radiation_ = radiation::radiationModel::New(thermo_->T());
 }
 
 
@@ -105,6 +107,8 @@ void Foam::regionTypes::solid::mapToCell
 {
     Info << "Map " << name() << " to Cell" << nl << endl;
 
+    volScalarField& T = thermo_->T();
+
     //- heat source
     volScalarField heatSource0
     (
@@ -118,7 +122,7 @@ void Foam::regionTypes::solid::mapToCell
         dimensionedScalar("zero", dimEnergy/dimVolume/dimTime, 0.0)
     );
 
-    heatSource0.rmap(Qdot_, cellMapIO_);
+    heatSource0.rmap(Qdot_ + (radiation_->ST(T) & T), cellMapIO_);
 
     fuelCell.Qdot() += heatSource0;
 

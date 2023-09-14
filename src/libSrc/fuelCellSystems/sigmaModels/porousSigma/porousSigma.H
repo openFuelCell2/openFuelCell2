@@ -25,7 +25,24 @@ Class
     Foam::sigmaModels::porousSigma
 
 Description
-    Isothermal dispersed-phase particle diameter model.
+    Electric conductivity in porous materials.
+    If this is the electrode, the occupiation of Nafion should be taken into account.
+    \f[
+        \sigma = \sigma_0 * (1 - porosity)
+    \f]
+    
+    otherwise:
+
+    \f[
+        \sigma = \sigma_0 * ((1 - porosity) * porNaf)^1.5
+    \f]
+
+    where
+    \vartable
+        \sigma_0        | Electric conductivity of electron/ion [S/m]
+        porosity        | Porosity of the porous material [-]
+        porNaf          | The volume fraction of Nafion material in the catalyst layer [-]
+    \endvartable
 
 SourceFiles
     porousSigma.C

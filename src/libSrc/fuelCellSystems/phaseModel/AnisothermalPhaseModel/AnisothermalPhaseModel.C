@@ -107,6 +107,8 @@ Foam::AnisothermalPhaseModel<BasePhaseModel>::heEqn()
     const volScalarField contErr(this->continuityError());
     const volScalarField K(this->K());
 
+    const volScalarField& rho = this->thermo().rho();
+
     volScalarField& he = this->thermo_->he();
 
     //- Porosity
@@ -145,11 +147,11 @@ Foam::AnisothermalPhaseModel<BasePhaseModel>::heEqn()
 
     tmp<fvScalarMatrix> tEEqn
     (
-        fvm::ddt(alpha, this->rho(), he)
+        fvm::ddt(alpha, rho, he)
       + fvm::div(alphaRhoPhi, he)
       + fvm::SuSp(-contErr, he)
 
-      + fvc::ddt(alpha, this->rho(), K) + fvc::div(alphaRhoPhi, K)
+      + fvc::ddt(alpha, rho, K) + fvc::div(alphaRhoPhi, K)
       - contErr*K
 
       - fvm::laplacian
@@ -158,23 +160,7 @@ Foam::AnisothermalPhaseModel<BasePhaseModel>::heEqn()
            *fvc::interpolate(this->alphaEff()),
             he
         )
-//     ==
-//        alpha*this->Qdot()
     );
-
-    // Add the appropriate pressure-work term
-//    if (he.name() == this->thermo_->phasePropertyName("e"))
-//    {
-//        tEEqn.ref() += filterPressureWork
-//        (
-//            fvc::div(fvc::absolute(alphaPhi, alpha, U), this->thermo().p())
-//          + this->thermo().p()*fvc::ddt(alpha)
-//        );
-//    }
-//    else if (this->thermo_->dpdt())
-//    {
-//        tEEqn.ref() -= filterPressureWork(alpha*this->fluid().dpdt());
-//    }
 
     return tEEqn;
 }
@@ -199,8 +185,6 @@ Foam::AnisothermalPhaseModel<BasePhaseModel>::heQdot()
     (
       - fvc::ddt(alpha, this->rho(), K) - fvc::div(alphaRhoPhi, K)
       + contErr*K
-//
-//      + alpha*this->Qdot()
     );
 
     // Add the appropriate pressure-work term
