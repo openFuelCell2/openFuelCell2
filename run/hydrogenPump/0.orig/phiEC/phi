@@ -23,41 +23,15 @@ internalField   uniform 0.3; // uniform (0.566711 0 0);
 
 boundaryField
 {
+    ".*"
+    {
+        type            zeroGradient;
+    }
 
     interconnect0
     {
         type            fixedValue;
-    		value			uniform 0.3;
-    }
-
-	phiEC_to_phiI0
-    {
-        type            zeroGradient;
-    }
-    
-    phiEC_to_phi0
-    {
-        type            zeroGradient;
-    }
-    
-    interconnectSides
-    {
-        type            zeroGradient;
-    }
-    
-	cathodeSides
-    {
-        type            zeroGradient;
-    }
-    
-	anodeSides
-    {
-        type            zeroGradient;
-    }
-    
-	phiE_to_phi0
-    {
-        type            zeroGradient;
+        value           uniform 0.3;
     }
 }
 

@@ -7,8 +7,8 @@ For each application, which is able to be simulated by the code, a tutorial case
 - conjugate heat transfer: CHT
 - Low temperature PEM electrolyzer: PEMEC
 - Low temperature PEM fuel cell: PEMFC
-- High temperature PEM electrolyzer: HT-PEMEC
-- High temperature PEM fuel cell: HT-PEMFC
+- High temperature PEM electrolyzer: HTPEMEC
+- High temperature PEM fuel cell: HTPEMFC
 - Hydrogen pump: hydrogenPump
 - Solid oxide fuel cell: SOFC
 - Solid oxide electrolyzer: SOEC
@@ -16,7 +16,6 @@ For each application, which is able to be simulated by the code, a tutorial case
 Each tutorial:
 
 - Common OpenFoam cases structure:
-  - 0 : Boundary and initial conditions
   - 0.orig : Backup of 0
   - constant
   - system
@@ -30,8 +29,10 @@ Each tutorial:
 - In serial
 
     ```bash
-    # Generate the computational meshes
+    # Generate the meshes with 'blockMesh'
     make mesh
+    # or Generate the meshes with 'salome'
+    # make salomeMesh
     # Run in serial
     make srun
     ```
@@ -39,8 +40,10 @@ Each tutorial:
 - In parallel
 
     ```bash
-    # Generate the computational meshes
+    # Generate the meshes with 'blockMesh'
     make mesh
+    # or Generate the meshes with 'salome'
+    # make salomeMesh
     # Edit values of 'nx' and 'ny' in constant/cellProperties
     export NPROCS=nx*ny # (value of 'nx' times 'ny')
     # Generate the cellID
@@ -52,7 +55,6 @@ Each tutorial:
     make run  #( the value of 'nx' times 'ny' needs to be changed in 'Makefile')
     # or
     # mpirun -np nx*ny fuelCell0Foam -parallel -fileHandler collated | tee log.run
-
     ```
 
 To view the result:
@@ -102,10 +104,8 @@ We are happy to provide more information. If you have problems, please send us E
 
 - Contact persons:
   - Shidong Zhang (s.zhang@fz-juelich.de)
-    - Developer
+    - Main Developer
   - Steffen Hess (s.hess@fz-juelich.de)
     - Developer
-  - Tianliang Cheng (t.cheng@fz-juelich.de)
-    - Drift flux simulation of two phase flow
   - Steven B. Beale (s.beale@fz-juelich.de)
     - Supervisor

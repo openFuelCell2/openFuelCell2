@@ -17,8 +17,8 @@ FoamFile
 
 defaultFieldValues
 (
-    volScalarFieldValue alpha.air 0.1
-    volScalarFieldValue alpha.water 0.9
+    volScalarFieldValue alpha.air 0.01
+    volScalarFieldValue alpha.water 0.99
 
 //    volVectorFieldValue U.air (0.1 0 0)
 //    volVectorFieldValue U.water (0.1 0 0)

@@ -29,18 +29,18 @@ gradSchemes
 divSchemes
 {
     default                 none;
-    div(rhoCpPhi,T)         Gauss upwind;
+    div(rhoCpPhi,T)         Gauss linearUpwind Gauss linear;
 }
 
 laplacianSchemes
 {
     default              none;
-    laplacian(k,T)       Gauss weightedFlux "k" corrected;
+    laplacian(k,T)       Gauss harmonic corrected;
 }
 
 interpolationSchemes
 {
-    default         weightedFlux "k";
+    default         harmonic corrected;
 }
 
 snGradSchemes

@@ -21,10 +21,10 @@ actions
         name    cathode;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.05e-3) (40.0 12.0 0.25e-3);
+            name cathode;
         }
     }
 
@@ -32,10 +32,10 @@ actions
         name    cmpl;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.03e-3) (40.0 12.0 0.05e-3);
+            name cmpl;
         }
     }
 
@@ -43,10 +43,10 @@ actions
         name    ccl;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.01e-3) (40.0 12.0 0.03e-3);
+            name ccl;
         }
     }
 
@@ -54,10 +54,10 @@ actions
         name    bpp;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.25e-3) (40.0 12.0 10);
+            name interconnect;
         }
     }
 );

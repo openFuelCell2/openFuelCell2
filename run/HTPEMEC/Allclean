@@ -14,6 +14,8 @@ rm -rf \
     constant/[a-z]*/cellToRegion \
     constant/[a-z]*/[Tk]* \
     constant/[a-z]*/cellID \
-    constant/cellID
+    constant/cellID \
+    [0] \
+    salome.unv
 
 #------------------------------------------------------------------------------

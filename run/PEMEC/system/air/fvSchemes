@@ -18,7 +18,8 @@ FoamFile
 
 ddtSchemes
 {
-    default         localEuler;//steadyState;
+    default         localEuler;
+    ddt(alpha.air,thermo:rho.air,H2O.air)   steadyState;
 }
 
 gradSchemes

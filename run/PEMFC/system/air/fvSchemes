@@ -18,7 +18,7 @@ FoamFile
 
 ddtSchemes
 {
-    default         localEuler;//steadyState;
+    default         steadyState;
 }
 
 gradSchemes
@@ -33,8 +33,8 @@ divSchemes
     "div\(phi,alpha.*\)"            Gauss vanLeer;
     "div\(phir,alpha.*\)"           Gauss vanLeer;
 
-    "div\(alphaRhoPhi.*,U.*\)"      Gauss GammaV 0.2;//limitedLinearV 1;
-    "div\(phi.*,U.*\)"              Gauss GammaV 0.2;//limitedLinearV 1;
+    "div\(alphaRhoPhi.*,U.*\)"      Gauss limitedLinearV 1;
+    "div\(phi.*,U.*\)"              Gauss limitedLinearV 1;
 
     "div\(alphaRhoPhi.*,Yi\)"       Gauss limitedLinear 1;
     "div\(alphaRhoPhi.*,(h|e).*\)"  Gauss limitedLinear 1;

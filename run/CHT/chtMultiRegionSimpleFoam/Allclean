@@ -9,9 +9,11 @@ rm -rf \
     constant/*/polyMesh \
     constant/polyMesh \
     [0-9]*/cellToRegion \
-    [0-9]*/[afiep]/cellToRegion \
+    [0-9]*/[a-z]*/cellToRegion \
     constant/cellToRegion \
     constant/[a-z]*/cellToRegion \
-    constant/[a-z]*/[Tk]
+    constant/[a-z]*/[Tk]* \
+    constant/[a-z]*/cellID \
+    constant/cellID
 
 #------------------------------------------------------------------------------

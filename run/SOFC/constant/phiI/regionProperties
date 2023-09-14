@@ -17,7 +17,7 @@ FoamFile
 //- Add information here
 
 control           false;
-relax             -4.0e-11;
+relax             -1.0e-10;
 
 dissolveOnOff   true;
 dissolved

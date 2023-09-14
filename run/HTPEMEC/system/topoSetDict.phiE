@@ -1,0 +1,153 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    phiEC;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set interconnect;
+        }
+    }
+    {
+        name    phiEC;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set cathode;
+        }
+    }
+    {
+        name    phiEC;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set cmpl;
+        }
+    }
+    {
+        name    phiEC;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set ccl;
+        }
+    }
+    {
+        name    phiEC;
+        type    cellZoneSet;
+        action  delete;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -10)(10 10 0);
+        }
+    }
+
+    {
+        name    phiEA;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set interconnect;
+        }
+    }
+    {
+        name    phiEA;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set anode;
+        }
+    }
+    {
+        name    phiEA;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set ampl;
+        }
+    }
+    {
+        name    phiEA;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set acl;
+        }
+    }
+    {
+        name    phiEA;
+        type    cellZoneSet;
+        action  delete;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 0)(10 10 10);
+        }
+    }
+
+    {
+        name    phiE0;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -10)(10 10 10);
+        }
+    }
+    {
+        name    phiE0;
+        type    cellZoneSet;
+        action  delete;
+        source  zoneToCell;
+        sourceInfo
+        {
+            zone  phiEC;
+        }
+    }
+    {
+        name    phiE0;
+        type    cellZoneSet;
+        action  delete;
+        source  zoneToCell;
+        sourceInfo
+        {
+            zone  phiEA;
+        }
+    }
+);
+// ************************************************************************* //

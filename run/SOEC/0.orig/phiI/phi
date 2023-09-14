@@ -23,31 +23,10 @@ internalField   uniform 1.5; // uniform (0.566711 0 0);
 
 boundaryField
 {
-    phiI_to_phiE1
+    ".*"
     {
         type            zeroGradient;
     }
-    
-    phiI_to_phiE0
-    {
-        type            zeroGradient;
-    }
-    
-    electrolyteSides
-    {
-        type            zeroGradient;
-    }
-    
-	cathodeSides
-    {
-        type            zeroGradient;
-    }
-    
-	anodeSides
-    {
-        type            zeroGradient;
-    }
-
 }
 
 

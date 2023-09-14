@@ -25,7 +25,7 @@ galvanostatic
     region      phiEC;    //- region where the galvanostatic control is applied
     patchName   interconnect0; //- patch name to control e.g. mean current density
 
-    ibar 8000;                 //- Mean current density
+    ibar        constant 8000;                 //- Mean current density
 }
 
 sigma

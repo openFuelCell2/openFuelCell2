@@ -1,10 +1,12 @@
-/*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright held by the original author
-     \\/     M anipulation  |
-\*---------------------------------------------------------------------------*/
+#!/bin/bash
+
+#----------------------------------------------------------------------#
+# Solver      |   openFuelCell                                         #
+# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+#----------------------------------------------------------------------#
+# Source code |   https://github.com/openFuelCell2/openFuelCell2       #
+# Update from |   14.09.2023                                           #
+#----------------------------------------------------------------------#
 
 # Rename the original field to 0
 rm -rf 0
@@ -12,10 +14,13 @@ cp -r 0.orig 0
 
 SECONDS=0
 
+topoSet -dict ./system/topoSetDict.zoneToSet -noZero -constant
+
 # Step 1:
 # air/fuel/electrolyte/interconnect
-
-topoSet -dict ./system/topoSetDict.serial.afei -noZero -constant
+# backup the cellZones
+mv constant/polyMesh/cellZones constant/polyMesh/cellZones_bk
+topoSet -dict ./system/topoSetDict.afei -noZero -constant
 splitMeshRegions -cellZonesOnly
 
 # copy
@@ -26,53 +31,43 @@ cp -r 1/interconnect/polyMesh constant/interconnect/.
 
 rm -rf 1
 
-topoSet -region air
-topoSet -region fuel
-
 # Step 2:
 # phiEA/phiEC
 
 rm constant/polyMesh/cellZones
-topoSet -dict ./system/topoSetDict.serial.phiE -noZero -constant
+topoSet -dict ./system/topoSetDict.phiE -noZero -constant
 splitMeshRegions -cellZonesOnly
 
 cp -r 1/phiEC/polyMesh constant/phiEC/.
 cp -r 1/phiEA/polyMesh constant/phiEA/.
 
 rm -rf 1
-
-topoSet -region phiEC
-topoSet -region phiEA
-
-rm -rf constant/phiI0
-rm -rf constant/phi0
-rm -rf system/phiI0
-rm -rf system/phi0
-rm -rf 0/phiI0
-rm -rf 0/phi0
+rm -rf constant/phiE0
+rm -rf system/phiE0
+rm -rf 0/phiE0
 
 # Step 3:
 # phiI
 
 rm constant/polyMesh/cellZones
-topoSet -dict ./system/topoSetDict.serial.phiI -noZero -constant
+topoSet -dict ./system/topoSetDict.phiI -noZero -constant
 splitMeshRegions -cellZonesOnly
 
 cp -r 1/phiI/polyMesh constant/phiI/.
 
 rm -rf 1
-
-topoSet -region phiI
-
-rm -rf constant/phiE1
 rm -rf constant/phiE0
-rm -rf system/phiE1
 rm -rf system/phiE0
-rm -rf 0/phiE1
 rm -rf 0/phiE0
 
-rm constant/polyMesh/cellZones
-topoSet -dict ./system/topoSetDict.parallel.afei -noZero -constant
+# mv back the original cell zones
+mv constant/polyMesh/cellZones_bk constant/polyMesh/cellZones
+
+topoSet -region air
+topoSet -region fuel
+topoSet -region phiEC
+topoSet -region phiEA
+topoSet -region phiI
 
 # Rename the original field to 0
 #rm -rf 0

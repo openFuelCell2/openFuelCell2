@@ -22,7 +22,7 @@ phases (air water);
 
 LTS
 {
-    maxCo               2;
+    maxCo               5;
     maxAlphaCo          5;
 
     rDeltaTSmoothingCoeff 0.05;

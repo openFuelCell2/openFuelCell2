@@ -1,0 +1,124 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    air;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set cchannel;
+        }
+    }
+    {
+        name    air;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set cathode;
+        }
+    }
+    {
+        name    air;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set cmpl;
+        }
+    }
+    {
+        name    air;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set ccl;
+        }
+    }
+
+    {
+        name    fuel;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set achannel;
+        }
+    }
+    {
+        name    fuel;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set anode;
+        }
+    }
+    {
+        name    fuel;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set ampl;
+        }
+    }
+    {
+        name    fuel;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set acl;
+        }
+    }
+
+    {
+        name    electrolyte;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set electrolyte;
+        }
+    }
+
+    {
+        name    interconnect;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set interconnect;
+        }
+    }
+);
+// ************************************************************************* //

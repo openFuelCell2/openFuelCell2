@@ -25,7 +25,7 @@ galvanostatic
     region      phiEC;
     patchName   interconnect0;
 
-    ibar -8000;
+    ibar        constant -8000;
 }
 
 sigma

@@ -1,18 +1,10 @@
-################################################################################
-                                                                               #
-#----------------------------------------------------------------------#       #
-# Contributor |                                                        #       #
-# Email       |   Shidong Zhang (s.zhang@fz-juelich.de)                #       #
-# Email       |   Steffen Hess  (s.hess@fz-juelich.de)                 #       #
-#----------------------------------------------------------------------#       #
-# Solver      |   openFuelCell                                         #       #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #       #
-#----------------------------------------------------------------------#       #
-# Source code |   https://jugit.fz-juelich.de/s.zhang/fuelcellfoam     #       #
-# Update from |   15.06.2022                                           #       #
-#----------------------------------------------------------------------#       #
-                                                                               #
-################################################################################
+#----------------------------------------------------------------------#
+# Solver      |   openFuelCell                                         #
+# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+#----------------------------------------------------------------------#
+# Source code |   https://github.com/openFuelCell2/openFuelCell2       #
+# Update from |   14.09.2023                                           #
+#----------------------------------------------------------------------#
 
 clear:
 	(./Allclean)
@@ -22,6 +14,14 @@ clear:
 mesh:
 	(cp -rf ./system/controlDict.mesh ./system/controlDict)
 	(blockMesh)
+	(renumberMesh -overwrite)
+	(./preprocessing.sh | tee log.pre)
+	(cp -rf ./system/controlDict.run ./system/controlDict)
+
+salomeMesh:
+	(cp -rf ./system/controlDict.mesh ./system/controlDict)
+	(salome -t salomeMesh.py)
+	(ideasUnvToFoam salome.unv)
 	(renumberMesh -overwrite)
 	(./preprocessing.sh | tee log.pre)
 	(cp -rf ./system/controlDict.run ./system/controlDict)

@@ -24,7 +24,7 @@ solvers
             preconditioner  GAMG;
             tolerance       2e-09;
             relTol          0;
-            smoother        DICGaussSeidel;
+            smoother        DIC;
             nPreSweeps      1;
             nPostSweeps     2;
             nFinestSweeps   2;
@@ -40,13 +40,13 @@ solvers
 
     p_rghFinal
     {
-        solver          PCG;
+        solver          PBiCGStab;
         preconditioner
         {
             preconditioner  GAMG;
             tolerance       2e-09;
             relTol          0;
-            smoother        DICGaussSeidel;
+            smoother        DIC;
             nPreSweeps      1;
             nPostSweeps     2;
             nFinestSweeps   2;
@@ -92,7 +92,7 @@ PIMPLE
     nCorrectors      3;
     nNonOrthogonalCorrectors 0;
 
-    faceMomentum     no;
+    consistent     true;
 }
 
 relaxationFactors

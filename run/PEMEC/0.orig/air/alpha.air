@@ -1,14 +1,15 @@
-/*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright held by the original author
-     \\/     M anipulation  |
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2306                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
     location    "0/air";
     object      alpha.air;
@@ -37,11 +38,11 @@ boundaryField
     {
         type            zeroGradient;
     }
-    air_to_electrolyte
+    air_to_interconnect
     {
         type            zeroGradient;
     }
-    air_to_interconnect
+    air_to_electrolyte
     {
         type            zeroGradient;
     }

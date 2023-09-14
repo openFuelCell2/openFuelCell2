@@ -4,7 +4,7 @@ set ylabel 'Residual'
 set xlabel 'Iteration'
 plot \
 "< cat log.run | grep 'Solving for Ux.air' | cut -d' ' -f9 | tr -d ','" every 2 title 'Ux' with lines,\
-"< cat log.run | grep 'Solving for p_rgh' | cut -d' ' -f9 | tr -d ','" every 8 title 'p' with lines,\
+"< cat log.run | grep 'Solving for p_rgh' | cut -d' ' -f9 | tr -d ','" every 6 title 'p' with lines,\
 "< cat log.run | grep 'Solving for O2' | cut -d' ' -f9 | tr -d ','" every 1 title 'YO2' with lines,\
 "< cat log.run | grep 'Solving for H2,' | cut -d' ' -f9 | tr -d ','" every 2 title 'YH2' with lines,\
 "< cat log.run | grep 'Solving for H2O' | cut -d' ' -f9 | tr -d ','" every 1 title 'YH2O' with lines,\

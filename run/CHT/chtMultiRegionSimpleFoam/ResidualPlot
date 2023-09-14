@@ -3,9 +3,8 @@ set title "/*-------------------------------------------------------------------
 set ylabel 'Residual'
 set xlabel 'Iteration'
 plot \
-"< cat log.run | grep 'Solving for Ux' | cut -d' ' -f9 | tr -d ','" every 2 title 'Ux' with lines,\
-"< cat log.run | grep 'Solving for p_rgh' | cut -d' ' -f9 | tr -d ','" every 6 title 'p' with lines,\
-"< cat log.run | grep 'Solving for T' | cut -d' ' -f9 | tr -d ','" title 'T' with lines,\
+"< cat log.run | grep 'Solving for p_rgh' | cut -d' ' -f9 | tr -d ','" every 2 title 'p' with lines,\
+"< cat log.run | grep 'Solving for h' | cut -d' ' -f9 | tr -d ','" every 3 title 'h' with lines,\
 
 pause 1
 reread

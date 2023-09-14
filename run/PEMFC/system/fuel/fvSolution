@@ -67,7 +67,7 @@ solvers
 
 PIMPLE
 {
-    momentumPredictor true;
+    momentumPredictor no;
 
     nOuterCorrectors 1;
     nCorrectors      3;
@@ -81,7 +81,7 @@ relaxationFactors
     fields
     {
          default       1;
-         p_rgh         0.3;
+         p_rgh         0.7;
     }
 
     equations

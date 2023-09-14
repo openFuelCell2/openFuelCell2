@@ -1,14 +1,15 @@
-/*---------------------------------------------------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright held by the original author
-     \\/     M anipulation  |
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2306                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
     location    "0/air";
     object      alpha.water;
@@ -17,63 +18,36 @@ FoamFile
 
 dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 0.;
+internalField   uniform 1;
 
 boundaryField
 {
     airInlet
     {
         type            calculated;
-        value           uniform 0.;
+        value           uniform 0.9;
     }
-
     airOutlet
     {
         type            calculated;
-        value           $internalField;
+        value           uniform 0.9;
     }
-
-    airSides
-    {
-        type            calculated;
-        value           $internalField;
-    }
-
     cathodeSides
     {
         type            calculated;
-        value           $internalField;
+        value           uniform 0.3;
     }
-
-    airInletSides
-    {
-        type            calculated;
-        value           $internalField;
-    }
-
-    airOutletSides
-    {
-        type            calculated;
-        value           $internalField;
-    }
-
-    cflSides
-    {
-        type            calculated;
-        value           $internalField;
-    }
-
     air_to_interconnect
     {
         type            calculated;
-        value           $internalField;
+        value           uniform 0.9;
     }
-
-    air_to_electrolyte //cathode
+    air_to_electrolyte
     {
         type            calculated;
-        value           $internalField;
+        value           uniform 0.3;
     }
 }
+
 
 // ************************************************************************* //

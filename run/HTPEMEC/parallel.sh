@@ -1,28 +1,21 @@
 #!/bin/bash
 
-## edit system/decomposeParDict for the desired decomposition
-## set environment variable NPROCS to number of processors.
-##     e.g., setenv NPROCS 2
-## make mesh
-##
-## then:
-##!/bin/csh
+#----------------------------------------------------------------------#
+# Solver      |   openFuelCell                                         #
+# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+#----------------------------------------------------------------------#
+# Source code |   https://github.com/openFuelCell2/openFuelCell2       #
+# Update from |   14.09.2023                                           #
+#----------------------------------------------------------------------#
 
 ## edit system/decomposeParDict for the desired decomposition
 ## set environment variable NPROCS to number of processors.
-##     e.g., setenv NPROCS 2
+##     e.g., export NPROCS=2
 ## make mesh
 ##
 ## then:
 
 echo "NPROCS = " $NPROCS
-
-# To reconstruct and visualize the regions, we need the *ProcAddressing files
-# created by decomposePar -region <region name>
-# After the region decomp, we rename the processor* directories as proc_*
-# to (a) allow the parallel decomp to proceed 
-# while (b) saving the *ProcAddressing files for later copy
-#
 
 cp system/controlDict.mesh system/controlDict
 
@@ -47,9 +40,9 @@ decomposePar -region phiI -fileHandler collated
 # Step 1:
 # air/fuel/electrolyte/interconnect
 
-rm processors$NPROCS/constant/polyMesh/cellZones
+mv processors$NPROCS/constant/polyMesh/cellZones processors$NPROCS/constant/polyMesh/cellZones_bk
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.parallel.afei -constant -noZero -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.afei -constant -noZero -parallel -fileHandler collated
 mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
 
 # sleep to wait for files
@@ -70,7 +63,7 @@ rm -rf processors$NPROCS/1
 
 rm processors$NPROCS/constant/polyMesh/cellZones
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.parallel.phiE -constant -noZero -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiE -constant -noZero -parallel -fileHandler collated
 mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
 
 # sleep to wait for files
@@ -89,7 +82,7 @@ rm -rf processors$NPROCS/1
 
 rm processors$NPROCS/constant/polyMesh/cellZones
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.parallel.phiI -constant -noZero -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiI -constant -noZero -parallel -fileHandler collated
 mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
 
 # sleep to wait for files
@@ -101,7 +94,7 @@ done
 cp -rf processors$NPROCS/1/phiI/polyMesh processors$NPROCS/constant/phiI
 rm -rf processors$NPROCS/1
 
-rm processors$NPROCS/constant/polyMesh/cellZones
+mv processors$NPROCS/constant/polyMesh/cellZones_bk processors$NPROCS/constant/polyMesh/cellZones
 
 ## patches:
 

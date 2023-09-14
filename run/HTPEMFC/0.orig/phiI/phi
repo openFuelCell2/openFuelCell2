@@ -19,36 +19,14 @@ FoamFile
 
 dimensions      [1 2 -3 0 0 -1 0];
 
-internalField   uniform -0.1; // uniform (0.566711 0 0);
+internalField   uniform -0.3; // uniform (0.566711 0 0);
 
 boundaryField
 {
-
-	phiI_to_phiE1
+    ".*"
     {
         type            zeroGradient;
     }
-    
-    phiI_to_phiE0
-    {
-        type            zeroGradient;
-    }
-    
-    electrolyteSides
-    {
-        type            zeroGradient;
-    }
-    
-	cathodeSides
-    {
-        type            zeroGradient;
-    }
-    
-	anodeSides
-    {
-        type            zeroGradient;
-    }
-
 }
 
 

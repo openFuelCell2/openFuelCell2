@@ -1,0 +1,72 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     |
+    \\  /    A nd           | Copyright held by the original author
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    phiI;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set acl;
+        }
+    }
+    {
+        name    phiI;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set electrolyte;
+        }
+    }
+    {
+        name    phiI;
+        type    cellZoneSet;
+        action  add;
+        source  setToCellZone;
+        sourceInfo
+        {
+            set ccl;
+        }
+    }
+
+    {
+        name    phiI0;
+        type    cellZoneSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (-10 -10 -10)(10 10 10);
+        }
+    }
+    {
+        name    phiI0;
+        type    cellZoneSet;
+        action  delete;
+        source  zoneToCell;
+        sourceInfo
+        {
+            zone  phiI;
+        }
+    }
+);
+// ************************************************************************* //

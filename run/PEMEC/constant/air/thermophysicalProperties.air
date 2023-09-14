@@ -26,7 +26,7 @@ thermoType
     energy          sensibleInternalEnergy;
 }
 
-inertSpecie none;
+inertSpecie O2;
 
 species
 (

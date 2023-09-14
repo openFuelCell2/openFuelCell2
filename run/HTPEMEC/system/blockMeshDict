@@ -54,19 +54,19 @@ blocks
     hex (74 75 79 78 82 83 87 86) interconnect ( 5 40 10) simpleGrading (1 1 1)
 
 // Air
-    hex ( 9 10 14 13 17 18 22 21) air          (10 40 10) simpleGrading (1 1 1)
+    hex ( 9 10 14 13 17 18 22 21) cchannel      (10 40 10) simpleGrading (1 1 1)
 
-    hex (17 18 22 21 25 26 30 29) air          (10 40  5) simpleGrading (1 1 1)
-    hex (25 26 30 29 33 34 38 37) air          (10 40  5) simpleGrading (1 1 1)
-    hex (33 34 38 37 41 42 46 45) air          (10 40  5) simpleGrading (1 1 1)
+    hex (17 18 22 21 25 26 30 29) cathode      (10 40  5) simpleGrading (1 1 1)
+    hex (25 26 30 29 33 34 38 37) cmpl         (10 40  5) simpleGrading (1 1 1)
+    hex (33 34 38 37 41 42 46 45) ccl          (10 40  5) simpleGrading (1 1 1)
 
-    hex (16 17 21 20 24 25 29 28) air          ( 5 40  5) simpleGrading (1 1 1)
-    hex (24 25 29 28 32 33 37 36) air          ( 5 40  5) simpleGrading (1 1 1)
-    hex (32 33 37 36 40 41 45 44) air          ( 5 40  5) simpleGrading (1 1 1)
+    hex (16 17 21 20 24 25 29 28) cathode      ( 5 40  5) simpleGrading (1 1 1)
+    hex (24 25 29 28 32 33 37 36) cmpl         ( 5 40  5) simpleGrading (1 1 1)
+    hex (32 33 37 36 40 41 45 44) ccl          ( 5 40  5) simpleGrading (1 1 1)
 
-    hex (18 19 23 22 26 27 31 30) air          ( 5 40  5) simpleGrading (1 1 1)
-    hex (26 27 31 30 34 35 39 38) air          ( 5 40  5) simpleGrading (1 1 1)
-    hex (34 35 39 38 42 43 47 46) air          ( 5 40  5) simpleGrading (1 1 1)
+    hex (18 19 23 22 26 27 31 30) cathode      ( 5 40  5) simpleGrading (1 1 1)
+    hex (26 27 31 30 34 35 39 38) cmpl         ( 5 40  5) simpleGrading (1 1 1)
+    hex (34 35 39 38 42 43 47 46) ccl          ( 5 40  5) simpleGrading (1 1 1)
 
 // Electrolyte
     hex (41 42 46 45 49 50 54 53) electrolyte  (10 40  5) simpleGrading (1 1 1)
@@ -76,19 +76,19 @@ blocks
     hex (42 43 47 46 50 51 55 54) electrolyte  ( 5 40  5) simpleGrading (1 1 1)
 
 // Fuel
-    hex (49 50 54 53 57 58 62 61) fuel         (10 40  5) simpleGrading (1 1 1)
-    hex (57 58 62 61 65 66 70 69) fuel         (10 40  5) simpleGrading (1 1 1)
-    hex (65 66 70 69 73 74 78 77) fuel         (10 40  5) simpleGrading (1 1 1)
+    hex (49 50 54 53 57 58 62 61) acl          (10 40  5) simpleGrading (1 1 1)
+    hex (57 58 62 61 65 66 70 69) ampl         (10 40  5) simpleGrading (1 1 1)
+    hex (65 66 70 69 73 74 78 77) anode        (10 40  5) simpleGrading (1 1 1)
 
-    hex (73 74 78 77 81 82 86 85) fuel         (10 40 10) simpleGrading (1 1 1)
+    hex (73 74 78 77 81 82 86 85) achannel     (10 40 10) simpleGrading (1 1 1)
 
-    hex (48 49 53 52 56 57 61 60) fuel         ( 5 40  5) simpleGrading (1 1 1)
-    hex (56 57 61 60 64 65 69 68) fuel         ( 5 40  5) simpleGrading (1 1 1)
-    hex (64 65 69 68 72 73 77 76) fuel         ( 5 40  5) simpleGrading (1 1 1)
+    hex (48 49 53 52 56 57 61 60) acl          ( 5 40  5) simpleGrading (1 1 1)
+    hex (56 57 61 60 64 65 69 68) ampl         ( 5 40  5) simpleGrading (1 1 1)
+    hex (64 65 69 68 72 73 77 76) anode        ( 5 40  5) simpleGrading (1 1 1)
 
-    hex (50 51 55 54 58 59 63 62) fuel         ( 5 40  5) simpleGrading (1 1 1)
-    hex (58 59 63 62 66 67 71 70) fuel         ( 5 40  5) simpleGrading (1 1 1)
-    hex (66 67 71 70 74 75 79 78) fuel         ( 5 40  5) simpleGrading (1 1 1)
+    hex (50 51 55 54 58 59 63 62) acl          ( 5 40  5) simpleGrading (1 1 1)
+    hex (58 59 63 62 66 67 71 70) ampl         ( 5 40  5) simpleGrading (1 1 1)
+    hex (66 67 71 70 74 75 79 78) anode        ( 5 40  5) simpleGrading (1 1 1)
 );
 
 edges

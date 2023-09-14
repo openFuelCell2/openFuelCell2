@@ -31,8 +31,10 @@ To run the case:
 
     ```bash
 
-    # Generate the computational meshes
+    # Generate the meshes with 'blockMesh'
     make mesh
+    # or Generate the meshes with 'salome'
+    # make salomeMesh
 
     # Run in serial
     make srun
@@ -43,8 +45,10 @@ To run the case:
 
     ```bash
 
-    # Generate the computational meshes
+    # Generate the meshes with 'blockMesh'
     make mesh
+    # or Generate the meshes with 'salome'
+    # make salomeMesh
 
     # Edit values of 'nx' and 'ny' in constant/cellProperties
 

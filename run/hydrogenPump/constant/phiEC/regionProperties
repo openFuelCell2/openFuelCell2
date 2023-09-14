@@ -17,7 +17,7 @@ FoamFile
 //- Add information here
 
 control          true;
-relax            1.0e-5;
+relax            4.0e-6;
 
 galvanostatic
 {
@@ -25,7 +25,7 @@ galvanostatic
     region      phiEC;
     patchName   interconnect0;
 
-    ibar -8000;
+    ibar        constant -8000;
 }
 
 sigma

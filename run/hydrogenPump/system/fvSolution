@@ -17,22 +17,6 @@ FoamFile
 
 solvers
 {
-    T1
-    {
-        solver           PBiCGStab;
-        preconditioner   DILU;
-        tolerance        1e-6;
-        relTol           0;
-    }
-
-    T2
-    {
-        solver           PBiCGStab;
-        preconditioner   DILU;
-        tolerance        1e-6;
-        relTol           0;
-    }
-
     T
     {
         solver           PBiCGStab;

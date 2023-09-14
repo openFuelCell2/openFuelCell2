@@ -21,32 +21,30 @@ actions
         name    cathode;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.055e-3) (40.0 12.0 0.255e-3);
+            name cathode;
         }
     }
-
     {
         name    mpl;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.035e-3) (40.0 12.0 0.055e-3);
+            name cmpl;
         }
     }
-
     {
         name    ccl;
         type    cellZoneSet;
         action  new;
-        source  boxToCell;
+        source  masterRegionToCell;
         sourceInfo
         {
-            box (-40 -12.0 0.015e-3) (40.0 12.0 0.035e-3);
+            name ccl;
         }
     }
 );

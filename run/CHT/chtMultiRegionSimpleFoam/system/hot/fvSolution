@@ -26,7 +26,7 @@ solvers
             preconditioner  GAMG;
             tolerance       2e-09;
             relTol          0;
-            smoother        DICGaussSeidel;
+            smoother        DIC;
             nPreSweeps      1;
             nPostSweeps     2;
             nFinestSweeps   2;
@@ -35,31 +35,9 @@ solvers
             agglomerator    faceAreaPair;
             mergeLevels     1;
         }
-        tolerance       1e-10;
-        relTol          0.001;
-        maxIter         50;
-    }
-
-    p_rghFinal
-    {
-        solver          PCG;
-        preconditioner
-        {
-            preconditioner  GAMG;
-            tolerance       2e-09;
-            relTol          0;
-            smoother        DICGaussSeidel;
-            nPreSweeps      1;
-            nPostSweeps     2;
-            nFinestSweeps   2;
-            cacheAgglomeration on;
-            nCellsInCoarsestLevel 10;
-            agglomerator    faceAreaPair;
-            mergeLevels     1;
-        }
-        tolerance       1e-10;
-        relTol          0;
-        maxIter         120;
+        tolerance           1e-10;
+        relTol              0;
+        maxIter             100;
     }
 
     "(e|h).*"
@@ -81,11 +59,13 @@ solvers
 
 SIMPLE
 {
+    momentumPredictor no;
+
     nOuterCorrectors 1;
     nCorrectors      3;
     nNonOrthogonalCorrectors 0;
 
-    faceMomentum     off;
+    consistent     true;
 }
 
 relaxationFactors
