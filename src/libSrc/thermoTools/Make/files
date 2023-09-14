@@ -1,0 +1,24 @@
+BCs = derivedFvPatchFields
+
+$(BCs)/semiPermeableBaffle/semiPermeableBaffleMassFraction/semiPermeableBaffleMassFractionFvPatchScalarField.C
+$(BCs)/semiPermeableBaffle/semiPermeableBaffleVelocity/semiPermeableBaffleVelocityFvPatchVectorField.C
+
+$(BCs)/thermalBaffle1D/thermalBaffle1DFvPatchScalarFields.C
+$(BCs)/totalFlowRateAdvectiveDiffusive/totalFlowRateAdvectiveDiffusiveFvPatchScalarField.C
+$(BCs)/externalWallHeatFluxTemperature/externalWallHeatFluxTemperatureFvPatchScalarField.C
+$(BCs)/wallHeatTransfer/wallHeatTransferFvPatchScalarField.C
+$(BCs)/convectiveHeatTransfer/convectiveHeatTransferFvPatchScalarField.C
+$(BCs)/fixedIncidentRadiation/fixedIncidentRadiationFvPatchScalarField.C
+$(BCs)/outletMappedUniformInletHeatAddition/outletMappedUniformInletHeatAdditionFvPatchField.C
+$(BCs)/outletMachNumberPressure/outletMachNumberPressureFvPatchScalarField.C
+
+$(BCs)/temperatureCoupledBase/temperatureCoupledBase.C
+$(BCs)/turbulentTemperatureCoupledBaffleMixed/turbulentTemperatureCoupledBaffleMixedFvPatchScalarField.C
+$(BCs)/turbulentTemperatureRadCoupledMixed/turbulentTemperatureRadCoupledMixedFvPatchScalarField.C
+$(BCs)/lumpedMassWallTemperature/lumpedMassWallTemperatureFvPatchScalarField.C
+
+$(BCs)/wallFunctions/alphatWallFunctions/alphatWallFunction/alphatWallFunctionFvPatchScalarField.C
+$(BCs)/wallFunctions/alphatWallFunctions/alphatJayatillekeWallFunction/alphatJayatillekeWallFunctionFvPatchScalarField.C
+$(BCs)/wallFunctions/sorptionWallFunction/sorptionWallFunctionFvPatchScalarField.C
+
+LIB = $(FOAM_USER_LIBBIN)/libthermoBoundary
