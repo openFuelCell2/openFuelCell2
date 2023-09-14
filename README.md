@@ -1,18 +1,14 @@
 # openFuelCell2
 
-A computational fluid dynamics (CFD) solver for electrochemical devices, including fuel cell and electrolysis. The solver is developed based on the open-source library, OpenFOAM.
+openFuelCell2 is a computational fluid dynamics (CFD) toolbox for simulating electrochemical devices such as fuel cells and electrolysis. The solver is based on the open-source library, OpenFOAM®.
 
 ## About the code
 
----
-
-The source code was developed from a previous open-source repository [openFuelCell](http://openfuelcell.sourceforge.net/). It was also inspired from the standard solver "reactingTwoPhaseEulerFoam" in OpenFOAM. The solver can be used to consider the coupled problem with multi-region and multi-physics issues, including single and two phase flows, multiple species components, charger transfer, and electrochemical reactions in different regions. More applications will be available in the future.
+The source code was developed from a previous open-source repository called [openFuelCell](http://openfuelcell.sourceforge.net/). It was also inspired by the standard solver "reactingTwoPhaseEulerFoam" in OpenFOAM®. The solver can consider coupled problems with multi-region and multi-physics issues, including single and two phase flows, multiple species components, charger transfer, and electrochemical reactions in different regions. More applications and solvers will be available in the future.
 
 ## How to use
 
----
-
-The code is compiled with the OpenFOAM libraries, either [Foundation version](https://openfoam.org/) or [ESI version](https://www.openfoam.com/). The default branch is compatable with the ESI version, while the other branches are also provided for different OpenFOAM environments. The available environments include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v6, OpenFOAM-v8.
+The code is compiled with the OpenFOAM libraries, either [ORG](https://openfoam.org/) or [COM](https://www.openfoam.com/) versions. The default branch is compatable with the COM version, while the other branches are also provided for different OpenFOAM environments. The available environments include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v2306, OpenFOAM-v6, OpenFOAM-v8.
 
 ```bash
 # Download the source code
@@ -20,7 +16,7 @@ The code is compiled with the OpenFOAM libraries, either [Foundation version](ht
 # Switch to the corresponding branch
 
 # Change dictionary to the repository
-cd openFuelCell/src
+cd openFuelCell2/src
 
 # Compile the source code with
 ./Allwmake
@@ -33,7 +29,7 @@ You can also clear the libraries and executable files with
 
 ```bash
 
-cd openFuelCell/src
+cd openFuelCell2/src
 
 ./Allwclean
 
@@ -49,11 +45,11 @@ Take the cross-section of a fuel cell as an example. The computational domain gi
   <img src="images/computationDomain.jpg" height="70%" width="70%">
 </div>
 
-In a PEM fuel cell or other types, there are several domains/regions: air, fuel, electrolyte, and interconnect. This can be found from the repository [openFuelCell](http://openfuelcell.sourceforge.net/). However, additional domains/regions, e.g. phiEA, phiEC, and phiI are also necessary to account for electron/proton and dissolved water transfer.
+In a PEM fuel cell or other types, there are several domains/regions: air, fuel, electrolyte, and interconnect. This can be found from the repository [openFuelCell](http://openfuelcell.sourceforge.net/). However, additional domains/regions, e.g. phiEA, phiEC, and phiI are also necessary to account for electron/ion and dissolved water transfer.
 
 To consider the coupling transfer problems in a PEM fuel cell, a global region, also called as parent mesh, and several local regions, also called as child meshes, are used. In the global region, only the energy equation is solved. In the local regions, corresponding partial differential equations will be discretized and solved. During the simulation, material properties, e.g. density, thermal conductivity, etc., are mapped from local regions to the global region, while the temperature field is mapped from the global region to the local regions.
 
-The local regions can be classified as three different types, namely fluid, solid, and electric regions. See the [code](src/fuelCellSystems/fuelCellSystem/regions).
+The local regions can be classified as three different types, namely fluid, solid, and electric regions. See the [code](src/libSrc/fuelCellSystems/regions).
 
 - Fluid region:
 
@@ -135,33 +131,44 @@ The local regions can be classified as three different types, namely fluid, soli
 - [Dec. 2022] Update the repository
     1. Fixed a bug in diffusivityList
     2. Update the tutorial
+- [Sep. 2023] Update the repository for public release
+    1. A new barnch is included for OpenFOAM-v2306
+    2. The prescribed mean current density and voltage are now defined as a function of time. (Availiable functions can be found in OpenFOAM/primitives/functions/Function1).
+    3. Include the radiation model in solid region.
+    4. Copy thermoTools to the repo. (need to remove this in next update.)
+    5. In test cases, when it comes to two-phase flow, a steadyState scheme is now used, specially for ddt term of species transfer.
+    6. Update the preprocessing script for an easier usage.
 
 ## Related publications
 
-- *Journal*
+- Journal
 
-  - **Zhang, Shidong, Steven B. Beale, Uwe Reimer, Martine Andersson, and Werner Lehnert. "Polymer electrolyte fuel cell modeling-A comparison of two models with different levels of complexity." International Journal of Hydrogen Energy 45, no. 38 (2020): 19761-19777.**
+  - Zhang, Shidong, Steffen Hess, Holger Marschall, Uwe Reimer, Steven Beale, and Werner Lehnert. "openFuelCell2: A New Computational Tool for Fuel Cells, Electrolyzers, and other Electrochemical Devices and Processes." Computer Physics Communications, Forthcoming (2023).**
 
-  - **Zhang, Shidong, Steven B. Beale, Yan Shi, Holger Janßen, Uwe Reimer, and Werner Lehnert. "Development of an Open-Source Solver for Polymer Electrolyte Fuel Cells." ECS Transactions 98, no. 9 (2020): 317.**
+  - Zhang, Shidong, Shangzhe Yu, Roland Peters, Steven Beale, Holger Marschall, Felix Kunz, and Rüdiger-A. Eichel. "A New Procedure for Rapid Convergence in Numerical Performance Calculations of Electrochemical Cells." Available at SSRN 4450642.
 
-  - **Zhang, Shidong. "Low-Temperature Polymer Electrolyte Fuel Cells." In Electrochemical Cell Calculations with OpenFOAM, pp. 59-85. Springer, Cham, 2022.**
+  - Zhang, Shidong, Kai Wang, Shangzhe Yu, Nicolas Kruse, Roland Peters, Felix Kunz, and Rudiger-A. Eichel. "Multiscale and Multiphysical Numerical Simulations of Solid Oxide Cell (SOC)." ECS Transactions 111, no. 6 (2023): 937.
 
-- *Thesis*
+  - Yu, Shangzhe, Shidong Zhang, Dominik Schäfer, Roland Peters, Felix Kunz, and Rüdiger-A. Eichel. "Numerical Modeling and Simulation of the Solid Oxide Cell Stacks and Metal Interconnect Oxidation with OpenFOAM." Energies 16, no. 9 (2023): 3827.
 
-  - **Zhang, Shidong. Modeling and Simulation of Polymer Electrolyte Fuel Cells. No. FZJ-2020-02318. Elektrochemische Verfahrenstechnik, 2020.**
+  - Zhang, Shidong, Steven B. Beale, Uwe Reimer, Martine Andersson, and Werner Lehnert. "Polymer electrolyte fuel cell modeling-A comparison of two models with different levels of complexity." International Journal of Hydrogen Energy 45, no. 38 (2020): 19761-19777.
+
+  - Zhang, Shidong, Steven B. Beale, Yan Shi, Holger Janßen, Uwe Reimer, and Werner Lehnert. "Development of an Open-Source Solver for Polymer Electrolyte Fuel Cells." ECS Transactions 98, no. 9 (2020): 317.
+
+  - Zhang, Shidong. "Low-Temperature Polymer Electrolyte Fuel Cells." In Electrochemical Cell Calculations with OpenFOAM, pp. 59-85. Springer, Cham, 2022.
+
+- Thesis
+
+  - Zhang, Shidong. Modeling and Simulation of Polymer Electrolyte Fuel Cells. No. FZJ-2020-02318. Elektrochemische Verfahrenstechnik, 2020.
 
 ## Developers
 
 ---
 
-The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the PhD thesis, supervised by Prof. [Werner Lehnert](w.lehnert@fz-juelich.de) and Prof. [Steven Beale](s.beale@fz-juelich.de). The detailed model description and simulation results can be found in the thesis, *Modeling and Simulation of Polymer Electrolyte Fuel Cells*. The following persons contribute to the optimization of the code,
+The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the PhD thesis, supervised by Prof. [Werner Lehnert](w.lehnert@fz-juelich.de) and Prof. [Steven Beale](s.beale@fz-juelich.de). The detailed model description and simulation results can be found in the thesis, `Modeling and Simulation of Polymer Electrolyte Fuel Cells` by FZJ. The following individuals also contribute to the optimization of the code,
 
-- Mr. Tianliang Cheng (t.cheng@fz-juelich.de), Forschungszentrum Juelich, IEK-13
-  - Tianliang Cheng is a PhD candidate.
+- Steffen Hess (s.hess@fz-juelich.de), Forschungszentrum Juelich, IEK-14
 
-- Mr. Steffen Hess (s.hess@fz-juelich.de), Forschungszentrum Juelich, IEK-13
-  - Steffen Hess is a PhD candidate.
-
-- Prof. Steven Beale (s.beale@fz-juelich.de), Forschungszentrum Juelich, IEK-13
+- Prof. Steven B. Beale (s.beale@fz-juelich.de), Forschungszentrum Juelich, IEK-13
 
 To be continued...
