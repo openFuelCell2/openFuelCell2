@@ -11,5 +11,5 @@ authors:
     given-names: Steven
 version: 2.0.0
 date-released: "2023-09-15"
-license: GPLv3
+license: GPL-3.0
 repository-code: "https://github.com/openFuelCell2/openFuelCell2.git"
