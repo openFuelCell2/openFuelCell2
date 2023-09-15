@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+title: openFuelCell2
+abstract: openFuelCell2 is a computational fluid dynamics (CFD) toolbox for simulating electrochemical devices such as fuel cells and electrolysis. The solver is based on the open-source library, OpenFOAM®.
+authors:
+  - family-names: Zhang
+    given-names: Shidong
+    orcid: "https://orcid.org/0000-0002-8645-6003"
+  - family-names: Hess
+    given-names: Steffen
+  - family-names: Beale
+    given-names: Steven
+version: 2.0.0
+date-released: "2023-09-15"
+license: GPLv3
+repository-code: "https://github.com/openFuelCell2/openFuelCell2.git"
