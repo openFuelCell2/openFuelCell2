@@ -146,7 +146,7 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
                 ),
                 this->mesh(),
                 dimensionedScalar("diff", this->muEff()->dimensions()/dimDensity, SMALL),
-                zeroGradientFvPatchVectorField::typeName
+                zeroGradientFvPatchScalarField::typeName
             )
         );
     }

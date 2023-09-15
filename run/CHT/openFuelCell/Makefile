@@ -18,7 +18,7 @@ mesh:
 	(cp -rf 1/hot/polyMesh constant/hot/.);
 	(cp -rf 1/cold/polyMesh constant/cold/.);
 	(cp -rf 1/solid/polyMesh constant/solid/.);
-	(rm -rf 1);
+	(rm -rf [01]);
 	(cp -rf ./system/controlDict.run ./system/controlDict);
 	(cp -r 0.orig 0);
 
