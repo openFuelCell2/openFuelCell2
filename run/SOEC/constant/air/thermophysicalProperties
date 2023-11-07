@@ -26,12 +26,12 @@ thermoType
     energy          sensibleInternalEnergy;
 }
 
-inertSpecie H2O;
+inertSpecie N2;
 
 species
 (
     O2
-    H2O
+    N2
 );
 
 O2
@@ -47,27 +47,6 @@ O2
         Tcommon         1000;
         highCpCoeffs    ( 3.69758 0.00061352 -1.25884e-07 1.77528e-11 -1.13644e-15 -1233.93 3.18917 );
         lowCpCoeffs     ( 3.21294 0.00112749 -5.75615e-07 1.31388e-09 -8.76855e-13 -1005.25 6.03474 );
-    }
-    transport
-    {
-        As              1.67212e-06;
-        Ts              170.672;
-    }
-}
-
-H2O
-{
-    specie
-    {
-        molWeight       18.0153;
-    }
-    thermodynamics
-    {
-        Tlow            200;
-        Thigh           3500;
-        Tcommon         1000;
-        highCpCoeffs    ( 3.03399 0.00217692 -1.64073e-07 -9.7042e-11 1.68201e-14 -30004.3 4.96677 );
-        lowCpCoeffs     ( 4.19864 -0.00203643 6.5204e-06 -5.48797e-09 1.77198e-12 -30293.7 -0.849032 );
     }
     transport
     {
