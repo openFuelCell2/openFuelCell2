@@ -4,11 +4,11 @@ openFuelCell2 is a computational fluid dynamics (CFD) toolbox for simulating ele
 
 ## About the code
 
-The source code was developed from a previous open-source repository called [openFuelCell](http://openfuelcell.sourceforge.net/). It was also inspired by the standard solver "reactingTwoPhaseEulerFoam" in OpenFOAM®. The solver can consider coupled problems with multi-region and multi-physics issues, including single and two phase flows, multiple species components, charger transfer, and electrochemical reactions in different regions. More applications and solvers will be available in the future.
+The source code was developed from a previous open-source repository called [openFuelCell](http://openfuelcell.sourceforge.net/). It was also inspired by the standard solver "reactingTwoPhaseEulerFoam" in OpenFOAM®. The solver can consider coupled problems with multi-region and multi-physics issues, including single and two phase flows, multiple species components, charge transfer, and electrochemical reactions in different regions. More applications and solvers will be available in the future.
 
 ## How to use
 
-The code is compiled with the OpenFOAM libraries, either [ORG](https://openfoam.org/) or [COM](https://www.openfoam.com/) versions. The default branch is compatable with the COM version, while the other branches are also provided for different OpenFOAM environments. The available environments include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v2306, OpenFOAM-v6, OpenFOAM-v8.
+The code is compiled with the OpenFOAM libraries, either [ORG](https://openfoam.org/) or [COM](https://www.openfoam.com/) versions. The default branch is compatable with the COM version, while the other branches are also provided for different OpenFOAM environments. The available environments will include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v2306, OpenFOAM-v6, OpenFOAM-v8. Note: the main branch is only compatible with OpenFOAM-v2306, while the others are under preparation.
 
 ```bash
 # Download the source code
@@ -68,7 +68,7 @@ The local regions can be classified as three different types, namely fluid, soli
 
 - Solid region:
 
-  This represents the solid components in fuel cell or electrolyzer. In the current solver, no eqautions will be solved here. However, stress analysis during assembly and thermal effects may be implemented in future applications.
+  This represents the solid components in fuel cell or electrolyzer. In the current solver, no equations will be solved here. However, stress analysis during assembly and thermal effects may be implemented in future applications.
 
   For example. in a fuel cell, the following components apply to this region,
 
@@ -78,9 +78,9 @@ The local regions can be classified as three different types, namely fluid, soli
 
 - Electric region:
 
-  This region accounts for the electric-conductive components. It is designed to consider electron/ion transfer specifically. However, it is found that the proton transfer region is the same as the region where dissolved water transfer takes place. Therefore, a switcher is enabled in the code to turn on/off the dissolved water transfer model. The following eqautions will be solved,
+  This region accounts for the electric-conductive components. It is designed to consider electron/ion transfer specifically. However, it is found that the proton transfer region is the same as the region where dissolved water transfer takes place. Therefore, a switcher is enabled in the code to turn on/off the dissolved water transfer model. The following equations will be solved,
 
-  - Potential equations (Possion equations)
+  - Potential equations (Poisson equations)
   - Dissolved water transfer equations (diffusion and electro-osmotic-drag)
 
   For example, in a fuel cell, the following components belong to this region:
@@ -123,17 +123,17 @@ The local regions can be classified as three different types, namely fluid, soli
     1. Change the phase name to none if single-phase flow is simulated. This makes the variable names change from _A.air_ to _A_.
     2. Moving the correction of diffusivity from MultiComponentPhaseModel to **diffusivityModelList**.
     3. Moving the definition of phase properties from phaseProperties to regionProperties.
-    4. Avoiding redundent output of diffusivity coefficients.
+    4. Avoiding redundant output of diffusivity coefficients.
     5. Applying a different method to Update the value of phi in phiI region --> use setReference of phiEqn. This seems to make the solution more stable.
-    6. Making the "porousZone" flexable to read. If the file doesn't exist, no porous zones are applied.
+    6. Making the "porousZone" flexible to read. If the file doesn't exist, no porous zones are applied.
     7. Update the test cases: rewrite the scripts.
     8. Change the header of each file. openFuelCell is included.
 - [Dec. 2022] Update the repository
     1. Fixed a bug in diffusivityList
     2. Update the tutorial
 - [Sep. 2023] Update the repository for public release
-    1. A new barnch is included for OpenFOAM-v2306
-    2. The prescribed mean current density and voltage are now defined as a function of time. (Availiable functions can be found in OpenFOAM/primitives/functions/Function1).
+    1. A new branch is included for OpenFOAM-v2306
+    2. The prescribed mean current density and voltage are now defined as a function of time. (Assailable functions can be found in OpenFOAM/primitives/functions/Function1).
     3. Include the radiation model in solid region.
     4. Copy thermoTools to the repo. (need to remove this in next update.)
     5. In test cases, when it comes to two-phase flow, a steadyState scheme is now used, specially for ddt term of species transfer.
@@ -143,19 +143,23 @@ The local regions can be classified as three different types, namely fluid, soli
 
 - Journal
 
-  - Zhang, Shidong, Steffen Hess, Holger Marschall, Uwe Reimer, Steven Beale, and Werner Lehnert. "openFuelCell2: A New Computational Tool for Fuel Cells, Electrolyzers, and other Electrochemical Devices and Processes." Computer Physics Communications, Forthcoming (2023).**
+  - Zhang, Shidong, Steffen Hess, Holger Marschall, Uwe Reimer, Steven Beale, and Werner Lehnert. "openFuelCell2: A New Computational Tool for Fuel Cells, Electrolyzers, and other Electrochemical Devices and Processes." Computer Physics Communications, Forthcoming (2023).
 
-  - Zhang, Shidong, Shangzhe Yu, Roland Peters, Steven Beale, Holger Marschall, Felix Kunz, and Rüdiger-A. Eichel. "A New Procedure for Rapid Convergence in Numerical Performance Calculations of Electrochemical Cells." Available at SSRN 4450642.
-
-  - Zhang, Shidong, Kai Wang, Shangzhe Yu, Nicolas Kruse, Roland Peters, Felix Kunz, and Rudiger-A. Eichel. "Multiscale and Multiphysical Numerical Simulations of Solid Oxide Cell (SOC)." ECS Transactions 111, no. 6 (2023): 937.
+  - Zhang, Shidong, Shangzhe Yu, Roland Peters, Steven B. Beale, Holger Marschall, Felix Kunz, and Rüdiger-A. Eichel. "A new procedure for rapid convergence in numerical performance calculations of electrochemical cells." Electrochimica Acta (2023): 143275.
 
   - Yu, Shangzhe, Shidong Zhang, Dominik Schäfer, Roland Peters, Felix Kunz, and Rüdiger-A. Eichel. "Numerical Modeling and Simulation of the Solid Oxide Cell Stacks and Metal Interconnect Oxidation with OpenFOAM." Energies 16, no. 9 (2023): 3827.
 
   - Zhang, Shidong, Steven B. Beale, Uwe Reimer, Martine Andersson, and Werner Lehnert. "Polymer electrolyte fuel cell modeling-A comparison of two models with different levels of complexity." International Journal of Hydrogen Energy 45, no. 38 (2020): 19761-19777.
 
-  - Zhang, Shidong, Steven B. Beale, Yan Shi, Holger Janßen, Uwe Reimer, and Werner Lehnert. "Development of an Open-Source Solver for Polymer Electrolyte Fuel Cells." ECS Transactions 98, no. 9 (2020): 317.
-
   - Zhang, Shidong. "Low-Temperature Polymer Electrolyte Fuel Cells." In Electrochemical Cell Calculations with OpenFOAM, pp. 59-85. Springer, Cham, 2022.
+
+- Conference
+
+  - Hess, Steffen, Shidong Zhang, Thomas Kadyk, Werner Lehnert, Michael Eikerling, and Steven B. Beale. "Numerical Two-Phase Simulations of Alkaline Water Electrolyzers." ECS Transactions 112, no. 4 (2023): 419.
+
+  - Zhang, Shidong, Kai Wang, Shangzhe Yu, Nicolas Kruse, Roland Peters, Felix Kunz, and Rudiger-A. Eichel. "Multiscale and Multiphysical Numerical Simulations of Solid Oxide Cell (SOC)." ECS Transactions 111, no. 6 (2023): 937.
+
+  - Zhang, Shidong, Steven B. Beale, Yan Shi, Holger Janßen, Uwe Reimer, and Werner Lehnert. "Development of an Open-Source Solver for Polymer Electrolyte Fuel Cells." ECS Transactions 98, no. 9 (2020): 317.
 
 - Thesis
 

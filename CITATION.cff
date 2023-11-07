@@ -7,9 +7,15 @@ authors:
     orcid: "https://orcid.org/0000-0002-8645-6003"
   - family-names: Hess
     given-names: Steffen
+    orcid: "https://orcid.org/0000-0003-4916-6469"
   - family-names: Beale
     given-names: Steven
+    orcid: "https://orcid.org/0000-0002-6755-9111"
 version: 2.0.0
 date-released: "2023-09-15"
+identifiers:
+  - description: This is the collection of archived snapshots of openFuelCell2
+    type: doi
+    value: "10.5281/zenodo.8349347"
 license: GPL-3.0
 repository-code: "https://github.com/openFuelCell2/openFuelCell2.git"
