@@ -26,6 +26,10 @@ License
 #include "nernstModel.H"
 #include "phaseModel.H"
 
+// * * * * * * * * * * * * * * * * Static members  * * * * * * * * * * * * * * //
+
+const Foam::word Foam::nernstModel::nernstName("nernst");
+
 namespace Foam
 {
     defineTypeNameAndDebug(nernstModel, 0);
@@ -40,11 +44,11 @@ Foam::nernstModel::nernstModel
     const dictionary& dict
 )
 :
-    volScalarField
+    nernst_
     (
         IOobject
         (
-            "nernst",
+            nernstName,
             phase1.mesh().time().timeName(),
             phase1.mesh(),
             IOobject::NO_READ,
@@ -61,8 +65,8 @@ Foam::nernstModel::nernstModel
 
     dict_(dict),
     rxnList_(dict_.lookup("RxnList")),
-    deltaH_(this->size(), 0.0),
-    deltaS_(deltaH_.size(), 0.0),
+    deltaH_(nernst_.size(), 0.0),
+    deltaS_(nernst_.size(), 0.0),
     residualY_(dict_.lookupOrDefault<scalar>("residualY", 1.0e-6)),
     pRef_("pRef", dimPressure, dict)
 {}

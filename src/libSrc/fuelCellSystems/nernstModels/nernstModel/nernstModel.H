@@ -54,10 +54,9 @@ class phaseModel;
                            Class nernstModel Declaration
 \*---------------------------------------------------------------------------*/
 class nernstModel
-:
-    public volScalarField
 {
-protected:
+        //- Nernst potential
+        volScalarField nernst_;
 
         //- Dictionary for ep parameters
         const dictionary& dict_;
@@ -119,11 +118,47 @@ public:
 
     // Member Functions
 
+        //- Field name
+        static const word nernstName;
+
         virtual void correct() = 0;
 
         const dictionary& dictnernstModel() const
         {
             return dict_;
+        }
+
+        //- J/mol
+        scalarField& deltaH()
+        {
+            return deltaH_;
+        }
+
+        const scalarField& deltaH() const
+        {
+            return deltaH_;
+        }
+
+        //- J/(mol K)
+        scalarField& deltaS()
+        {
+            return deltaS_;
+        }
+
+        const scalarField& deltaS() const
+        {
+            return deltaS_;
+        }
+
+        //- Reaction list
+        HashTable<scalar>& rxnList()
+        {
+            return rxnList_;
+        }
+
+        const HashTable<scalar>& rxnList() const
+        {
+            return rxnList_;
         }
 
         //- Reference pressure
@@ -132,22 +167,23 @@ public:
             return pRef_;
         }
 
-        //- J/mol
-        const scalarField& deltaH() const
+        //- Residual Y
+        scalar residualY() const
         {
-            return deltaH_;
+            return residualY_;
         }
 
-        //- J/(mol K)
-        const scalarField& deltaS() const
+        //- Operators
+        volScalarField& operator()()
         {
-            return deltaS_;
+            return nernst_;
         }
 
-        const HashTable<scalar> rxnList() const
+        const volScalarField& operator()() const
         {
-            return rxnList_;
+            return nernst_;
         }
+
 };
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

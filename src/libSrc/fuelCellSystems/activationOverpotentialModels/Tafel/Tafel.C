@@ -96,7 +96,7 @@ void Foam::activationOverpotentialModels::Tafel<Thermo>::correct()
     //- Reference
     scalarField& eta = this->eta_;
     //- Nernst field
-    scalarField& nernst = this->nernst_();
+    scalarField& nernst = this->nernst_()();
     //- Current density
     scalarField& j = this->j_;
 

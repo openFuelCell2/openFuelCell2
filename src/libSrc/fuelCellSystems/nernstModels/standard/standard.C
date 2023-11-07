@@ -56,21 +56,21 @@ Foam::nernstModels::standard<Thermo, OtherThermo>::~standard()
 template<class Thermo, class OtherThermo>
 void Foam::nernstModels::standard<Thermo, OtherThermo>::correct()
 {
-    this->deltaH_ *= 0.0;
-    this->deltaS_ *= 0.0;
+    this->deltaH() *= 0.0;
+    this->deltaS() *= 0.0;
 
     const word water = phaseModel::water;
 
-    scalarField& nernst(*this);
-    scalarField Qrxn(this->size(), 1.0);
-    scalarField deltaHS(this->size(), 0.0);
+    scalarField& nernst = this->operator()();
+    scalarField Qrxn(nernst.size(), 1.0);
+    scalarField deltaHS(nernst.size(), 0.0);
 
     const scalarField& p = this->thermo_.p();
     const scalarField& T = this->thermo_.T();
 
-    scalarField pRef = p/this->pRef_.value();
+    scalarField pRef = p/this->pRef().value();
 
-    forAllConstIter(HashTable<scalar>, this->rxnList_, iter)
+    forAllConstIter(HashTable<scalar>, this->rxnList(), iter)
     {
         const word& nameI = iter.key();
 
@@ -78,14 +78,14 @@ void Foam::nernstModels::standard<Thermo, OtherThermo>::correct()
         {
             label speciesI = this->thermo_.composition().species()[nameI];
             const scalar Wi = this->thermo_.composition().W(speciesI)/1000.0;
-            scalar stoiCoeffI = this->rxnList_[nameI];
+            scalar stoiCoeffI = this->rxnList()[nameI];
 
-            forAll(this->deltaH_, cellI)
+            forAll(this->deltaH(), cellI)
             {
-                this->deltaH_[cellI] +=
+                this->deltaH()[cellI] +=
                     stoiCoeffI*this->thermo_.composition().Ha(speciesI, p[cellI], T[cellI])*Wi;
 
-                this->deltaS_[cellI] +=
+                this->deltaS()[cellI] +=
                     stoiCoeffI*this->thermo_.composition().S(speciesI, p[cellI], T[cellI])*Wi;
 
                 deltaHS[cellI] +=
@@ -94,11 +94,11 @@ void Foam::nernstModels::standard<Thermo, OtherThermo>::correct()
 
             const scalarField& X = phase1_.X(nameI);
 
-            Qrxn *= Foam::pow(Foam::max(X, 1.0e-6)*pRef, stoiCoeffI);
+            Qrxn *= Foam::pow(Foam::max(X, this->residualY())*pRef, stoiCoeffI);
         }
     }
 
-    if (this->rxnList_.found(water))
+    if (this->rxnList().found(water))
     {
         const scalarField& p = this->otherThermo_.p();
         const scalarField& T = this->otherThermo_.T();
@@ -112,12 +112,12 @@ void Foam::nernstModels::standard<Thermo, OtherThermo>::correct()
 
         label speciesI = this->thermo_.composition().species()[water];
         const scalar Wi = this->thermo_.composition().W(speciesI)/1000.0;
-        scalar stoiCoeffI = this->rxnList_[water];
+        scalar stoiCoeffI = this->rxnList()[water];
 
-        forAll(this->deltaH_, cellI)
+        forAll(this->deltaH(), cellI)
         {
-            this->deltaH_[cellI] += stoiCoeffI*otherLocalThermo.Ha(p[cellI], T[cellI])*Wi;
-            this->deltaS_[cellI] += stoiCoeffI*otherLocalThermo.S(p[cellI], T[cellI])*Wi;
+            this->deltaH()[cellI] += stoiCoeffI*otherLocalThermo.Ha(p[cellI], T[cellI])*Wi;
+            this->deltaS()[cellI] += stoiCoeffI*otherLocalThermo.S(p[cellI], T[cellI])*Wi;
             deltaHS[cellI] += stoiCoeffI*otherLocalThermo.S(p[cellI], T[cellI])*Wi*T[cellI];
         }
 
@@ -129,12 +129,12 @@ void Foam::nernstModels::standard<Thermo, OtherThermo>::correct()
         }
     }
 
-    nernst = -(-(this->deltaH_ - deltaHS) - Rgas*T*Foam::log(Qrxn))/this->rxnList_["e"]/F;
+    nernst = -(-(this->deltaH() - deltaHS) - Rgas*T*Foam::log(Qrxn))/this->rxnList()["e"]/F;
 
-    Info<< "Nernst " << this->mesh().name()
-        << ": min = " << Foam::min(this->primitiveField())
-        << ", mean = " << Foam::average(this->primitiveField())
-        << ", max = " << Foam::max(this->primitiveField())
+    Info<< "Nernst " << this->operator()().mesh().name()
+        << ": min = " << Foam::min(this->operator()().primitiveField())
+        << ", mean = " << Foam::average(this->operator()().primitiveField())
+        << ", max = " << Foam::max(this->operator()().primitiveField())
         << endl;
 }
 
