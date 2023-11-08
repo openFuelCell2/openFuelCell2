@@ -170,8 +170,9 @@ Foam::regionTypes::electric::electric
             voltage_.reset(Function1<scalar>::New("voltage", controlDict, this));
         }
 
+        if (controlDict.found("zoneName"))
         {
-            zoneName_ = controlDict.getOrDefault<word>("zoneName", name());
+            zoneName_ = controlDict.get<word>("zoneName");
             cellZoneIDs_ = this->cellZones().indices(zoneName_);
         }
     }
@@ -207,7 +208,9 @@ void Foam::regionTypes::electric::solve()
 
         for (label id = 0; id < nCells(); id++)
         {
-            phiEqn->setReference(id, phi_[id] - iDot*relax_);
+            //- The option has to be true (forceReference)
+            //- otherwise, errors happen in parallel simulations
+            phiEqn->setReference(id, phi_[id] - iDot*relax_, true);
         }
     }
 
@@ -243,19 +246,26 @@ void Foam::regionTypes::electric::correct()
         const scalarField& volume = this->V();
         scalar iDot(0.0);
 
-        forAll(cellZoneIDs_, zoneI)
+        if (cellZoneIDs_.size())
         {
-            const labelList& cells = this->cellZones()[cellZoneIDs_[zoneI]];
-
-            forAll(cells, i)
+            forAll(cellZoneIDs_, zoneI)
             {
-                const label cellI = cells[i];
+                const labelList& cells = this->cellZones()[cellZoneIDs_[zoneI]];
 
-                iDot += source[cellI] * volume[cellI];
+                forAll(cells, i)
+                {
+                    const label cellI = cells[i];
+
+                    iDot += source[cellI] * volume[cellI];
+                }
             }
-        }
 
-        reduce(iDot, sumOp<scalar>());
+            reduce(iDot, sumOp<scalar>());
+        }
+        else
+        {
+            iDot = Foam::gSum(source*volume);
+        }
 
         {
             label patchID = this->boundaryMesh().findPatchID(patchName_);
