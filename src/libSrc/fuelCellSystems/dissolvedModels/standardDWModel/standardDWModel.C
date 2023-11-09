@@ -147,7 +147,9 @@ void Foam::dissolvedModels::standardDWModel::solve()
 
         for (label i = 0; i < lambda_.size(); i++)
         {
-            wEqn->setReference(i, lambda_[i] + iDot*relax_);
+            //- The option has to be true (forceReference)
+            //- otherwise, errors happen in parallel simulations
+            wEqn->setReference(i, lambda_[i] + iDot*relax_, true);    // TODO! figure out the reason
         }
     }
 
