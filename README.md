@@ -1,6 +1,6 @@
 # openFuelCell2
 
-[openFuelCell2](https://github.com/openFuelCell2/openFuelCell2.github.io) is a computational fluid dynamics (CFD) toolbox for simulating electrochemical devices such as fuel cells and electrolysis. The solver is based on the open-source library, OpenFOAM®.
+[openFuelCell2](https://openfuelcell2.github.io/) is a computational fluid dynamics (CFD) toolbox for simulating electrochemical devices such as fuel cells and electrolysis. The solver is based on the open-source library, OpenFOAM®.
 
 ## About the code
 
