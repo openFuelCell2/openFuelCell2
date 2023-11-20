@@ -81,11 +81,14 @@ relaxationFactors
 {
     fields
     {
-        default     1;
+        default      1;
+        p_rgh         0.3;
     }
     equations
     {
-        default     1;
+        "U.*"        0.7;
+        "O2.*"       0.95;
+        "H2O.*"      0.95;
     }
 }
 
