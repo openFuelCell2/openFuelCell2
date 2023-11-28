@@ -8,7 +8,7 @@ The source code was developed from a previous open-source repository called [ope
 
 ## How to use
 
-The code is compiled with the OpenFOAM libraries, either [ORG](https://openfoam.org/) or [COM](https://www.openfoam.com/) versions. The default branch is compatable with the COM version, while the other branches are also provided for different OpenFOAM environments. The available environments will include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v2306, OpenFOAM-v6, OpenFOAM-v8. Note: the main branch is only compatible with OpenFOAM-v2306, while the others are under preparation.
+The code is compiled with the OpenFOAM libraries, either [ORG](https://openfoam.org/) or [COM](https://www.openfoam.com/) versions. The default branch is compatable with the COM version, while the other branches are also provided for different OpenFOAM environments. The available environments will include: OpenFOAM-v2012, OpenFOAM-v2106, OpenFOAM-v2306, OpenFOAM-v6, OpenFOAM-v8. Note: this branch is only compatible with OpenFOAM-10, while the others can be found from different branches.
 
 ```bash
 # Download the source code
@@ -138,6 +138,10 @@ The local regions can be classified as three different types, namely fluid, soli
     4. Copy thermoTools to the repo. (need to remove this in next update.)
     5. In test cases, when it comes to two-phase flow, a steadyState scheme is now used, specially for ddt term of species transfer.
     6. Update the preprocessing script for an easier usage.
+- [Nov. 2023] Update the repository for OpenFOAM-10
+    1. Update the source code (libSrc) for OpenFOAM-10
+    2. Bug fix: fix some bugs in the code from the main branch.
+    3. Update the tutorials: mainly the thermoPhysicalProperties
 
 ## Related publications
 
@@ -170,6 +174,8 @@ The local regions can be classified as three different types, namely fluid, soli
 ---
 
 The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the PhD thesis, supervised by Prof. [Werner Lehnert](w.lehnert@fz-juelich.de) and Prof. [Steven Beale](s.beale@fz-juelich.de). The detailed model description and simulation results can be found in the thesis, `Modeling and Simulation of Polymer Electrolyte Fuel Cells` by FZJ. The following individuals also contribute to the optimization of the code,
+
+- Shidong Zhang (s.zhang@fz-juelich.de), Forschungszentrum Juelich, IEK-9
 
 - Steffen Hess (s.hess@fz-juelich.de), Forschungszentrum Juelich, IEK-14
 
