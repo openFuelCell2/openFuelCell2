@@ -2,10 +2,10 @@
 
 #----------------------------------------------------------------------#
 # Solver      |   openFuelCell                                         #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+# OpenFOAM    |   OpenFOAM-10                                          #
 #----------------------------------------------------------------------#
 # Source code |   https://github.com/openFuelCell2/openFuelCell2       #
-# Update from |   14.09.2023                                           #
+# Update from |   28.11.2023                                           #
 #----------------------------------------------------------------------#
 
 ## edit system/decomposeParDict for the desired decomposition
@@ -19,7 +19,7 @@ echo "NPROCS = " $NPROCS
 
 cp system/controlDict.mesh system/controlDict
 
-decomposePar -fileHandler collated >& log.decompose
+decomposePar >& log.decompose
 
 cp system/decomposeParDict system/air/.
 cp system/decomposeParDict system/fuel/.
@@ -29,85 +29,109 @@ cp system/decomposeParDict system/phiEA/.
 cp system/decomposeParDict system/phiEC/.
 cp system/decomposeParDict system/phiI/.
 
-decomposePar -region air -fileHandler collated 
-decomposePar -region fuel -fileHandler collated
-decomposePar -region electrolyte -fileHandler collated
-decomposePar -region interconnect -fileHandler collated
-decomposePar -region phiEA -fileHandler collated
-decomposePar -region phiEC -fileHandler collated
-decomposePar -region phiI -fileHandler collated
+decomposePar -region air
+decomposePar -region fuel
+decomposePar -region electrolyte
+decomposePar -region interconnect
+decomposePar -region phiEA
+decomposePar -region phiEC
+decomposePar -region phiI
 
 # Step 1:
 # air/fuel/electrolyte/interconnect
 
-mv processors$NPROCS/constant/polyMesh/cellZones processors$NPROCS/constant/polyMesh/cellZones_bk
+ii=0
+while [ -d processor$ii ];
+do
+  mv processor$ii/constant/polyMesh/cellZones processor$ii/constant/polyMesh/cellZones_bk
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.afei -constant -noZero -parallel -fileHandler collated
-mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
+  ii=$((ii+1))
+done
+
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.afei -parallel
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel
 
 # sleep to wait for files
-while [! -d processors$NPROCS/1];
+while [ ! -d processor0/1 ];
 do
     sleep 1s
 done
 
-cp -rf processors$NPROCS/1/air/polyMesh processors$NPROCS/constant/air
-cp -rf processors$NPROCS/1/fuel/polyMesh processors$NPROCS/constant/fuel
-cp -rf processors$NPROCS/1/electrolyte/polyMesh processors$NPROCS/constant/electrolyte
-cp -rf processors$NPROCS/1/interconnect/polyMesh processors$NPROCS/constant/interconnect
+ii=0
+while [ -d processor$ii ];
+do
+  cp -rf processor$ii/1/air/polyMesh processor$ii/constant/air
+  cp -rf processor$ii/1/fuel/polyMesh processor$ii/constant/fuel
+  cp -rf processor$ii/1/electrolyte/polyMesh processor$ii/constant/electrolyte
+  cp -rf processor$ii/1/interconnect/polyMesh processor$ii/constant/interconnect
+  rm -rf processor$ii/1
 
-rm -rf processors$NPROCS/1
+  ii=$((ii+1))
+done
+
 
 # Step 2:
 # phiEA, phiEC
 
-rm processors$NPROCS/constant/polyMesh/cellZones
+rm processor*/constant/polyMesh/cellZones
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiE -constant -noZero -parallel -fileHandler collated
-mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiE -constant -noZero -parallel
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel
 
 # sleep to wait for files
-while [! -d processors$NPROCS/1];
+while [ ! -d processor0/1 ];
 do
     sleep 1s
 done
 
-cp -rf processors$NPROCS/1/phiEA/polyMesh processors$NPROCS/constant/phiEA
-cp -rf processors$NPROCS/1/phiEC/polyMesh processors$NPROCS/constant/phiEC
+ii=0
+while [ -d processor$ii ];
+do
+  cp -rf processor$ii/1/phiEA/polyMesh processor$ii/constant/phiEA
+  cp -rf processor$ii/1/phiEC/polyMesh processor$ii/constant/phiEC
+  rm -rf processor$ii/1
 
-rm -rf processors$NPROCS/1
+  ii=$((ii+1))
+done
 
 # Step 3:
 # phiI
 
-rm processors$NPROCS/constant/polyMesh/cellZones
+rm processor*/constant/polyMesh/cellZones
 
-mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiI -constant -noZero -parallel -fileHandler collated
-mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -dict ./system/topoSetDict.phiI -constant -noZero -parallel
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel
 
 # sleep to wait for files
-while [! -d processors$NPROCS/1];
+while [ ! -d processor0/1 ];
 do
     sleep 1s
 done
 
-cp -rf processors$NPROCS/1/phiI/polyMesh processors$NPROCS/constant/phiI
-rm -rf processors$NPROCS/1
+ii=0
+while [ -d processor$ii ];
+do
+  cp -rf processor$ii/1/phiI/polyMesh processor$ii/constant/phiI
+  rm -rf processor$ii/1
 
-mv processors$NPROCS/constant/polyMesh/cellZones_bk processors$NPROCS/constant/polyMesh/cellZones
+  mv processor$ii/constant/polyMesh/cellZones_bk processor$ii/constant/polyMesh/cellZones
+
+  ii=$((ii+1))
+done
+
 
 ## patches:
 
 # air zones
-mpirun -np $NPROCS topoSet -region air -noZero -constant -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -region air -noZero -constant -parallel
 
 # fuel zones
-mpirun -np $NPROCS topoSet -region fuel -noZero -constant -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -region fuel -noZero -constant -parallel
 
 # electric zones
-mpirun -np $NPROCS topoSet -region phiEA -noZero -constant -parallel -fileHandler collated
-mpirun -np $NPROCS topoSet -region phiEC -noZero -constant -parallel -fileHandler collated
-mpirun -np $NPROCS topoSet -region phiI -noZero -constant -parallel -fileHandler collated
+mpirun -np $NPROCS topoSet -region phiEA -noZero -constant -parallel
+mpirun -np $NPROCS topoSet -region phiEC -noZero -constant -parallel
+mpirun -np $NPROCS topoSet -region phiI -noZero -constant -parallel
 
 rm -rf system/phi0
 rm -rf system/phiI0

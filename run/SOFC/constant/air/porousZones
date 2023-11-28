@@ -32,15 +32,13 @@ cathode
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
-                type    axes;
+                type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
                 e2      (0 0 1);
             }
         }
-        theta 2.111848395;
-        sigma 0.0625;
     }
 
     Cp        568;
@@ -63,7 +61,7 @@ mpl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -94,7 +92,7 @@ ccl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);

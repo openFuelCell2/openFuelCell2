@@ -2,10 +2,10 @@
 
 #----------------------------------------------------------------------#
 # Solver      |   openFuelCell                                         #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+# OpenFOAM    |   OpenFOAM-10                                          #
 #----------------------------------------------------------------------#
 # Source code |   https://github.com/openFuelCell2/openFuelCell2       #
-# Update from |   14.09.2023                                           #
+# Update from |   28.11.2023                                           #
 #----------------------------------------------------------------------#
 
 # Rename the original field to 0
@@ -56,9 +56,9 @@ splitMeshRegions -cellZonesOnly
 cp -r 1/phiI/polyMesh constant/phiI/.
 
 rm -rf 1
-rm -rf constant/phiE0
-rm -rf system/phiE0
-rm -rf 0/phiE0
+rm -rf constant/phiI0
+rm -rf system/phiI0
+rm -rf 0/phiI0
 
 # mv back the original cell zones
 mv constant/polyMesh/cellZones_bk constant/polyMesh/cellZones

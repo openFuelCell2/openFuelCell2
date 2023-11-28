@@ -56,7 +56,7 @@ solvers
         relTol           0;
     }
 
-    Yi
+    "Yi.*"
     {
         solver           PBiCGStab;
         preconditioner   DILU;
@@ -74,18 +74,21 @@ PIMPLE
     nNonOrthogonalCorrectors 0;
 
     faceMomentum     yes;
-//    activePhase      water;
+    activePhase      water;
 }
 
 relaxationFactors
 {
     fields
     {
-        default     1;
+        default       1;
+        //p_rgh         0.1;
     }
     equations
     {
-        default     1;
+        default      1;
+        //"U.*"        0.7;
+        //"H2O.*"       0.7;
     }
 }
 

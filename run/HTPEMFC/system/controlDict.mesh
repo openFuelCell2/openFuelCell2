@@ -16,6 +16,8 @@ FoamFile
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+libs            ("libmasterRegionToCell.so");
+
 application     openFuelCell;
 
 startFrom       latestTime;

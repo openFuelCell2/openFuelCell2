@@ -24,9 +24,7 @@ mesh:
 ################################################################################
 
 decompose:
-	(decomposeParID -region hot -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
-	(decomposeParID -region cold -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
-	(decomposeParID -region solid -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
+	(decomposeParID -allRegions -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 	(decomposeParID -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 
 ################################################################################
@@ -38,7 +36,7 @@ parallel:
 ################################################################################
 
 run:
-	(mpirun -np 4 chtMultiRegionSimpleFoam -parallel -fileHandler collated | tee log.run);
+	(mpirun -np 4 chtMultiRegionFoam -parallel | tee log.run);
 
 ################################################################################
 
@@ -48,24 +46,18 @@ plot:
 ################################################################################
 
 srun:
-	(chtMultiRegionSimpleFoam | tee log.run);
+	(chtMultiRegionFoam | tee log.run);
 
 ################################################################################
 
 reconstruct:
-	(reconstructParMesh);
-	(reconstructParMesh -region hot -constant -fileHandler collated);
-	(reconstructParMesh -region solid -constant -fileHandler collated);
-	(reconstructParMesh -region cold -constant -fileHandler collated);
-	(reconstructPar -fileHandler collated);
-	(reconstructPar -region hot -fileHandler collated);
-	(reconstructPar -region solid -fileHandler collated);
-	(reconstructPar -region cold -fileHandler collated);
+	(reconstructPar -region hot);
+	(reconstructPar -region solid);
+	(reconstructPar -region cold);
 
 ################################################################################
 
 view:
-	(foamToVTK -latestTime);
 	(foamToVTK -latestTime -region hot);
 	(foamToVTK -latestTime -region cold);
 	(foamToVTK -latestTime -region solid);
@@ -73,7 +65,6 @@ view:
 ################################################################################
 
 viewAll:
-	(foamToVTK);
 	(foamToVTK -region hot);
 	(foamToVTK -region cold);
 	(foamToVTK -region solid);

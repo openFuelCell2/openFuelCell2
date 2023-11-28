@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------#
 # Solver      |   openFuelCell                                         #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+# OpenFOAM    |   OpenFOAM-10                                          #
 #----------------------------------------------------------------------#
 # Source code |   https://github.com/openFuelCell2/openFuelCell2       #
-# Update from |   14.09.2023                                           #
+# Update from |   28.11.2023                                           #
 #----------------------------------------------------------------------#
 
 clear:
@@ -25,9 +25,7 @@ mesh:
 ################################################################################
 
 decompose:
-	(decomposeParID -region hot -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
-	(decomposeParID -region cold -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
-	(decomposeParID -region solid -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
+	(decomposeParID -allRegions -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 	(decomposeParID -coordinate '((0.00 -0.001 0) (0.04 0.001 0))')
 
 ################################################################################
@@ -39,7 +37,7 @@ parallel:
 ################################################################################
 
 run:
-	(mpirun -np 4 openFuelCell -parallel -fileHandler collated | tee log.run);
+	(mpirun -np 4 openFuelCell -parallel | tee log.run);
 
 ################################################################################
 
@@ -54,14 +52,8 @@ srun:
 ################################################################################
 
 reconstruct:
-	(reconstructParMesh);
-	(reconstructParMesh -region hot -constant -fileHandler collated);
-	(reconstructParMesh -region solid -constant -fileHandler collated);
-	(reconstructParMesh -region cold -constant -fileHandler collated);
-	(reconstructPar -fileHandler collated);
-	(reconstructPar -region hot -fileHandler collated);
-	(reconstructPar -region solid -fileHandler collated);
-	(reconstructPar -region cold -fileHandler collated);
+	(reconstructPar);
+	(reconstructPar -allRegions);
 
 ################################################################################
 

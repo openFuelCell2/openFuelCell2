@@ -23,7 +23,7 @@ The water may exist in vapor and liquid in PEM water electrolyzer cells
     supply:                 Water vapor
     Active area             0.8 cm2
 
-    Mean current density    8000 A/m3
+    Mean current density    -8000 A/m3
     ```
 
 To run the case:

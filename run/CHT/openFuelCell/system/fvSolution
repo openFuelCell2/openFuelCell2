@@ -29,15 +29,15 @@ solvers
             nPreSweeps      0;
             nPostSweeps     2;
             nFinestSweeps   2;
-            cacheAgglomeration false;
+            cacheAgglomeration true;
             nCellsInCoarsestLevel 10;
-            agglomerator    assembledFaceAreaPair;
+            agglomerator    algebraicPair;
             mergeLevels     1;
         }
-        tolerance       1e-10;
-        relTol          0;
+        tolerance         1e-11;
+        relTol            0;
 
-        maxIter         100;
+        maxIter           100;
     }
 }
 

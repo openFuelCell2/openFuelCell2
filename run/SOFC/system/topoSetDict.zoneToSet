@@ -24,7 +24,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone cchannel;
+            name cchannel;
         }
     }
 
@@ -35,7 +35,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone achannel;
+            name achannel;
         }
     }
 
@@ -46,7 +46,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone electrolyte;
+            name electrolyte;
         }
     }
 
@@ -57,7 +57,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone interconnect;
+            name interconnect;
         }
     }
     {
@@ -67,7 +67,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone cathode;
+            name cathode;
         }
     }
     {
@@ -77,7 +77,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone anode;
+            name anode;
         }
     }
     {
@@ -87,7 +87,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone cmpl;
+            name cmpl;
         }
     }
     {
@@ -97,7 +97,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone ampl;
+            name ampl;
         }
     }
     {
@@ -107,7 +107,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone ccl;
+            name ccl;
         }
     }
     {
@@ -117,7 +117,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone acl;
+            name acl;
         }
     }
 );

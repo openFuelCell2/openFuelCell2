@@ -19,11 +19,11 @@ thermoType
 {
     type            heSolidThermo;
     mixture         pureMixture;
-    transport       constIso;
-    thermo          hConst;
+    transport       constIsoSolid;
+    thermo          eConst;
     equationOfState rhoConst;
     specie          specie;
-    energy          sensibleEnthalpy;
+    energy          sensibleInternalEnergy;
 }
 
 mixture
@@ -45,7 +45,7 @@ mixture
     thermodynamics
     {
         Hf              0;
-        Cp              1980;
+        Cv              1980;
     }
 }
 

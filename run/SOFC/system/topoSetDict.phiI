@@ -65,7 +65,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone  phiI;
+            name  phiI;
         }
     }
 );

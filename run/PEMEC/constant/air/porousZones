@@ -32,7 +32,7 @@ cathode
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -63,7 +63,7 @@ mpl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -94,7 +94,7 @@ ccl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);

@@ -7,29 +7,16 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version         2.0;
-    format          ascii;
-    class           dictionary;
-    object          fvSolution;
+    version     2.0;
+    format      ascii;
+    class       uniformDimensionedVectorField;
+    location    "constant";
+    object      g;
 }
-
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-solvers
-{
-    T
-    {
-        solver           PBiCGStab;
-        preconditioner   DILU;
-        tolerance        1e-11;
-        relTol           0;
-    }
-}
-
-relaxationFactors
-{
-    T               0.999;
-}
+dimensions      [0 1 -2 0 0 0 0];
+value           (0 0 0);
 
 
 // ************************************************************************* //

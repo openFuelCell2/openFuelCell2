@@ -1,11 +1,11 @@
 #!/bin/csh
 
 #----------------------------------------------------------------------#
-# Solver      |   chtMultiRegionSimpleFoam                             #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+# Solver      |   chtMultiRegionFoam                                   #
+# OpenFOAM    |   OpenFOAM-10                                          #
 #----------------------------------------------------------------------#
-# Source code |   https://jugit.fz-juelich.de/s.zhang/fuelcellfoam     #
-# Update from |   14.09.2023                                           #
+# Source code |   OpenFOAM-10                                          #
+# Update from |   28.11.2023                                           #
 #----------------------------------------------------------------------#
 
 ## edit system/decomposeParDict for the desired decomposition

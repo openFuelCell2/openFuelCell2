@@ -32,7 +32,7 @@ cathode
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -62,7 +62,7 @@ mpl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -70,8 +70,6 @@ mpl
             }
         }
         rho thermo:rho;
-        theta 2.111848395;
-        sigma 0.0625;
     }
 
     Cp    568;
@@ -94,7 +92,7 @@ ccl
         {
             type    cartesian;
             origin  (0 0 0);
-            rotation
+            coordinateRotation
             {
                 type    axesRotation;
                 e1      (1 0 0);    //(0.70710678 0.70710678 0);
@@ -102,8 +100,6 @@ ccl
             }
         }
         rho thermo:rho;
-        theta 1.745329252;
-        sigma 0.0625;
     }
 
     Cp        568;

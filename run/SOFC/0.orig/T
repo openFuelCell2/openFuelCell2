@@ -33,7 +33,7 @@ boundaryField
     airInlet
     {
         type            fixedValue;
-        value           uniform 873.15;
+        value           uniform 973.15;
     }
     airOutlet
     {
@@ -54,7 +54,7 @@ boundaryField
     fuelInlet
     {
         type            fixedValue;
-        value           uniform 873.15;
+        value           uniform 973.15;
     }
     fuelOutlet
     {

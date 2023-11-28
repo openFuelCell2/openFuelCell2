@@ -54,7 +54,7 @@ Each tutorial:
     # Run in parallel
     make run  #( the value of 'nx' times 'ny' needs to be changed in 'Makefile')
     # or
-    # mpirun -np nx*ny fuelCell0Foam -parallel -fileHandler collated | tee log.run
+    # mpirun -np nx*ny openFuelCell -parallel | tee log.run
     ```
 
 To view the result:

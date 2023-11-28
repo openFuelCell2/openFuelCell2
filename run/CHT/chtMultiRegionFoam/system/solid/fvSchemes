@@ -10,43 +10,41 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "constant/heater";
-    object      thermophysicalProperties;
+    object      fvSchemes;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-thermoType
+ddtSchemes
 {
-    type            heSolidThermo;
-    mixture         pureMixture;
-    transport       constIso;
-    thermo          hConst;
-    equationOfState rhoConst;
-    specie          specie;
-    energy          sensibleEnthalpy;
+    default         steadyState;
 }
 
-mixture
+gradSchemes
 {
-    // Iron
-
-    specie
-    {
-        molWeight       27;
-    }
-    equationOfState
-    {
-        rho             2700;
-    }
-    transport
-    {
-        kappa           20;
-    }
-    thermodynamics
-    {
-        Hf              0;
-        Cp              1980;
-    }
+    default         Gauss linear;
 }
+
+divSchemes
+{
+    default         none;
+}
+
+laplacianSchemes
+{
+    default             none;
+    laplacian(alphae,e)  Gauss linear uncorrected;
+    laplacian(thermo:kappa,T) Gauss linear uncorrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         uncorrected;
+}
+
 
 // ************************************************************************* //

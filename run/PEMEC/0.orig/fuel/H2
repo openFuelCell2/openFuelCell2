@@ -25,7 +25,7 @@ boundaryField
 {
     fuelInlet
     {
-        type            fixedValue;
+        type            zeroGradient;//fixedValue;
         value           $internalField;
     }
 

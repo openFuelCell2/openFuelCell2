@@ -23,13 +23,13 @@ ddtSchemes
 
 gradSchemes
 {
-    default         Gauss weightedFlux "k";
+    default         Gauss linear;
 }
 
 divSchemes
 {
     default                 none;
-    div(rhoCpPhi,T)         Gauss linearUpwind Gauss linear;
+    div(rhoCpPhi,T)         Gauss limitedLinear 1;
 }
 
 laplacianSchemes
@@ -40,7 +40,7 @@ laplacianSchemes
 
 interpolationSchemes
 {
-    default         harmonic corrected;
+    default         harmonic;
 }
 
 snGradSchemes

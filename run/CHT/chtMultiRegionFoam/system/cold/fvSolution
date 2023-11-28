@@ -5,7 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
-
 FoamFile
 {
     version         2.0;
@@ -13,7 +12,6 @@ FoamFile
     class           dictionary;
     object          fvSolution;
 }
-
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 solvers
@@ -35,9 +33,9 @@ solvers
             agglomerator    faceAreaPair;
             mergeLevels     1;
         }
-        tolerance           1e-10;
-        relTol              0;
-        maxIter             100;
+        tolerance       1e-10;
+        relTol          0;
+        maxIter         100;
     }
 
     "(e|h).*"
@@ -57,7 +55,7 @@ solvers
     }
 }
 
-SIMPLE
+PIMPLE
 {
     momentumPredictor no;
 
@@ -65,20 +63,20 @@ SIMPLE
     nCorrectors      3;
     nNonOrthogonalCorrectors 0;
 
-    consistent     true;
+    consistent    true;
 }
 
 relaxationFactors
 {
     fields
     {
-        p_rgh         0.3;
+         p_rgh         0.3;
     }
+
     equations
     {
-        "U.*"        0.7;
+         "U.*"         0.7;
     }
 }
-
 
 // ************************************************************************* //

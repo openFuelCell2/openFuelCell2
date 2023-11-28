@@ -71,7 +71,7 @@ PIMPLE
     nCorrectors      4;
     nNonOrthogonalCorrectors 0;
 
-    consistent     	yes;
+    consistent       yes;
 }
 
 relaxationFactors
@@ -79,14 +79,14 @@ relaxationFactors
     fields
     {
         default     1;
-        p_rgh       0.5;
+        p_rgh       0.3;
     }
 
     equations
     {
         default     1;
-         "U.*"      0.7;
-         "H2.*"     0.999;
+        "U.*"       0.7;
+        "H2.*"      0.999;
     }
 }
 

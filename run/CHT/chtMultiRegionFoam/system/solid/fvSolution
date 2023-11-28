@@ -16,7 +16,7 @@ FoamFile
 
 solvers
 {
-    h
+    e
     {
         solver           PCG;
         preconditioner   DIC;
@@ -25,7 +25,7 @@ solvers
     }
 }
 
-SIMPLE
+PIMPLE
 {
     nNonOrthogonalCorrectors 0;
 }

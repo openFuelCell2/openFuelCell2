@@ -2,10 +2,10 @@
 
 #----------------------------------------------------------------------#
 # Solver      |   openFuelCell                                         #
-# OpenFOAM    |   OpenFOAM-v1906 or newer (ESI)                        #
+# OpenFOAM    |   OpenFOAM-10                                          #
 #----------------------------------------------------------------------#
 # Source code |   https://github.com/openFuelCell2/openFuelCell2       #
-# Update from |   14.09.2023                                           #
+# Update from |   28.11.2023                                           #
 #----------------------------------------------------------------------#
 
 ## edit system/decomposeParDict for the desired decomposition
@@ -23,24 +23,32 @@ cp system/decomposeParDict system/hot/.
 cp system/decomposeParDict system/cold/.
 cp system/decomposeParDict system/solid/.
 
-decomposePar -fileHandler collated
+decomposePar
 
-decomposePar -region hot -fileHandler collated
-decomposePar -region cold -fileHandler collated
-decomposePar -region solid -fileHandler collated
+decomposePar -region hot
+decomposePar -region cold
+decomposePar -region solid
 
-mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel -fileHandler collated
+mpirun -np $NPROCS splitMeshRegions -cellZonesOnly -parallel
 
 # sleep to wait for files
-while [ ! -d processors$NPROCS/1 ]
+ii=0
+while [ ! -d processor$ii/1 ];
 do
-    sleep 1s
+  sleep 1s
+  ii=$((ii+1))
 done
 
-cp -rf processors$NPROCS/1/hot/polyMesh processors$NPROCS/constant/hot
-cp -rf processors$NPROCS/1/cold/polyMesh processors$NPROCS/constant/cold
-cp -rf processors$NPROCS/1/solid/polyMesh processors$NPROCS/constant/solid
+ii=0
+while [ -d processor$ii ];
+do
+  cp -rf processor$ii/1/hot/polyMesh processor$ii/constant/hot
+  cp -rf processor$ii/1/cold/polyMesh processor$ii/constant/cold
+  cp -rf processor$ii/1/solid/polyMesh processor$ii/constant/solid
 
-rm -rf processors$NPROCS/1
+  rm -rf processor$ii/1
+
+  ii=$((ii+1))
+done
 
 cp system/controlDict.run system/controlDict

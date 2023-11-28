@@ -136,7 +136,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone  phiEC;
+            name  phiEC;
         }
     }
     {
@@ -146,7 +146,7 @@ actions
         source  zoneToCell;
         sourceInfo
         {
-            zone  phiEA;
+            name  phiEA;
         }
     }
 );
