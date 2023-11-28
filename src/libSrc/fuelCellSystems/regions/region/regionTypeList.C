@@ -73,10 +73,13 @@ bool Foam::regionTypeList::active(const bool warn) const
 void Foam::regionTypeList::reset(const regionProperties& rp)
 {
     wordList regionNames;
+    wordList regionTypes;
 
     forAllConstIter(HashTable<wordList>, rp, iter)
     {
         const wordList& regions = iter();
+
+        regionTypes.append(iter.key());
 
         forAll(regions, regionI)
         {
@@ -97,7 +100,7 @@ void Foam::regionTypeList::reset(const regionProperties& rp)
     wordList modelTypes = {"fluid", "solid", "electric"};
 
     //- Add other types in needed..
-    for (auto& typeI : regionNames)
+    for (auto& typeI : regionTypes)
     {
         modelTypes.appendUniq(typeI);
     }
