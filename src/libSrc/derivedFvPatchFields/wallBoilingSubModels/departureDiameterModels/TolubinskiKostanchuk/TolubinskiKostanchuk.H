@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -65,7 +63,7 @@ class TolubinskiKostanchuk
     public departureDiameterModel
 {
 
-    // Private data:
+    // Private Data:
 
         //- Coefficient of the temperature term
         scalar dRef_;
@@ -86,6 +84,18 @@ public:
 
         //- Construct from a dictionary
         TolubinskiKostanchuk(const dictionary& dict);
+
+        //- Copy construct
+        TolubinskiKostanchuk(const TolubinskiKostanchuk& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<departureDiameterModel> clone() const
+        {
+            return autoPtr<departureDiameterModel>
+            (
+                new TolubinskiKostanchuk(*this)
+            );
+        }
 
 
     //- Destructor

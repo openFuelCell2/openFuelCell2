@@ -60,8 +60,10 @@ class porousZoneList
 
     // Private Member Functions
 
-        //- Create IO object if dictionary is present
-        IOobject createIOobject(const fvMesh& mesh) const;
+        static typeIOobject<IOdictionary> readPorousZonesDict
+        (
+            const objectRegistry& obr
+        );
 
         //- Disallow default bitwise copy construct
         porousZoneList(const porousZoneList&);

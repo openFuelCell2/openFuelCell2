@@ -24,7 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "wallBoiling.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 #include "alphatWallBoilingWallFunctionFvPatchScalarField.H"
 #include "fvmSup.H"
 #include "addToRunTimeSelectionTable.H"
@@ -89,18 +89,13 @@ Foam::diameterModels::IATEsources::wallBoiling::R
         dimensionedScalar("Rdk", kappai.dimensions()/dimTime, 0)
     );
 
-    const phaseCompressibleTurbulenceModel& turbulence =
-        phase().db().lookupObjectRef<phaseCompressibleTurbulenceModel>
+    const volScalarField& alphat =
+        phase().mesh().lookupObject<volScalarField>
         (
-            IOobject::groupName
-            (
-                turbulenceModel::propertiesName,
-                otherPhase().name()
-            )
+            IOobject::groupName("alphat", otherPhase().name())
         );
 
-    const tmp<volScalarField> talphat(turbulence.alphat());
-    const volScalarField::Boundary& alphatBf = talphat().boundaryField();
+    const volScalarField::Boundary& alphatBf = alphat.boundaryField();
 
     const scalarField& rho = phase().rho();
 
@@ -117,7 +112,7 @@ Foam::diameterModels::IATEsources::wallBoiling::R
             const alphatWallBoilingWallFunction& alphatw =
                 refCast<const alphatWallBoilingWallFunction>(alphatBf[patchi]);
 
-            const scalarField& dmdt = alphatw.dmdt();
+            const scalarField& dmdt = alphatw.dmdtf();
             const scalarField& dDep = alphatw.dDeparture();
 
             const labelList& faceCells = alphatw.patch().faceCells();

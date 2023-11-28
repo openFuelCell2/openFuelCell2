@@ -1,7 +1,6 @@
 #include "createRDeltaT.H"
 
-const uniformDimensionedVectorField& g =
-  runTime.lookupObject<uniformDimensionedVectorField>("g");
+const uniformDimensionedVectorField& g = g_;
 
 #include "readhRef.H"
 #include "gh.H"
@@ -14,7 +13,7 @@ surfaceScalarField& phi = phase_.alphaRhoPhiRef();
 rhoThermo& thermo = phase_.thermoRef();
 
 volScalarField& p = thermo.p();
-volScalarField& rho = thermo.rho();
+volScalarField rho = thermo.rho();
 const volScalarField& psi = thermo.psi();
 volScalarField dmdt = phase_.dmdt();
 
@@ -25,24 +24,36 @@ dimensionedScalar pMin
     *this
 );
 
-dimensionedScalar rhoMin
+dimensionedScalar rhoMin = dimensionedScalar::lookupOrDefault
 (
     "rhoMin",
+    pimple_.dict(),
     dimDensity,
-    Zero,
-    pimple_.dict()
+    Zero
 );
 
-dimensionedScalar rhoMax
+dimensionedScalar rhoMax = dimensionedScalar::lookupOrDefault
 (
     "rhoMax",
+    pimple_.dict(),
     dimDensity,
-    GREAT,
-    pimple_.dict()
+    GREAT
 );
 
 p_rgh_ = p - rho*gh;
 
-fv::options& fvOptions = this->fvOptions();
+Info<< "Creating field dpdt\n" << endl;
+volScalarField dpdt
+(
+    IOobject
+    (
+        "dpdt",
+        runTime.timeName(),
+        mesh
+    ),
+    mesh,
+    dimensionedScalar("dpdt", p.dimensions()/dimTime, 0)
+);
 
-#include "createDpdt.H"
+Foam::fvModels& fvModels = this->fvModels(mesh);
+Foam::fvConstraints& fvConstraints = this->fvConstraints(mesh);

@@ -33,34 +33,34 @@ const Foam::word Foam::porousZoneList::dictName("porousZones");
 
 // * * * * * * * * * * * * * * Private Functions * * * * * * * * * * * * * * //
 
-Foam::IOobject Foam::porousZoneList::createIOobject
+Foam::typeIOobject<Foam::IOdictionary>
+Foam::porousZoneList::readPorousZonesDict
 (
-    const fvMesh& mesh
-) const
+    const objectRegistry& obr
+)
 {
-    IOobject io
+    typeIOobject<IOdictionary> regionPorousZonesIO
     (
         dictName,
-        mesh.time().constant(),
-        mesh,
-        IOobject::MUST_READ,
-        IOobject::NO_WRITE
+        obr.time().constant(),
+        obr,
+        IOobject::MUST_READ_IF_MODIFIED,
+        IOobject::NO_WRITE,
+        false
     );
 
-    if (io.typeHeaderOk<IOdictionary>(true))
+    if (regionPorousZonesIO.headerOk())
     {
-        Info<< "Creating porous model list from " << io.name() << nl << endl;
-
-        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+        Info<< "Get porous zones from " << regionPorousZonesIO.name() << nl << endl;
     }
     else
     {
-        Info<< "No porous models present... " << nl << endl;
+        Info<< "No porous zones presented..." << nl << endl;
 
-        io.readOpt(IOobject::NO_READ);
+        regionPorousZonesIO.readOpt() = IOobject::NO_READ;
     }
 
-    return io;
+    return regionPorousZonesIO;
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -72,7 +72,7 @@ Foam::porousZoneList::porousZoneList
 :
     PtrList<porousZone>(),
     mesh_(mesh),
-    dict_(createIOobject(mesh))
+    dict_(readPorousZonesDict(mesh))
 {
     reset(dict_);
 

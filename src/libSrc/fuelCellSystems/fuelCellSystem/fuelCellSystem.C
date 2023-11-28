@@ -31,35 +31,34 @@ License
 
 
 // * * * * * * * * * * * * * * * Private functions * * * * * * * * * * * * * //
-
-Foam::IOobject Foam::fuelCellSystem::createIOobject
+Foam::typeIOobject<Foam::IOdictionary>
+Foam::fuelCellSystem::readCellPropertiesDict
 (
-    const fvMesh& mesh
-) const
+    const objectRegistry& obr
+)
 {
-    IOobject io
+    typeIOobject<IOdictionary> cellPropertiesIO
     (
         "cellProperties",
-        mesh.time().constant(),
-        mesh,
-        IOobject::MUST_READ,
-        IOobject::NO_WRITE
+        obr.time().constant(),
+        obr,
+        IOobject::MUST_READ_IF_MODIFIED,
+        IOobject::NO_WRITE,
+        true
     );
 
-    if (io.typeHeaderOk<IOdictionary>(true))
+    if (cellPropertiesIO.headerOk())
     {
-        Info<< "Get cell properties from " << io.name() << nl << endl;
-
-        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+        Info<< "Get cell properties from " << cellPropertiesIO.name() << nl << endl;
     }
     else
     {
-        Info<< "No cell properties are provided... " << nl << endl;
+        Info<< "No cellProperties presented..." << nl << endl;
 
-        io.readOpt(IOobject::NO_READ);
+        cellPropertiesIO.readOpt() = IOobject::NO_READ;
     }
 
-    return io;
+    return cellPropertiesIO;
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -69,7 +68,7 @@ Foam::fuelCellSystem::fuelCellSystem
     const fvMesh& mesh
 )
 :
-    IOdictionary(createIOobject(mesh)),
+    IOdictionary(readCellPropertiesDict(mesh)),
 
     mesh_(mesh),
 

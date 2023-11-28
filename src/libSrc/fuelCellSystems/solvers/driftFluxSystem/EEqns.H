@@ -24,12 +24,12 @@
          ==
            *heatTransfer[phase.name()]
           + alpha*rho*(U&g)
-          + fvOptions(alpha, rho, thermo.he())
+          + fvModels.source(alpha, rho, thermo.he())
         );
 
         EEqn.relax();
-        fvOptions.constrain(EEqn);
+        fvConstraints.constrain(EEqn);
         EEqn.solve();
-        fvOptions.correct(thermo.he());
+        fvConstraints.constrain(thermo.he());
     }
 }

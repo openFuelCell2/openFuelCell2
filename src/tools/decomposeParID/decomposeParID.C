@@ -75,9 +75,26 @@ int main(int argc, char *argv[])
         "- eg, '( (-1 -1 0) (1 1 0) )'"
     );
 
+    #include "addDictOption.H"
     #include "addRegionOption.H"
+    #include "addAllRegionsOption.H"
+
     #include "setRootCase.H"
     #include "createTime.H"
+
+    const bool doDecomposeBlock = args.optionFound("coordinate");
+    // this is not actually stringent enough:
+    if (!doDecomposeBlock)
+    {
+        FatalErrorInFunction
+            << "No options supplied, please indicate decompose "
+            << "block coordinates. "
+            << exit(FatalError);
+    }
+
+    // Get region names
+    const wordList regionNames =
+        selectRegionNames(args, runTime);
 
     IOdictionary cellProperties
     (
@@ -91,28 +108,11 @@ int main(int argc, char *argv[])
         )
     );
 
-    label nx(cellProperties.get<label>("nx"));
-    label ny(cellProperties.get<label>("ny"));
-
-    // Get all region names
-    wordList regionNames;
-    if (args.found("allRegions"))
-    {
-        regionNames = regionProperties(runTime).names();
-
-        Info<< "Decomposing all regions in regionProperties" << nl
-            << "    " << flatOutput(regionNames) << nl << endl;
-    }
-    else
-    {
-        regionNames.resize(1);
-        regionNames.first() =
-            args.getOrDefault<word>("region", fvMesh::defaultRegion);
-    }
+    label nx(readLabel(cellProperties.lookup("nx")));
+    label ny(readLabel(cellProperties.lookup("ny")));
 
     forAll(regionNames, regioni)
     {
-
         Foam::word regionName = regionNames[regioni];
 
         Foam::fvMesh mesh
@@ -139,20 +139,9 @@ int main(int argc, char *argv[])
             labelList(mesh.nCells(), 1)
         );
 
-        const bool doDecomposeBlock = args.found("coordinate");
-
-        // this is not actually stringent enough:
-        if (!doDecomposeBlock)
-        {
-            FatalErrorInFunction
-                << "No options supplied, please indicate decompose "
-                << "block coordinates. "
-                << exit(FatalError);
-        }
-
         Pair<vector> c1c2
         (
-            args.lookup("coordinate")()
+            args.optionLookup("coordinate")()
         );
 
         label NpX(0), NpY(0);

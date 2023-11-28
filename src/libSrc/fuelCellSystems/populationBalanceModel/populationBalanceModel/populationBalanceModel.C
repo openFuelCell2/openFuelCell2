@@ -35,7 +35,7 @@ License
 #include "fvcDdt.H"
 #include "fvmSup.H"
 #include "fvcDiv.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * Private Member Functions * * * * * * * * * * * * //
 
@@ -848,7 +848,7 @@ Foam::diameterModels::populationBalanceModel::populationBalanceModel
     (
         mesh_.lookupObject<phaseModel>
         (
-            IOobject::groupName("alpha", dict_.get<word>("continuousPhase"))
+            IOobject::groupName("alpha", dict_.lookup("continuousPhase"))
         )
     ),
     velocityGroups_(),
@@ -1161,15 +1161,15 @@ Foam::diameterModels::populationBalanceModel::sigmaWithContinuousPhase
 }
 
 
-const Foam::phaseCompressibleTurbulenceModel&
+const Foam::phaseCompressibleMomentumTransportModel&
 Foam::diameterModels::populationBalanceModel::continuousTurbulence() const
 {
     return
-        mesh_.lookupObject<phaseCompressibleTurbulenceModel>
+        mesh_.lookupObject<phaseCompressibleMomentumTransportModel>
         (
             IOobject::groupName
             (
-                turbulenceModel::propertiesName,
+                momentumTransportModel::typeName,
                 continuousPhase_.name()
             )
         );
@@ -1178,7 +1178,7 @@ Foam::diameterModels::populationBalanceModel::continuousTurbulence() const
 
 void Foam::diameterModels::populationBalanceModel::solve()
 {
-    const dictionary& solutionControls = mesh_.solverDict(name_);
+    const dictionary& solutionControls = mesh_.solution().solverDict(name_);
     bool solveOnFinalIterOnly
         (
             solutionControls.lookupOrDefault<bool>
@@ -1191,7 +1191,7 @@ void Foam::diameterModels::populationBalanceModel::solve()
     calcAlphas();
     calcVelocity();
 
-    if (!solveOnFinalIterOnly || pimple_.finalIter())
+    if (!solveOnFinalIterOnly || pimple_.finalPimpleIter())
     {
         label nCorr(readLabel(solutionControls.lookup("nCorr")));
         scalar tolerance

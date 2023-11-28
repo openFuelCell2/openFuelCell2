@@ -45,6 +45,7 @@ Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::ThermoPhaseModel
 )
 :
     BasePhaseModel(fluid, phaseName, index),
+    viscosity(),
     thermo_(ThermoType::New(fluid.mesh(), this->name()))
 {
     thermo_->validate
@@ -149,7 +150,7 @@ Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::kappa
     const label patchi
 ) const
 {
-    return thermo_->kappa(patchi);
+    return thermo_->kappa().boundaryField()[patchi];
 }
 
 
@@ -193,48 +194,5 @@ Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::kappaEff
 {
     return thermo_->kappaEff(alphat, patchi);
 }
-
-
-template<class BasePhaseModel, class ThermoType>
-Foam::tmp<Foam::volScalarField>
-Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::alpha() const
-{
-    return thermo_->alpha();
-}
-
-
-template<class BasePhaseModel, class ThermoType>
-Foam::tmp<Foam::scalarField>
-Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::alpha
-(
-    const label patchi
-) const
-{
-    return thermo_->alpha(patchi);
-}
-
-
-template<class BasePhaseModel, class ThermoType>
-Foam::tmp<Foam::volScalarField>
-Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::alphaEff
-(
-    const volScalarField& alphat
-) const
-{
-    return thermo_->alphaEff(alphat);
-}
-
-
-template<class BasePhaseModel, class ThermoType>
-Foam::tmp<Foam::scalarField>
-Foam::ThermoPhaseModel<BasePhaseModel, ThermoType>::alphaEff
-(
-    const scalarField& alphat,
-    const label patchi
-) const
-{
-    return thermo_->alphaEff(alphat, patchi);
-}
-
 
 // ************************************************************************* //

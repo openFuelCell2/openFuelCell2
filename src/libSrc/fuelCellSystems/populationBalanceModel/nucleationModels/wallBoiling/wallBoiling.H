@@ -41,7 +41,6 @@ SourceFiles
 #define wallBoiling_H
 
 #include "nucleationModel.H"
-#include "phaseCompressibleTurbulenceModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -64,9 +63,6 @@ class wallBoiling
 
         //- Velocity group in which the nucleation occurs
         const velocityGroup& velGroup_;
-
-        //- Pointer to turbulence model
-        const phaseCompressibleTurbulenceModel& turbulence_;
 
 
 public:

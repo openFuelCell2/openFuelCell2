@@ -49,10 +49,10 @@ Foam::interfaceCompositionModel::New
     Info<< "Selecting interfaceCompositionModel for "
         << pair << ": " << interfaceCompositionModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(interfaceCompositionModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(interfaceCompositionModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown interfaceCompositionModelType type "
@@ -62,7 +62,7 @@ Foam::interfaceCompositionModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 

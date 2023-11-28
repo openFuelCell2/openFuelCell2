@@ -40,10 +40,10 @@ Foam::autoPtr<Foam::phaseModel> Foam::phaseModel::New
     Info<< "Selecting phaseModel for "
         << phaseName << ": " << phaseModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(phaseModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(phaseModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown phaseModelType type "
@@ -53,7 +53,7 @@ Foam::autoPtr<Foam::phaseModel> Foam::phaseModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(fluid, phaseName, index);
+    return cstrIter()(fluid, phaseName, index);
 }
 
 // ************************************************************************* //

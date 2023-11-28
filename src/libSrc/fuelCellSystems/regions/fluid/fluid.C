@@ -100,7 +100,7 @@ void Foam::regionTypes::fluid::mapToCell
     Info << "Map " << name() << " to Cell" << nl << endl;
 
     const uniformDimensionedVectorField& g =
-        this->time().lookupObject<uniformDimensionedVectorField>("g");
+        this->lookupObject<uniformDimensionedVectorField>("g");
 
     //- Continuous phase name
     const word& continuous = phases_->continuous();
@@ -236,7 +236,7 @@ void Foam::regionTypes::fluid::mapToCell
                 scalarField::rmap
                 (
                     (
-                        rhoPhi.boundaryFieldRef()[patchI]
+                        rhoPhi.boundaryField()[patchI]
                     )*curMask,
                     curFpm
                 );
@@ -245,8 +245,8 @@ void Foam::regionTypes::fluid::mapToCell
                 scalarField::rmap
                 (
                     (
-                        phase.thermo().Cp().ref().boundaryFieldRef()[patchI]
-                      * rhoPhi.boundaryFieldRef()[patchI]
+                        phase.thermo().Cp().boundaryField()[patchI]
+                      * rhoPhi.boundaryField()[patchI]
                     )*curMask,
                     curFpm
                 );

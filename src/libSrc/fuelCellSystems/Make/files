@@ -30,7 +30,7 @@ dissolvedModels/dissolvedModel/newDissolvedModel.C
 dissolvedModels/standardDWModel/standardDWModel.C
 dissolvedModels/noneDWModel/noneDWModel.C
 
-electroChemicalModel/electroChemicalReactions.C
+electroChemicalModel/electroChemicalReaction.C
 
 regions/region/regionType.C
 regions/region/newRegionType.C
@@ -120,7 +120,6 @@ solvers/driftFluxSystem/relativeVelocityModels/relativeVelocityModel/relativeVel
 solvers/driftFluxSystem/relativeVelocityModels/simple/simple.C
 solvers/driftFluxSystem/relativeVelocityModels/general/general.C
 solvers/driftFluxSystem/twoPhaseInteractingMixture/twoPhaseInteractingMixture.C
-solvers/driftFluxSystem/compressibleTurbulenceModels.C
 solvers/driftFluxSystem/driftFluxSystem.C
 solvers/driftFluxSystem/driftFluxSystems.C
 

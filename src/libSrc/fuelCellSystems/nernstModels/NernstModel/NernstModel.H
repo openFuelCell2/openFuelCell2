@@ -107,10 +107,10 @@ public:
 // Instantiation for multi-component-multi-component pairs
 #define makeNernstType(Type, Thermo, Comp, Mix, Phys, OtherThermo, OtherComp, OtherMix, OtherPhys)\
                                                                                \
-    typedef Thermo<Comp, SpecieMixture<Mix<Phys>>>                             \
+    typedef Thermo<Comp::composite, SpecieMixture<Mix<Phys>>>                             \
         Type##Thermo##Comp##Mix##Phys;                                         \
                                                                                \
-    typedef OtherThermo<OtherComp, OtherMix<OtherPhys>>                        \
+    typedef OtherThermo<OtherComp::composite, OtherMix<OtherPhys>>                        \
         Type##Other##OtherThermo##OtherComp##OtherMix##OtherPhys;              \
                                                                                \
     addNernstToRunTimeSelectionTable                             \
@@ -123,10 +123,10 @@ public:
 // Instantiation for multi-component-single-component pairs
 #define makeSpecieNernstType(Type, Thermo, Comp, Mix, Phys, OtherThermo, OtherComp, OtherMix, OtherPhys)\
                                                                                \
-    typedef Thermo<Comp, SpecieMixture<Mix<Phys>>>                             \
+    typedef Thermo<Comp::composite, SpecieMixture<Mix<Phys>>>                             \
         Type##Thermo##Comp##Mix##Phys;                                         \
                                                                                \
-    typedef OtherThermo<OtherComp, SpecieMixture<OtherMix<OtherPhys>>>         \
+    typedef OtherThermo<OtherComp::composite, SpecieMixture<OtherMix<OtherPhys>>>         \
         Type##Other##OtherThermo##OtherComp##OtherMix##OtherPhys;              \
                                                                                \
     addNernstToRunTimeSelectionTable                             \

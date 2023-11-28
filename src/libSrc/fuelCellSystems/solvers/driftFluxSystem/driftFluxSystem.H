@@ -37,11 +37,14 @@ SourceFiles
 #define driftFluxSystem_H
 
 #include "dictionary.H"
-#include "twoPhaseInteractingMixture.H"
+#include "incompressibleTwoPhaseInteractingMixture.H"
 #include "relativeVelocityModel.H"
-#include "CompressibleTurbulenceModel.H"
+#include "momentumTransportModel.H"
+#include "compressibleMomentumTransportModels.H"
 #include "volFields.H"
 #include "phaseSystem.H"
+#include "fvModels.H"
+#include "fvConstraints.H"
 #include "runTimeSelectionTables.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -87,7 +90,7 @@ class driftFluxSystem
         //- Turbulence model
         autoPtr
         <
-            CompressibleTurbulenceModel<twoPhaseInteractingMixture>
+            compressible::momentumTransportModel
         > turbulence_;
 
 public:

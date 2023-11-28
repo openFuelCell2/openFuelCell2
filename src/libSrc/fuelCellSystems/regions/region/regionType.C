@@ -38,35 +38,34 @@ const Foam::word Foam::regionType::dictName("regionProperties");
 
 // * * * * * * * * * * * * * * Private Functions * * * * * * * * * * * * * * //
 
-Foam::IOobject Foam::regionType::createIOobject
+Foam::typeIOobject<Foam::IOdictionary>
+Foam::regionType::readRegionPropertiesDict
 (
-    const fvMesh& mesh
-) const
+    const objectRegistry& obr
+)
 {
-    IOobject io
+    typeIOobject<IOdictionary> regionPropertiesIO
     (
         dictName,
-        mesh.time().constant(),
-        mesh,
-        IOobject::MUST_READ,
+        obr.time().constant(),
+        obr,
+        IOobject::MUST_READ_IF_MODIFIED,
         IOobject::NO_WRITE,
         false
     );
 
-    if (io.typeHeaderOk<IOdictionary>(true))
+    if (regionPropertiesIO.headerOk())
     {
-        Info<< "Get region properties from " << io.name() << nl << endl;
-
-        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+        Info<< "Get region properties from " << regionPropertiesIO.name() << nl << endl;
     }
     else
     {
         Info<< "No regionProperties presented..." << nl << endl;
 
-        io.readOpt(IOobject::NO_READ);
+        regionPropertiesIO.readOpt() = IOobject::NO_READ;
     }
 
-    return io;
+    return regionPropertiesIO;
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -89,7 +88,7 @@ Foam::regionType::regionType
 
     mesh_(mesh),
 
-    dict_(createIOobject(*this)),
+    dict_(readRegionPropertiesDict(*this)),
 
     faceRegionAddressingIO_
     (
@@ -123,8 +122,9 @@ Foam::regionType::regionType
             this->time().findInstance(this->meshDir(), "faces"),
             polyMesh::meshSubDir,
             *this,
-            IOobject::MUST_READ
-        )
+            IOobject::READ_IF_PRESENT
+        ),
+        labelList(boundaryMesh().size(), -1)
     ),
 
     faceMap_(faceRegionAddressingIO_.size(), 1),
@@ -152,6 +152,15 @@ Foam::regionType::regionType
 
     forAll(patchesMapIO_, i)
     {
+        for (auto& bI : mesh.boundaryMesh())
+        {
+            if (boundaryMesh()[i].name() == bI.name())
+            {
+                patchesMapIO_[i] = bI.index();
+                break;
+            }
+        }
+
         patchesMap_.insert
         (
             patchesMapIO_[i],

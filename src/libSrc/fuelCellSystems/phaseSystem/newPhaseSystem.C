@@ -53,10 +53,10 @@ Foam::autoPtr<Foam::phaseSystem> Foam::phaseSystem::New
         << ": "
         << phaseSystemType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(phaseSystemType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(phaseSystemType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorIn("phaseSystemType::New")
            << "Unknown phaseSystemType type "
@@ -66,7 +66,7 @@ Foam::autoPtr<Foam::phaseSystem> Foam::phaseSystem::New
            << exit(FatalError);
     }
 
-    return ctorPtr(mesh);
+    return cstrIter()(mesh);
 }
 
 

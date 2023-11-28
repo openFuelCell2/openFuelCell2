@@ -57,9 +57,6 @@ class masterRegionToCell
 
     // Private data
 
-        //- Add usage string
-        static addToUsageTable usage_;
-
         //- Map to the master mesh
         labelIOList cellMapIO_;
 
@@ -94,13 +91,6 @@ public:
         (
             const polyMesh& mesh,
             const dictionary& dict
-        );
-
-        //- Construct from Istream
-        masterRegionToCell
-        (
-            const polyMesh& mesh,
-            Istream&
         );
 
 

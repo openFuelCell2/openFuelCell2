@@ -66,28 +66,6 @@ Foam::copiedFixedValueFvPatchScalarField::copiedFixedValueFvPatchScalarField
 {}
 
 
-Foam::copiedFixedValueFvPatchScalarField::copiedFixedValueFvPatchScalarField
-(
-    const copiedFixedValueFvPatchScalarField& awfpsf
-)
-:
-    fixedValueFvPatchScalarField(awfpsf),
-    sourceFieldName_(awfpsf.sourceFieldName_)
-{}
-
-
-Foam::copiedFixedValueFvPatchScalarField::copiedFixedValueFvPatchScalarField
-(
-    const copiedFixedValueFvPatchScalarField& awfpsf,
-    const DimensionedField<scalar, volMesh>& iF
-)
-:
-    fixedValueFvPatchScalarField(awfpsf, iF),
-    sourceFieldName_(awfpsf.sourceFieldName_)
-{}
-
-
-
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 void Foam::copiedFixedValueFvPatchScalarField::updateCoeffs()
@@ -109,9 +87,8 @@ void Foam::copiedFixedValueFvPatchScalarField::updateCoeffs()
 void Foam::copiedFixedValueFvPatchScalarField::write(Ostream& os) const
 {
     fvPatchField<scalar>::write(os);
-    os.writeKeyword("sourceFieldName")
-        << sourceFieldName_ << token::END_STATEMENT << nl;
-    writeEntry("value", os);
+    writeEntry(os, "sourceFieldName", sourceFieldName_);
+    writeEntry(os, "value", *this);
 }
 
 

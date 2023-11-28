@@ -39,7 +39,7 @@ SourceFiles
 #ifndef electroChemicalReaction_H
 #define electroChemicalReaction_H
 
-#include "ThermoCombustion.H"
+#include "combustionModel.H"
 #include "saturationModel.H"
 #include "IOdictionary.H"
 
@@ -57,10 +57,9 @@ namespace combustionModels
                      Class electroChemicalReaction Declaration
 \*---------------------------------------------------------------------------*/
 
-template<class ReactionThermo>
 class electroChemicalReaction
 :
-    public ThermoCombustion<ReactionThermo>
+    public combustionModel
 {
     // Private Member Functions
 
@@ -73,7 +72,7 @@ class electroChemicalReaction
 protected:
 
         //- Thermo model
-        const ReactionThermo& thermo_;
+        const fluidReactionThermo& thermo_;
 
         //- Activation overpotential model
         autoPtr<activationOverpotentialModel> eta_;
@@ -94,8 +93,8 @@ public:
         electroChemicalReaction
         (
             const word& modelType,
-            ReactionThermo& thermo,
-            const compressibleTurbulenceModel& turb,
+            const fluidReactionThermo& thermo,
+            const compressibleMomentumTransportModel& turb,
             const word& electroChemicalReactionProperties
         );
 
@@ -124,12 +123,6 @@ public:
 
 } // End namespace combustionModels
 } // End namespace Foam
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-#ifdef NoRepository
-    #include "electroChemicalReaction.C"
-#endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

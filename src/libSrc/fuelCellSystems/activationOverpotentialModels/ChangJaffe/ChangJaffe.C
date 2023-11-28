@@ -104,7 +104,7 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
     const scalarField& s = this->phase_;
 
     //- Mixture mole fraction
-    const scalarField W(this->thermo_.W()/1000.0);
+    const scalarField W(this->phase_.thermo().W()/1000.0);
     //- Mixture density
     const scalarField& rho= this->phase_.thermo().rho();
     //- Store values for all species

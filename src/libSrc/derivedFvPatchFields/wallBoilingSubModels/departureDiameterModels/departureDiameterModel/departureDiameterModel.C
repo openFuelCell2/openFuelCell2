@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2019 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -45,6 +43,13 @@ Foam::wallBoilingModels::departureDiameterModel::departureDiameterModel()
 {}
 
 
+Foam::wallBoilingModels::departureDiameterModel::departureDiameterModel
+(
+    const departureDiameterModel&
+)
+{}
+
+
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 Foam::wallBoilingModels::departureDiameterModel::~departureDiameterModel()
@@ -55,7 +60,7 @@ Foam::wallBoilingModels::departureDiameterModel::~departureDiameterModel()
 
 void Foam::wallBoilingModels::departureDiameterModel::write(Ostream& os) const
 {
-    os.writeEntry("type", this->type());
+    writeEntry(os, "type", this->type());
 }
 
 // ************************************************************************* //

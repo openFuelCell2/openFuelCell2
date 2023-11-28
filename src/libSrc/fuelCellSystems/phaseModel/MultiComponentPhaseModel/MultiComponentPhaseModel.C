@@ -51,13 +51,14 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
     (
         "residualAlpha",
         dimless,
-        fluid.mesh().solverDict("Yi")
+        fluid.mesh().solution().solverDict("Yi")
     ),
     inertIndex_(-1)
 {
     const word inertSpecie
     (
-        this->thermo_->lookupOrDefault("inertSpecie", word::null)
+        this->thermo_->properties().
+            lookupOrDefault("inertSpecie", word::null)
     );
 
     if (inertSpecie != word::null)
@@ -83,7 +84,7 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
         (
             "W",
             dimMass/dimMoles,
-            this->thermo_->composition().W(i)
+            this->thermo_->composition().Wi(i)
         );
 
         X_.set
@@ -145,7 +146,7 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
                     IOobject::AUTO_WRITE
                 ),
                 this->mesh(),
-                dimensionedScalar("diff", this->muEff()->dimensions()/dimDensity, SMALL),
+                dimensionedScalar("diff", sqr(dimLength)/dimTime, SMALL),
                 zeroGradientFvPatchScalarField::typeName
             )
         );
@@ -223,7 +224,7 @@ void Foam::MultiComponentPhaseModel<BasePhaseModel>::correctThermo()
         (
             "W",
             dimMass/dimMoles,
-            this->thermo_->composition().W(i)
+            this->thermo_->composition().Wi(i)
         );
 
         X_[i] = W*Yi[i]/Wi;
@@ -391,9 +392,11 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::dmdt() const
 
     scalarField& dmdt0 = dmdt.ref();
 
-    for (auto& iDmdt : iDmdt_)
+    forAll(Y(), i)
     {
-        dmdt0 += iDmdt;
+        volScalarField& Yi = const_cast<volScalarField&>(Y()[i]);
+
+        dmdt0 += this->R(Yi) & Yi;
     }
 
     return dmdt;

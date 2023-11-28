@@ -7,11 +7,11 @@ cd ${0%/*} || exit 1    # Run from this directory
 wmakeLnInclude fuelCellSystems
 
 wmake $targetType regionCourantNo
+wmake $targetType fuelCellSystems
 wmake $targetType interfacialModels
 wmake $targetType interfacialCompositionModels
 wmake $targetType derivedFvPatchFields
-wmake $targetType thermoTools
-wmake $targetType multiPhaseCompressibleTurbulenceModels
-wmake $targetType fuelCellSystems
+wmake $targetType multiphaseCompressibleMomentumTransportModels
+wmake $targetType thermoTypes
 
 #------------------------------------------------------------------------------

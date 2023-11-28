@@ -48,10 +48,10 @@ Foam::diameterModels::nucleationModel::New
     const dictionary& dict
 )
 {
-    auto* ctorPtr =
-        dictionaryConstructorTable(type);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(type);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown nucleation model type "
@@ -61,7 +61,7 @@ Foam::diameterModels::nucleationModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<nucleationModel>(ctorPtr(popBal, dict));
+    return autoPtr<nucleationModel>(cstrIter()(popBal, dict));
 }
 
 

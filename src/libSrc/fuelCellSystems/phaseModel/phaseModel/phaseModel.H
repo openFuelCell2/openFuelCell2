@@ -42,7 +42,7 @@ SourceFiles
 #include "surfaceFields.H"
 #include "fvMatricesFwd.H"
 #include "rhoThermo.H"
-#include "phaseCompressibleTurbulenceModelFwd.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 #include "runTimeSelectionTables.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -392,35 +392,7 @@ public:
                 const label patchi
             ) const = 0;
 
-            //- Return the laminar thermal diffusivity for enthalpy
-            virtual tmp<volScalarField> alpha() const = 0;
-
-            //- Return the laminar thermal diffusivity for enthalpy on a patch
-            virtual tmp<scalarField> alpha(const label patchi) const = 0;
-
-            //- Return the effective thermal diffusivity for enthalpy, given the
-            //  turbulent thermal diffusivity
-            virtual tmp<volScalarField> alphaEff
-            (
-                const volScalarField& alphat
-            ) const = 0;
-
-            //- Return the effective thermal diffusivity for enthalpy on a
-            //  patch, given the turbulent thermal diffusivity
-            virtual tmp<scalarField> alphaEff
-            (
-                const scalarField& alphat,
-                const label patchi
-            ) const = 0;
-
-
         // Turbulence
-
-            //- Return the turbulent dynamic viscosity
-            virtual tmp<volScalarField> mut() const = 0;
-
-            //- Return the effective dynamic viscosity
-            virtual tmp<volScalarField> muEff() const = 0;
 
             //- Return the turbulent kinematic viscosity
             virtual tmp<volScalarField> nut() const = 0;

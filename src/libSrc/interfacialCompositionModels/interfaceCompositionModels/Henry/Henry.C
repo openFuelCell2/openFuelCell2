@@ -96,8 +96,8 @@ Foam::interfaceCompositionModels::Henry<Thermo, OtherThermo>::Yf
         return
             k_[index]
            *this->otherThermo_.composition().Y(speciesName)
-           *this->otherThermo_.rhoThermo::rho()
-           /this->thermo_.rhoThermo::rho();
+           *this->pair_.phase2().thermo().rho()
+           /this->pair_.phase1().thermo().rho();
     }
     else
     {

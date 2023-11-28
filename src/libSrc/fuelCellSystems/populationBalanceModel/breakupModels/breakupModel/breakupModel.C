@@ -47,10 +47,10 @@ Foam::diameterModels::breakupModel::New
     const dictionary& dict
 )
 {
-    auto* ctorPtr =
-        dictionaryConstructorTable(type);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(type);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown breakup model type "
@@ -60,7 +60,7 @@ Foam::diameterModels::breakupModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<breakupModel>(ctorPtr(popBal, dict));
+    return autoPtr<breakupModel>(cstrIter()(popBal, dict));
 }
 
 

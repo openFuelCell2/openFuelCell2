@@ -50,12 +50,15 @@ Foam::diffusivityModel::diffusivityModel
     cells_(),
     firstIndex_(true)
 {
-    labelList cellZoneIDs = mesh.cellZones().indices(zoneName_);
+    labelList cellZoneIDs = mesh.cellZones().findIndices(zoneName_);
 
-    if (cellZoneIDs.empty())
+    bool foundZone = !cellZoneIDs.empty();
+    reduce(foundZone, orOp<bool>());
+
+    if (!foundZone && Pstream::master())
     {
         FatalErrorInFunction
-            << "cannot find cellZone " << zoneName_
+            << "cannot find porous cellZone " << zoneName_
             << exit(FatalError);
     }
 
@@ -83,15 +86,18 @@ Foam::diffusivityModel::diffusivityModel
     dict_(dict),
     firstIndex_(true)
 {
-    labelList cellZoneIDs = mesh.cellZones().indices(zoneName_);
+    labelList cellZoneIDs = mesh.cellZones().findIndices(zoneName_);
 
-    if (cellZoneIDs.empty())
+    bool foundZone = !cellZoneIDs.empty();
+    reduce(foundZone, orOp<bool>());
+
+    if (!foundZone && Pstream::master())
     {
         FatalErrorInFunction
-            << "cannot find cellZone " << zoneName_
+            << "cannot find porous cellZone " << zoneName_
             << exit(FatalError);
     }
-
+    
     for (auto& id : cellZoneIDs)
     {
         for (auto& cellI : mesh.cellZones()[id])

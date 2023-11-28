@@ -5,9 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2019 OpenFOAM Foundation
-    Copyright (C) 2020 OpenCFD Ltd.
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -55,7 +52,15 @@ Foam::wallBoilingModels::partitioningModels::
 Lavieville::Lavieville(const dictionary& dict)
 :
     partitioningModel(),
-    alphaCrit_(dict.get<scalar>("alphaCrit"))
+    alphaCrit_(dict.lookup<scalar>("alphaCrit"))
+{}
+
+
+Foam::wallBoilingModels::partitioningModels::
+Lavieville::Lavieville(const Lavieville& model)
+:
+    partitioningModel(model),
+    alphaCrit_(model.alphaCrit_)
 {}
 
 
@@ -91,7 +96,7 @@ void Foam::wallBoilingModels::partitioningModels::
 Lavieville::write(Ostream& os) const
 {
     partitioningModel::write(os);
-    os.writeEntry("alphaCrit", alphaCrit_);
+    writeEntry(os, "alphaCrit", alphaCrit_);
 }
 
 

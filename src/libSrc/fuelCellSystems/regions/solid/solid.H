@@ -66,7 +66,7 @@ class solid
         autoPtr<solidThermo> thermo_;
 
         //- Radiation model
-        autoPtr<radiation::radiationModel> radiation_;
+        autoPtr<radiationModel> radiation_;
 
         //- Heat source/sink
         volScalarField Qdot_;

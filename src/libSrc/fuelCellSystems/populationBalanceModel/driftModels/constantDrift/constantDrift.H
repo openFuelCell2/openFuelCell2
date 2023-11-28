@@ -27,7 +27,7 @@ Class
 Description
     Constant drift rate within all classes. Used for verification and
     validation of the drift formulation implemented in the
-    populationBalanceModel class. Rate is calculated from fvOptions mass source.
+    populationBalanceModel class. Rate is calculated from fvModels mass source.
 
 
 SourceFiles

@@ -42,7 +42,7 @@ Foam::InterfaceCompositionModel<Thermo, OtherThermo>::getLocalThermo
 ) const
 {
     return
-        globalThermo.getLocalThermo
+        globalThermo.specieThermo
         (
             globalThermo.species()
             [
@@ -61,7 +61,7 @@ Foam::InterfaceCompositionModel<Thermo, OtherThermo>::getLocalThermo
     const pureMixture<ThermoType>& globalThermo
 ) const
 {
-    return globalThermo.cellMixture(0);
+    return globalThermo.cellTransportMixture(0);
 }
 
 
@@ -79,14 +79,14 @@ Foam::InterfaceCompositionModel<Thermo, OtherThermo>::InterfaceCompositionModel
     (
         pair.phase1().mesh().lookupObject<Thermo>
         (
-            IOobject::groupName(basicThermo::dictName, pair.phase1().name())
+            IOobject::groupName(physicalProperties::typeName, pair.phase1().name())
         )
     ),
     otherThermo_
     (
         pair.phase2().mesh().lookupObject<OtherThermo>
         (
-            IOobject::groupName(basicThermo::dictName, pair.phase2().name())
+            IOobject::groupName(physicalProperties::typeName, pair.phase2().name())
         )
     ),
     Le_("Le", dimless, dict)
@@ -158,7 +158,8 @@ Foam::InterfaceCompositionModel<Thermo, OtherThermo>::D
     forAll(p, celli)
     {
         D[celli] =
-            localThermo.alphah(p[celli], T[celli])
+            localThermo.kappa(p[celli], T[celli])
+           /localThermo.Cp(p[celli], T[celli])
            /localThermo.rho(p[celli], T[celli]);
     }
 
@@ -233,7 +234,7 @@ void Foam::InterfaceCompositionModel<Thermo, OtherThermo>::addMDotL
     {
         volScalarField rhoKDL
         (
-            thermo_.rhoThermo::rho()
+            this->pair_.phase1().thermo().rho()
            *K
            *D(*iter)
            *L(*iter, Tf)

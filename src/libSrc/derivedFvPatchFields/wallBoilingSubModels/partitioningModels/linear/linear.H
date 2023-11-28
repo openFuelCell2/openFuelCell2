@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -69,7 +67,7 @@ class linear
 :
     public partitioningModel
 {
-    // Private data
+    // Private Data
 
         //- Model parameters, threshold liquid phase fractions
         scalar alphaLiquid1_;
@@ -86,6 +84,15 @@ public:
 
         //- Construct from a dictionary
         linear(const dictionary& dict);
+
+        //- Copy construct
+        linear(const linear& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<partitioningModel> clone() const
+        {
+            return autoPtr<partitioningModel>(new linear(*this));
+        }
 
 
     //- Destructor

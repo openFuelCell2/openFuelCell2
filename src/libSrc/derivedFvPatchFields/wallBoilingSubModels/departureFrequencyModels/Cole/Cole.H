@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -64,7 +62,6 @@ class Cole
 :
     public departureFrequencyModel
 {
-
 public:
 
     //- Runtime type information
@@ -75,6 +72,15 @@ public:
 
         //- Construct from a dictionary
         Cole(const dictionary& dict);
+
+        //- Copy construct
+        Cole(const Cole& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<departureFrequencyModel> clone() const
+        {
+            return autoPtr<departureFrequencyModel>(new Cole(*this));
+        }
 
 
     //- Destructor
@@ -89,6 +95,9 @@ public:
             const phaseModel& liquid,
             const phaseModel& vapor,
             const label patchi,
+            const scalarField& Tl,
+            const scalarField& Tsatw,
+            const scalarField& L,
             const scalarField& dDep
         ) const;
 };

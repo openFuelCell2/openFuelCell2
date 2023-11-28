@@ -71,7 +71,7 @@ Foam::regionTypes::solid::solid
     //- Solid thermo model
     thermo_ = solidThermo::New(*this);
 
-    radiation_ = radiation::radiationModel::New(thermo_->T());
+    radiation_ = radiationModel::New(thermo_->T());
 }
 
 
@@ -122,17 +122,21 @@ void Foam::regionTypes::solid::mapToCell
         dimensionedScalar("zero", dimEnergy/dimVolume/dimTime, 0.0)
     );
 
-    heatSource0.rmap(Qdot_ + (radiation_->ST(T) & T), cellMapIO_);
-
-    fuelCell.Qdot() += heatSource0;
-
-    const scalarField rho = thermo_->rho();
-    const scalarField cp = thermo_->Cp();
+    const volScalarField rho = thermo_->rho();
+    const volScalarField cp = thermo_->Cp();
 
     //- rhoCpCell
     volScalarField& rhoCpCell = fuelCell.rhoCp();
 
     scalarField rhoCp = rho*cp;
+
+    scalarField radiationST =
+        radiation_->Ru()/rhoCp
+      - radiation_->Rp()*Foam::pow(T, 4)/rhoCp;
+
+    heatSource0.rmap(Qdot_ + radiationST, cellMapIO_);
+
+    fuelCell.Qdot() += heatSource0;
 
     // Perform reverse mapping
     rhoCpCell.rmap(rhoCp, cellMapIO_);
@@ -156,7 +160,16 @@ void Foam::regionTypes::solid::mapFromCell
     Info << "Map " << name() << " from Cell" << nl << endl;
 
     volScalarField& he = thermo_->he();
-    volScalarField& p = thermo_->p();
+    uniformGeometricScalarField& p = he.mesh().
+        objectRegistry::lookupObjectRef<uniformGeometricScalarField>("p");
+
+    // Define a pressure field
+    tmp<volScalarField> p0 = volScalarField::New
+    (
+        "p0",
+        *this,
+        p
+    );
 
     volScalarField T = thermo_->T();
 
@@ -165,7 +178,7 @@ void Foam::regionTypes::solid::mapFromCell
         T[cellI] = fuelCell.T()[cellMapIO_[cellI]];
     }
 
-    he = thermo_->he(p, T).ref();
+    he = thermo_->he(p0.ref(), T).ref();
 }
 
 // ************************************************************************* //

@@ -33,19 +33,18 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
     const dictionary& dict
 )
 {
-    //- By default the none type is selected
     word modelType
     (
-        dict.getOrDefault<word>("type", "none")
+        dict.lookup("type")
     );
 
     Info << "Selecting dissolved water transfer Type: "
         << modelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(modelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(modelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorIn("dissolvedModel::New")
            << "Unknown dissolvedModel type "
@@ -55,13 +54,7 @@ Foam::autoPtr<Foam::dissolvedModel> Foam::dissolvedModel::New
            << exit(FatalError);
     }
 
-    return ctorPtr
-    (
-        mesh,
-        modelType == "none"
-      ? dict
-      : dict.subDict(modelType + "Coeffs")
-    );
+    return cstrIter()(mesh, dict.subDict(modelType + "Coeffs"));
 }
 
 // ************************************************************************* //

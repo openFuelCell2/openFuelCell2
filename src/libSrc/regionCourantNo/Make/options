@@ -4,5 +4,4 @@ EXE_INC = \
 
 LIB_LIBS = \
     -lfiniteVolume \
-    -lfvOptions \
     -lmeshTools

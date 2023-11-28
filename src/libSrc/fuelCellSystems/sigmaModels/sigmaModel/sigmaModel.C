@@ -46,7 +46,7 @@ Foam::sigmaModel::sigmaModel
     sigmaDictionary_(sigmaDictionary),
     zoneName_(sigmaDictionary_.lookup("cellZone"))
 {
-    cellZoneIDs_ = mesh_.cellZones().indices(zoneName_);
+    cellZoneIDs_ = mesh_.cellZones().findIndices(zoneName_);
 }
 
 

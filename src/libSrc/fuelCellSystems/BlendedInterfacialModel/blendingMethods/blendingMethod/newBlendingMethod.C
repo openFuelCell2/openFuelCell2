@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::blendingMethod> Foam::blendingMethod::New
     Info<< "Selecting " << modelName << " blending method: "
         << blendingMethodType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(blendingMethodType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(blendingMethodType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown blendingMethodType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::blendingMethod> Foam::blendingMethod::New
             << exit(FatalError);
     }
 
-    return autoPtr<blendingMethod>(ctorPtr(dict, phaseNames));
+    return cstrIter()(dict, phaseNames);
 }
 
 

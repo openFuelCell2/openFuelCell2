@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::wallLubricationModel> Foam::wallLubricationModel::New
     Info<< "Selecting wallLubricationModel for "
         << pair << ": " << wallLubricationModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(wallLubricationModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(wallLubricationModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown wallLubricationModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::wallLubricationModel> Foam::wallLubricationModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 

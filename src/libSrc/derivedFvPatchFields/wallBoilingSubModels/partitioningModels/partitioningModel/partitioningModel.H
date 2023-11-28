@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -31,7 +29,7 @@ Description
 
 SourceFiles
     partitioningModel.C
-    newpartitioningModel.C
+    partitioningModelNew.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -55,15 +53,6 @@ namespace wallBoilingModels
 
 class partitioningModel
 {
-    // Private Member Functions
-
-        //- Disallow default bitwise copy construct
-        partitioningModel(const partitioningModel&);
-
-        //- Disallow default bitwise assignment
-        void operator=(const partitioningModel&);
-
-
 public:
 
     //- Runtime type information
@@ -88,6 +77,12 @@ public:
         //- Construct null
         partitioningModel();
 
+        //- Copy construct
+        partitioningModel(const partitioningModel&);
+
+        //- Construct and return a clone
+        virtual autoPtr<partitioningModel> clone() const = 0;
+
 
     // Selectors
 
@@ -108,6 +103,12 @@ public:
         ) const = 0;
 
         virtual void write(Ostream& os) const;
+
+
+    // Member Operators
+
+        //- Disallow default bitwise assignment
+        void operator=(const partitioningModel&) = delete;
 };
 
 

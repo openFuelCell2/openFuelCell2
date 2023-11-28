@@ -1,0 +1,4 @@
+rhoThermos.C
+rhoReactionThermos.C
+
+LIB = $(FOAM_USER_LIBBIN)/libfuelCellThermophysicalModels

@@ -81,52 +81,76 @@ Foam::porousZones::DarcyForchheimer::~DarcyForchheimer()
 
 void Foam::porousZones::DarcyForchheimer::calcTranformModelData()
 {
-    // The Darcy coefficient as a tensor           // S.Hess
-    tensor darcyCoeff(Zero);
-    darcyCoeff.xx() = dXYZ_.value().x();
-    darcyCoeff.yy() = dXYZ_.value().y();
-    darcyCoeff.zz() = dXYZ_.value().z();
-
-    // The Forchheimer coefficient as a tensor
-    // - the leading 0.5 is from 1/2*rho
-    tensor forchCoeff(Zero);
-    forchCoeff.xx() = 0.5*fXYZ_.value().x();
-    forchCoeff.yy() = 0.5*fXYZ_.value().y();
-    forchCoeff.zz() = 0.5*fXYZ_.value().z();
-
-    tensor sqrtDCoeff(Zero);
-    sqrtDCoeff.xx() = sqrt(dXYZ_.value().x());
-    sqrtDCoeff.yy() = sqrt(dXYZ_.value().y());
-    sqrtDCoeff.zz() = sqrt(dXYZ_.value().z());
-
-    if (coordSys_.uniform())
+    if (coordSys_.R().uniform())
     {
-        forAll(cellZoneIDs_, zonei)
+        forAll (cellZoneIDs_, zoneI)
         {
-            D_[zonei].resize(1);
-            F_[zonei].resize(1);
-            sqrtD_[zonei].resize(1);                // S.Hess
+            D_[zoneI].setSize(1);
+            F_[zoneI].setSize(1);
+            sqrtD_[zoneI].setSize(1);
 
-            sqrtD_[zonei] = coordSys_.transform(sqrtDCoeff);    // S.Hess
-            D_[zonei] = coordSys_.transform(darcyCoeff);
-            F_[zonei] = coordSys_.transform(forchCoeff);
+            D_[zoneI][0] = tensor::zero;
+            D_[zoneI][0].xx() = dXYZ_.value().x();
+            D_[zoneI][0].yy() = dXYZ_.value().y();
+            D_[zoneI][0].zz() = dXYZ_.value().z();
+
+            D_[zoneI][0] = coordSys_.R().transformTensor(D_[zoneI][0]);
+
+            sqrtD_[zoneI][0] = tensor::zero;
+            sqrtD_[zoneI][0].xx() = sqrt(dXYZ_.value().x());
+            sqrtD_[zoneI][0].yy() = sqrt(dXYZ_.value().y());
+            sqrtD_[zoneI][0].zz() = sqrt(dXYZ_.value().z());
+
+            sqrtD_[zoneI][0] = coordSys_.R().transformTensor(sqrtD_[zoneI][0]);
+
+            // leading 0.5 is from 1/2*rho
+            F_[zoneI][0] = tensor::zero;
+            F_[zoneI][0].xx() = 0.5*fXYZ_.value().x();
+            F_[zoneI][0].yy() = 0.5*fXYZ_.value().y();
+            F_[zoneI][0].zz() = 0.5*fXYZ_.value().z();
+
+            F_[zoneI][0] = coordSys_.R().transformTensor(F_[zoneI][0]);
         }
     }
     else
     {
-        forAll(cellZoneIDs_, zonei)
+        forAll(cellZoneIDs_, zoneI)
         {
-            const pointUIndList cc
+            const labelList& cells = mesh_.cellZones()[cellZoneIDs_[zoneI]];
+
+            D_[zoneI].setSize(cells.size());
+            sqrtD_[zoneI].setSize(cells.size());
+            F_[zoneI].setSize(cells.size());
+
+            forAll(cells, i)
+            {
+                D_[zoneI][i] = tensor::zero;
+                D_[zoneI][i].xx() = dXYZ_.value().x();
+                D_[zoneI][i].yy() = dXYZ_.value().y();
+                D_[zoneI][i].zz() = dXYZ_.value().z();
+
+                sqrtD_[zoneI][i] = tensor::zero;
+                sqrtD_[zoneI][i].xx() = sqrt(dXYZ_.value().x());
+                sqrtD_[zoneI][i].yy() = sqrt(dXYZ_.value().y());
+                sqrtD_[zoneI][i].zz() = sqrt(dXYZ_.value().z());
+
+                // leading 0.5 is from 1/2*rho
+                F_[zoneI][i] = tensor::zero;
+                F_[zoneI][i].xx() = 0.5*fXYZ_.value().x();
+                F_[zoneI][i].yy() = 0.5*fXYZ_.value().y();
+                F_[zoneI][i].zz() = 0.5*fXYZ_.value().z();
+            }
+
+            const coordinateRotation& R = coordSys_.R
             (
-                mesh_.cellCentres(),
-                mesh_.cellZones()[cellZoneIDs_[zonei]]
+                UIndirectList<vector>(mesh_.C(), cells)()
             );
 
-            D_[zonei] = coordSys_.transform(cc, darcyCoeff);
-             sqrtD_[zonei] = coordSys_.transform(cc, sqrtDCoeff);
-            F_[zonei] = coordSys_.transform(cc, forchCoeff);
+            D_[zoneI] = R.transformTensor(D_[zoneI]);
+            sqrtD_[zoneI] = R.transformTensor(sqrtD_[zoneI]);
+            F_[zoneI] = R.transformTensor(F_[zoneI]);
         }
-    }                                                           // up to here
+    }
 
     if (debug && mesh_.time().outputTime())
     {

@@ -43,7 +43,7 @@ while (pimple.correct())
     p_rgh_ = p - rho_*gh;
 
     // Correct fixed-flux BCs to be consistent with the velocity BCs
-    MRF_.correctBoundaryFlux(U_, phi_);
+    MRF_.correctBoundaryVelocity(U_);
 
     // Combined buoyancy and force fluxes
     const surfaceScalarField ghSnGradRho
@@ -119,9 +119,9 @@ while (pimple.correct())
 
     // Add option sources
     {
-        if (fvOptions.appliesToField(rho1.name()))
+        if (fvModels.addsSupToField(rho1.name()))
         {
-            tmp<fvScalarMatrix> optEqn1 = fvOptions(alpha1, rho1);
+            tmp<fvScalarMatrix> optEqn1 = fvModels.source(alpha1, rho1);
             if (pEqnComp1.valid())
             {
                 pEqnComp1.ref() -= (optEqn1 & rho1)/rho1;
@@ -131,9 +131,9 @@ while (pimple.correct())
                 pEqnComp1 = fvm::Su(- (optEqn1 & rho1)/rho1, p_rgh_);
             }
         }
-        if (fvOptions.appliesToField(rho2.name()))
+        if (fvModels.addsSupToField(rho2.name()))
         {
-            tmp<fvScalarMatrix> optEqn2 = fvOptions(alpha2, rho2);
+            tmp<fvScalarMatrix> optEqn2 = fvModels.source(alpha2, rho2);
             if (pEqnComp2.valid())
             {
                 pEqnComp2.ref() -= (optEqn2 & rho2)/rho2;
@@ -144,9 +144,9 @@ while (pimple.correct())
             }
         }
 
-        if (fvOptions.appliesToField(rho_.name()))
+        if (fvModels.addsSupToField(rho_.name()))
         {
-            tmp<fvScalarMatrix> optEqn = fvOptions(rho_);
+            tmp<fvScalarMatrix> optEqn = fvModels.source(rho_);
             pEqnComp.ref() -= (optEqn & rho_)/rho_;
         }
     }
@@ -199,11 +199,7 @@ while (pimple.correct())
                 pEqn += pEqnComp();
             }
 
-            ::solve
-            (
-                pEqn,
-                mesh.solver(p_rgh_.select(pimple.finalInnerIter()))
-            );
+            pEqn.solve(mesh.solution().solverDict(p_rgh_.select(pimple_.finalInnerIter())));
         }
 
         // Correct fluxes and velocities on last non-orthogonal iteration
@@ -224,7 +220,7 @@ while (pimple.correct())
 
             U_ = HbyA + fvc::reconstruct(rAUf*mSfGradp - phigF);
             U_.correctBoundaryConditions();
-            fvOptions.correct(U_);
+            fvConstraints.constrain(U_);
 
             //- Calculate phase velocities
             {
@@ -249,9 +245,9 @@ while (pimple.correct())
                 porousZone_->correctU(U1, U2, U_, dpcds_);
 
                 U1.correctBoundaryConditions();
-                fvOptions.correct(U1);
+                fvConstraints.constrain(U1);
                 U2.correctBoundaryConditions();
-                fvOptions.correct(U2);
+                fvConstraints.constrain(U2);
            }
 
            // Set the phase dilatation rates

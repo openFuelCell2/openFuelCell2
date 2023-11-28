@@ -108,6 +108,29 @@ Foam::phaseSystem::phasePairs() const
 }
 
 
+inline const Foam::phaseModel& Foam::phaseSystem::otherPhase
+(
+    const phaseModel& phase
+) const
+{
+    if (phaseModels_.size() != 2)
+    {
+        FatalErrorInFunction
+            << "Call from a two-phase model in a multi-phase system."
+            << exit(FatalError);
+    }
+
+    if (&phase == &phaseModels_[0])
+    {
+        return phaseModels_[1];
+    }
+    else
+    {
+        return phaseModels_[0];
+    }
+}
+
+
 inline const Foam::surfaceScalarField& Foam::phaseSystem::phi() const
 {
     return phi_;
@@ -138,9 +161,27 @@ inline const Foam::IOMRFZoneList& Foam::phaseSystem::MRF() const
 }
 
 
-inline Foam::fv::options& Foam::phaseSystem::fvOptions() const
+inline Foam::fvModels& Foam::phaseSystem::fvModels(fvMesh& mesh)
 {
-    return fv::options::New(mesh_);
+    return Foam::fvModels::New(mesh);
+}
+
+
+inline const Foam::fvModels& Foam::phaseSystem::fvModels() const
+{
+    return Foam::fvModels::New(mesh_);
+}
+
+
+inline Foam::fvConstraints& Foam::phaseSystem::fvConstraints(fvMesh& mesh)
+{
+    return Foam::fvConstraints::New(mesh);
+}
+
+
+inline const Foam::fvConstraints& Foam::phaseSystem::fvConstraints() const
+{
+    return Foam::fvConstraints::New(mesh_);
 }
 
 

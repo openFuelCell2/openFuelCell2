@@ -9,11 +9,11 @@
             (
                 phase_.YiEqn(Y1[i])
              ==
-                fvOptions(rho, Y1[i])
+                fvModels.source(rho, Y1[i])
             );
 
             Y1iEqn.relax();
-            Y1iEqn.solve(mesh.solver("Yi"));
+            Y1iEqn.solve("Yi");
 
             Y1[i].max(SMALL);
             Y1[i].min(1.0);

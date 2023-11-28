@@ -461,7 +461,7 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::correctInterfaceThermo()
             << ", max = " << max(Tf.primitiveField())
             << endl;
 
-        scalar iDmdtRelax(this->mesh().fieldRelaxationFactor("iDmdt"));
+        scalar iDmdtRelax(this->mesh().solution().fieldRelaxationFactor("iDmdt"));
         iDmdt = (1 - iDmdtRelax)*iDmdt + iDmdtRelax*iDmdtNew;
 
         if (phaseChange_)
@@ -526,9 +526,9 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::correctInterfaceThermo()
                             wallBoilingActive = true;
 
                             const scalarField& patchDmdt =
-                                PCpatch.dmdt(key);
+                                PCpatch.dmdtf(key);
                             const scalarField& patchMDotL =
-                                PCpatch.mDotL(key);
+                                PCpatch.dmdtLf(key);
 
                             const scalar sign
                             (

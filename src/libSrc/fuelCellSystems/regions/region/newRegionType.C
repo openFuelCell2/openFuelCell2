@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::regionType> Foam::regionType::New
     Info << "Selecting regionType: "
         << regionType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(regionType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(regionType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorIn("regionType::New")
            << "Unknown region type "
@@ -52,6 +52,6 @@ Foam::autoPtr<Foam::regionType> Foam::regionType::New
            << exit(FatalError);
     }
 
-    return ctorPtr(mesh, name);
+    return cstrIter()(mesh, name);
 }
 // ************************************************************************* //

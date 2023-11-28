@@ -2,7 +2,7 @@ EXE_INC = \
     -Iinclude \
     -I../libSrc/fuelCellSystems/lnInclude \
     -I../libSrc/regionCourantNo/lnInclude \
-    -I../libSrc/multiPhaseCompressibleTurbulenceModels/lnInclude \
+    -I../libSrc/multiphaseCompressibleMomentumTransportModels/lnInclude \
     -I../libSrc/interfacialCompositionModels/lnInclude \
     -I../libSrc/derivedFvPatchFields/lnInclude \
     -I../libSrc/interfacialModels/lnInclude \
@@ -10,28 +10,40 @@ EXE_INC = \
     -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/specie/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/reactionThermo/lnInclude \
-    -I$(LIB_SRC)/transportModels/compressible/lnInclude \
-    -I$(LIB_SRC)/transportModels/incompressible/transportModel \
-    -I$(LIB_SRC)/TurbulenceModels/turbulenceModels/lnInclude \
-    -I$(LIB_SRC)/TurbulenceModels/compressible/lnInclude \
-    -I$(LIB_SRC)/TurbulenceModels/phaseCompressible/lnInclude \
+    -I$(LIB_SRC)/radiationModels/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/momentumTransportModels/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/compressible/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/phaseCompressible/lnInclude \
+    -I$(LIB_SRC)/ThermophysicalTransportModels/lnInclude \
+    -I$(LIB_SRC)/twoPhaseModels/twoPhaseMixture/lnInclude \
     -I$(LIB_SRC)/combustionModels/lnInclude \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(LIB_SRC)/regionModels/regionModel/lnInclude \
-    -I$(LIB_SRC)/sampling/lnInclude
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(LIB_SRC)/physicalProperties/lnInclude \
+    -I$(LIB_SRC)/twoPhaseModels/twoPhaseMixture/lnInclude
 
 EXE_LIBS = \
+    -lcombustionModels \
     -lfiniteVolume \
-    -lfvOptions \
-    -lmeshTools \
-    -lsampling \
+    -lradiationModels \
+    -lfvModels \
     -lregionModels \
+    -lmeshTools \
+    -lfvConstraints \
+    -lmomentumTransportModels \
+    -lcompressibleMomentumTransportModels \
+    -lthermophysicalTransportModels \
+    -lreactionThermophysicalModels \
+    -lfluidThermophysicalModels \
+    -lphaseFluidThermophysicalTransportModels \
+    -lphaseFluidReactionThermophysicalTransportModels \
     -L$(FOAM_USER_LIBBIN) \
     -lregionCourantNo \
-    -lmultiphaseFuelCellTurbulenceModels \
+    -lfuelCellMomentumTransportModels \
     -lfuelCellEulerianFvPatchFields \
     -lfuelCellEulerianInterfacialCompositionModels \
     -lfuelCellEulerianInterfacialModels \
-    -lthermoBoundary \
+    -lfuelCellThermophysicalModels \
     -lfuelCellSystem

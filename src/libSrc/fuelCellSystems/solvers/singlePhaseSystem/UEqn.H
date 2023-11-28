@@ -4,20 +4,20 @@ tmp<fvVectorMatrix> tUEqn
 (
     phase_.UEqn()
  ==
-    fvOptions(rho, U)
+    fvModels.source(rho, U)
 );
 
 fvVectorMatrix& UEqn = tUEqn.ref();
 
 porousZone_->addResistance(UEqn);
 UEqn.relax();
-fvOptions.constrain(UEqn);
+fvConstraints.constrain(UEqn);
 U.correctBoundaryConditions();
-fvOptions.correct(U);
+fvConstraints.constrain(U);
 
 if (pimple_.momentumPredictor())
 {
     ::solve(UEqn == -fvc::grad(p_rgh_));
 
-    fvOptions.correct(U);
+    fvConstraints.constrain(U);
 }

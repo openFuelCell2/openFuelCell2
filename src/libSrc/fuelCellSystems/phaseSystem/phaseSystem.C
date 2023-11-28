@@ -30,11 +30,9 @@ License
 #include "surfaceInterpolate.H"
 #include "localEulerDdtScheme.H"
 #include "fvcSmooth.H"
-
+#include "movingWallVelocityFvPatchVectorField.H"
 #include "dragModel.H"
 #include "BlendedInterfacialModel.H"
-
-#include "pimpleControl.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -48,36 +46,34 @@ const Foam::word Foam::phaseSystem::propertiesName("regionProperties");
 
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
-
-Foam::IOobject Foam::phaseSystem::createIOobject
+Foam::typeIOobject<Foam::IOdictionary>
+Foam::phaseSystem::readPhasePropertiesDict
 (
-    const fvMesh& mesh
-) const
+    const objectRegistry& obr
+)
 {
-    IOobject io
+    typeIOobject<IOdictionary> phasePropertiesIO
     (
         propertiesName,
-        mesh.time().constant(),
-        mesh,
-        IOobject::MUST_READ,
-        IOobject::NO_WRITE
+        obr.time().constant(),
+        obr,
+        IOobject::MUST_READ_IF_MODIFIED,
+        IOobject::NO_WRITE,
+        true
     );
 
-    if (io.typeHeaderOk<IOdictionary>(true))
+    if (phasePropertiesIO.headerOk())
     {
-        Info<< "Creating phaseSystem from " << io.name() << nl << endl;
-
-        io.readOpt(IOobject::MUST_READ_IF_MODIFIED);
+        Info<< "Get phase properties from " << phasePropertiesIO.name() << nl << endl;
     }
     else
     {
-        Info<< "No phaseSystem present" << nl << endl;
-        Info<< "Single phase solver assumed" << nl << endl;
+        Info<< "No phase properties presented..." << nl << endl;
 
-        io.readOpt(IOobject::NO_READ);
+        phasePropertiesIO.readOpt() = IOobject::NO_READ;
     }
 
-    return io;
+    return phasePropertiesIO;
 }
 
 
@@ -162,7 +158,7 @@ Foam::phaseSystem::phaseSystem
     const fvMesh& mesh
 )
 :
-    IOdictionary(createIOobject(mesh)),
+    IOdictionary(readPhasePropertiesDict(mesh)),
 
     mesh_(mesh),
 
@@ -207,6 +203,18 @@ Foam::phaseSystem::phaseSystem
         mesh
     ),
 
+    g_
+    (
+        IOobject
+        (
+            "g",
+            mesh.time().constant(),
+            mesh,
+            IOobject::READ_IF_PRESENT
+        ),
+        dimensionedVector(dimVelocity/dimTime, vector::zero)
+    ),
+
     pRefCell_(0),
     pRefValue_(0.0),
     pimple_(const_cast<fvMesh&>(mesh))
@@ -220,7 +228,7 @@ Foam::phaseSystem::phaseSystem
         pRefCell_,
         pRefValue_
     );
-    mesh.setFluxRequired(p_rgh_.name());
+    mesh.schemes().setFluxRequired(p_rgh_.name());
 
     // Create LTS field, if LTS is enabled
     bool LTS = fv::localEulerDdt::enabled(mesh);
@@ -246,6 +254,24 @@ Foam::phaseSystem::phaseSystem
                 extrapolatedCalculatedFvPatchScalarField::typeName
             )
         );
+    }
+
+    //- Get gravity field
+    {
+        uniformDimensionedVectorField g
+        (
+            IOobject
+            (
+                "g",
+                mesh.time().constant(),
+                mesh.time(),
+                IOobject::MUST_READ,
+                IOobject::NO_WRITE,
+                false
+            )
+        );
+
+        g_[0] = g[0];
     }
 
     // Groupings
@@ -525,6 +551,35 @@ void Foam::phaseSystem::correctEnergyTransport()
     forAll(phaseModels_, phasei)
     {
         phaseModels_[phasei].correctEnergyTransport();
+    }
+}
+
+void Foam::phaseSystem::correctBoundaryFlux()
+{
+    forAll(movingPhases(), movingPhasei)
+    {
+        phaseModel& phase = movingPhases()[movingPhasei];
+
+        const volVectorField::Boundary& UBf = phase.U()().boundaryField();
+
+        FieldField<fvsPatchField, scalar> phiRelBf
+        (
+            MRF_.relative(mesh_.Sf().boundaryField() & UBf)
+        );
+
+        surfaceScalarField::Boundary& phiBf = phase.phiRef().boundaryFieldRef();
+
+        forAll(mesh_.boundary(), patchi)
+        {
+            if
+            (
+                isA<fixedValueFvsPatchScalarField>(phiBf[patchi])
+             && !isA<movingWallVelocityFvPatchVectorField>(UBf[patchi])
+            )
+            {
+                phiBf[patchi] == phiRelBf[patchi];
+            }
+        }
     }
 }
 

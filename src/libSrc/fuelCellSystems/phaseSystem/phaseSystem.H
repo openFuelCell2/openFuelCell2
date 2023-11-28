@@ -46,13 +46,14 @@ SourceFiles
 #include "PtrListDictionary.H"
 
 #include "IOMRFZoneList.H"
-#include "fvOptions.H"
-#include "pimpleControl.H"
+#include "fvModels.H"
+#include "fvConstraints.H"
 
 #include "volFields.H"
 #include "surfaceFields.H"
 #include "fvMatricesFwd.H"
 
+#include "pimpleControl.H"
 #include "porousZoneList.H"
 #include "localEulerDdtScheme.H"
 
@@ -67,8 +68,6 @@ class blendingMethod;
 template<class modelType> class BlendedInterfacialModel;
 class surfaceTensionModel;
 class aspectRatioModel;
-
-class pimpleControl;
 
 /*---------------------------------------------------------------------------*\
                          Class phaseSystem Declaration
@@ -173,6 +172,9 @@ protected:
         //- Pressure p_rgh
         volScalarField p_rgh_;
 
+        //- gravity
+        uniformDimensionedVectorField g_;
+
         //- local time step
         autoPtr<volScalarField> trDeltaT_;
 
@@ -198,8 +200,12 @@ protected:
 
     // Protected member functions
 
-        //- Create IO dictionary
-        IOobject createIOobject(const fvMesh& mesh) const;
+    // Private Member Functions
+
+        static typeIOobject<IOdictionary> readPhasePropertiesDict
+        (
+            const objectRegistry& obr
+        );
 
         //- Calculate and return the mixture flux
         tmp<surfaceScalarField> calcPhi
@@ -390,6 +396,9 @@ public:
 
             //- Return the phase pairs
             inline const phasePairTable& phasePairs() const;
+            //- Return the phase not given as an argument in a two-phase system
+            //  An error is generated if the system is not two-phase
+            inline const phaseModel& otherPhase(const phaseModel& phase) const;
 
             //- Return the mixture flux
             inline const surfaceScalarField& phi() const;
@@ -406,8 +415,17 @@ public:
             //- Return MRF zones
             inline const IOMRFZoneList& MRF() const;
 
-            //- Access the fvOptions
-            inline fv::options& fvOptions() const;
+            //- Return the fvModels
+            inline const Foam::fvModels& fvModels() const;
+
+            //- Access the fvModels
+            inline Foam::fvModels& fvModels(fvMesh& mesh);
+
+            //- Access the fvConstraints
+            inline const Foam::fvConstraints& fvConstraints() const;
+
+            //- Access the fvConstraints
+            inline Foam::fvConstraints& fvConstraints(fvMesh& mesh);
 
             //- Return porousZones
             inline const porousZoneList& porousZone() const;
@@ -536,6 +554,9 @@ public:
 
             //- Correct the energy transport e.g. alphat
             virtual void correctEnergyTransport();
+
+            //- Correct fixed-flux BCs to be consistent with the velocity BCs
+            void correctBoundaryFlux();
 
             //- Set delta T
             void setRDeltaT();

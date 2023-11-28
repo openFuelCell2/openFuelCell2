@@ -47,10 +47,10 @@ Foam::diameterModels::coalescenceModel::New
     const dictionary& dict
 )
 {
-    auto* ctorPtr =
-        dictionaryConstructorTable(type);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(type);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown coalescence model type "
@@ -60,7 +60,7 @@ Foam::diameterModels::coalescenceModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<coalescenceModel>(ctorPtr(popBal, dict));
+    return autoPtr<coalescenceModel>(cstrIter()(popBal, dict));
 }
 
 

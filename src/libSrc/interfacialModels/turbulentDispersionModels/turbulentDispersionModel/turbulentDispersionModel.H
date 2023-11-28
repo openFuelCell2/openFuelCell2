@@ -40,7 +40,7 @@ SourceFiles
 #include "volFields.H"
 #include "dictionary.H"
 #include "runTimeSelectionTables.H"
-#include "phaseCompressibleTurbulenceModelFwd.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 namespace Foam
 {
@@ -116,7 +116,7 @@ public:
     // Member Functions
 
         //- Return a reference to the turbulence model for the continuous phase
-        const phaseCompressibleTurbulenceModel& continuousTurbulence() const;
+        const phaseCompressibleMomentumTransportModel& continuousTurbulence() const;
 
         //- Turbulent diffusivity
         //  multiplying the gradient of the phase-fraction

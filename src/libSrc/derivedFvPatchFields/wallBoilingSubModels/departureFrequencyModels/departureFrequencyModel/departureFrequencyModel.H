@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -31,7 +29,7 @@ Description
 
 SourceFiles
     departureFrequencyModel.C
-    newdepartureFrequencyModel.C
+    departureFrequencyModelNew.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -57,15 +55,6 @@ namespace wallBoilingModels
 
 class departureFrequencyModel
 {
-    // Private Member Functions
-
-        //- Disallow default bitwise copy construct
-        departureFrequencyModel(const departureFrequencyModel&);
-
-        //- Disallow default bitwise assignment
-        void operator=(const departureFrequencyModel&);
-
-
 public:
 
     //- Runtime type information
@@ -90,6 +79,12 @@ public:
         //- Construct null
         departureFrequencyModel();
 
+        //- Copy construct
+        departureFrequencyModel(const departureFrequencyModel& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<departureFrequencyModel> clone() const = 0;
+
 
     // Selectors
 
@@ -109,10 +104,19 @@ public:
             const phaseModel& liquid,
             const phaseModel& vapor,
             const label patchi,
+            const scalarField& Tl,
+            const scalarField& Tsatw,
+            const scalarField& L,
             const scalarField& dDep
         ) const = 0;
 
         virtual void write(Ostream& os) const;
+
+
+    // Member Operators
+
+        //- Disallow default bitwise assignment
+        void operator=(const departureFrequencyModel&) = delete;
 };
 
 

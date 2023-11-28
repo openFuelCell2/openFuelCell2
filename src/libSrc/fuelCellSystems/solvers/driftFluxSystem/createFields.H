@@ -1,5 +1,4 @@
-const uniformDimensionedVectorField& g =
-  runTime.lookupObject<uniformDimensionedVectorField>("g");
+const uniformDimensionedVectorField& g = g_;
 
 #include "readhRef.H"
 #include "gh.H"
@@ -27,7 +26,8 @@ const volScalarField& psi2 = thermo2.psi();
 volScalarField dmdt1 = phase1_.dmdt();
 volScalarField dmdt2 = phase2_.dmdt();
 
-fv::options& fvOptions = this->fvOptions();
+Foam::fvModels& fvModels = this->fvModels(mesh);
+Foam::fvConstraints& fvConstraints = this->fvConstraints(mesh);
 
 volScalarField& p = phase1_.thermoRef().p();
 
@@ -60,4 +60,4 @@ if (p_rgh_.needReference())
     p_rgh_ = p - rho_*gh;
 }
 
-mesh.setFluxRequired(p_rgh_.name());
+mesh.schemes().setFluxRequired(p_rgh_.name());

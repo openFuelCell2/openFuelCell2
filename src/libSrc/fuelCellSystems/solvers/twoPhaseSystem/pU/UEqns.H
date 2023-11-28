@@ -16,12 +16,12 @@ fvVectorMatrix U2Eqn(U2, rho2.dimensions()*U2.dimensions()*dimVol/dimTime);
             phase1_.UEqn()
          ==
            *momentumTransfer[phase1_.name()]
-          + fvOptions(alpha1, rho1, U1)
+          + fvModels.source(alpha1, rho1, U1)
         );
         porousZone_->addResistance(U1Eqn);
         U1Eqn.relax();
-        fvOptions.constrain(U1Eqn);
-        fvOptions.correct(U1);
+        fvConstraints.constrain(U1Eqn);
+        fvConstraints.constrain(U1);
     }
 
     {
@@ -32,12 +32,12 @@ fvVectorMatrix U2Eqn(U2, rho2.dimensions()*U2.dimensions()*dimVol/dimTime);
             phase2_.UEqn()
          ==
            *momentumTransfer[phase2_.name()]
-          + fvOptions(alpha2, rho2, U2)
+          + fvModels.source(alpha2, rho2, U2)
           + alpha2 * (dpcds_ & fvc::grad(alpha2))
         );
         porousZone_->addResistance(U2Eqn);
         U2Eqn.relax();
-        fvOptions.constrain(U2Eqn);
-        fvOptions.correct(U2);
+        fvConstraints.constrain(U2Eqn);
+        fvConstraints.constrain(U2);
     }
 }

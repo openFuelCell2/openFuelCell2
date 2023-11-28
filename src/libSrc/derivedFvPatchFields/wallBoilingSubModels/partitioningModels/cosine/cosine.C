@@ -5,9 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2019 OpenFOAM Foundation
-    Copyright (C) 2020 OpenCFD Ltd.
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -55,8 +52,17 @@ Foam::wallBoilingModels::partitioningModels::
 cosine::cosine(const dictionary& dict)
 :
     partitioningModel(),
-    alphaLiquid1_(dict.get<scalar>("alphaLiquid1")),
-    alphaLiquid0_(dict.get<scalar>("alphaLiquid0"))
+    alphaLiquid1_(dict.lookup<scalar>("alphaLiquid1")),
+    alphaLiquid0_(dict.lookup<scalar>("alphaLiquid0"))
+{}
+
+
+Foam::wallBoilingModels::partitioningModels::
+cosine::cosine(const cosine& model)
+:
+    partitioningModel(model),
+    alphaLiquid1_(model.alphaLiquid1_),
+    alphaLiquid0_(model.alphaLiquid0_)
 {}
 
 
@@ -100,8 +106,8 @@ void Foam::wallBoilingModels::partitioningModels::
 cosine::write(Ostream& os) const
 {
     partitioningModel::write(os);
-    os.writeEntry("alphaLiquid1", alphaLiquid1_);
-    os.writeEntry("alphaLiquid0", alphaLiquid0_);
+    writeEntry(os, "alphaLiquid1", alphaLiquid1_);
+    writeEntry(os, "alphaLiquid0", alphaLiquid0_);
 }
 
 

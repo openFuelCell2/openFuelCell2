@@ -66,7 +66,7 @@ Foam::ActivationOverpotentialModel<Thermo>::getLocalThermo
     const pureMixture<ThermoType>& globalThermo
 ) const
 {
-    return globalThermo.cellMixture(0);
+    return globalThermo.cellTransportMixture(0);
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -84,7 +84,7 @@ Foam::ActivationOverpotentialModel<Thermo>::ActivationOverpotentialModel
     (
         phase.mesh().lookupObject<Thermo>
         (
-            IOobject::groupName(basicThermo::dictName, phase.name())
+            IOobject::groupName(physicalProperties::typeName, phase.name())
         )
     )
 {}

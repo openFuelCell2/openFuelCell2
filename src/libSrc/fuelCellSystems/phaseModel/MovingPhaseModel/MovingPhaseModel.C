@@ -25,7 +25,7 @@ License
 
 #include "MovingPhaseModel.H"
 #include "phaseSystem.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 #include "fixedValueFvPatchFields.H"
 #include "slipFvPatchFields.H"
 #include "partialSlipFvPatchFields.H"
@@ -55,7 +55,7 @@ Foam::MovingPhaseModel<BasePhaseModel>::phi(const volVectorField& U) const
         IOobject::NO_READ
     );
 
-    if (phiHeader.typeHeaderOk<surfaceScalarField>(true))
+    if (phiHeader.headerOk())
     {
         Info<< "Reading face flux field " << phiName << endl;
 
@@ -169,7 +169,7 @@ Foam::MovingPhaseModel<BasePhaseModel>::MovingPhaseModel
     divU_(nullptr),
     turbulence_
     (
-        phaseCompressibleTurbulenceModel::New
+        phaseCompressible::momentumTransportModel::New
         (
             *this,
             this->thermo().rho(),
@@ -178,6 +178,14 @@ Foam::MovingPhaseModel<BasePhaseModel>::MovingPhaseModel
             phi_,
             *this
         )
+    ),
+    thermophysicalTransport_
+    (
+        PhaseThermophysicalTransportModel
+        <
+            phaseCompressible::momentumTransportModel,
+            transportThermoModel
+        >::New(turbulence_, this->thermo_)
     ),
     continuityErrorFlow_
     (
@@ -229,7 +237,7 @@ void Foam::MovingPhaseModel<BasePhaseModel>::correct()
 
     continuityErrorFlow_ = fvc::ddt(*this, rho) + fvc::div(alphaRhoPhi_);
 
-    continuityErrorSources_ = - (this->fluid().fvOptions()(*this, rho)&rho);
+    continuityErrorSources_ = - (this->fluid().fvModels().source(*this, rho)&rho);
 }
 
 
@@ -272,7 +280,7 @@ void Foam::MovingPhaseModel<BasePhaseModel>::correctEnergyTransport()
 {
     BasePhaseModel::correctEnergyTransport();
 
-    turbulence_->correctEnergyTransport();
+    thermophysicalTransport_->correct();
 }
 
 
@@ -296,7 +304,7 @@ Foam::MovingPhaseModel<BasePhaseModel>::UEqn()
       + fvm::div(alphaRhoPhi_, U_)
       + fvm::SuSp(- this->continuityError(), U_)
       + this->fluid().MRF().DDt(alpha*rho, U_)
-      + turbulence_->divDevRhoReff(U_)
+      + turbulence_->divDevTau(U_)
     );
 }
 
@@ -316,7 +324,7 @@ Foam::MovingPhaseModel<BasePhaseModel>::UfEqn()
       - fvm::Sp(fvc::div(alphaRhoPhi_), U_)
       + fvm::SuSp(- this->continuityErrorSources(), U_)
       + this->fluid().MRF().DDt(alpha*rho, U_)
-      + turbulence_->divDevRhoReff(U_)
+      + turbulence_->divDevTau(U_)
     );
 }
 
@@ -470,22 +478,6 @@ void Foam::MovingPhaseModel<BasePhaseModel>::divU(tmp<volScalarField> divU)
 
 template<class BasePhaseModel>
 Foam::tmp<Foam::volScalarField>
-Foam::MovingPhaseModel<BasePhaseModel>::mut() const
-{
-    return turbulence_->mut();
-}
-
-
-template<class BasePhaseModel>
-Foam::tmp<Foam::volScalarField>
-Foam::MovingPhaseModel<BasePhaseModel>::muEff() const
-{
-    return turbulence_->muEff();
-}
-
-
-template<class BasePhaseModel>
-Foam::tmp<Foam::volScalarField>
 Foam::MovingPhaseModel<BasePhaseModel>::nut() const
 {
     return turbulence_->nut();
@@ -504,7 +496,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::volScalarField>
 Foam::MovingPhaseModel<BasePhaseModel>::kappaEff() const
 {
-    return turbulence_->kappaEff();
+    return thermophysicalTransport_->kappaEff();
 }
 
 
@@ -512,7 +504,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::scalarField>
 Foam::MovingPhaseModel<BasePhaseModel>::kappaEff(const label patchi) const
 {
-    return turbulence_->kappaEff(patchi);
+    return thermophysicalTransport_->kappaEff(patchi);
 }
 
 
@@ -520,7 +512,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::volScalarField>
 Foam::MovingPhaseModel<BasePhaseModel>::alphaEff() const
 {
-    return turbulence_->alphaEff();
+    return thermophysicalTransport_->alphaEff();
 }
 
 
@@ -528,7 +520,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::scalarField>
 Foam::MovingPhaseModel<BasePhaseModel>::alphaEff(const label patchi) const
 {
-    return turbulence_->alphaEff(patchi);
+    return thermophysicalTransport_->alphaEff(patchi);
 }
 
 

@@ -40,10 +40,10 @@ Foam::surfaceTensionModel::New
     Info<< "Selecting surfaceTensionModel for "
         << pair << ": " << surfaceTensionModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(surfaceTensionModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(surfaceTensionModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown surfaceTensionModelType type "
@@ -53,7 +53,7 @@ Foam::surfaceTensionModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair, true);
+    return cstrIter()(dict, pair, true);
 }
 
 

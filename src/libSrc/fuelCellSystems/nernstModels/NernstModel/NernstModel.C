@@ -46,7 +46,7 @@ Foam::NernstModel<Thermo, OtherThermo>::getLocalThermo
 ) const
 {
     return
-        globalThermo.getLocalThermo
+        globalThermo.specieThermo
         (
             globalThermo.species()
             [
@@ -65,7 +65,7 @@ Foam::NernstModel<Thermo, OtherThermo>::getLocalThermo
     const pureMixture<ThermoType>& globalThermo
 ) const
 {
-    return globalThermo.cellMixture(0);
+    return globalThermo.cellTransportMixture(0);
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -84,14 +84,14 @@ Foam::NernstModel<Thermo, OtherThermo>::NernstModel
     (
         phase1.mesh().lookupObject<Thermo>
         (
-            IOobject::groupName(basicThermo::dictName, phase1.name())
+            IOobject::groupName(physicalProperties::typeName, phase1.name())
         )
     ),
     otherThermo_
     (
         phase2.mesh().lookupObject<OtherThermo>
         (
-            IOobject::groupName(basicThermo::dictName, phase2.name())
+            IOobject::groupName(physicalProperties::typeName, phase2.name())
         )
     )
 {}

@@ -5,9 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
-    Copyright (C) 2018 OpenCFD Ltd.
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -29,9 +26,8 @@ License
 #include "Cole.H"
 #include "addToRunTimeSelectionTable.H"
 #include "uniformDimensionedFields.H"
-#include "compressibleTurbulenceModel.H"
-#include "ThermalDiffusivity.H"
-#include "PhaseCompressibleTurbulenceModel.H"
+#include "compressibleMomentumTransportModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
@@ -62,6 +58,13 @@ Cole::Cole(const dictionary& dict)
 {}
 
 
+Foam::wallBoilingModels::departureFrequencyModels::
+Cole::Cole(const Cole& model)
+:
+    departureFrequencyModel(model)
+{}
+
+
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 Foam::wallBoilingModels::departureFrequencyModels::
@@ -78,12 +81,15 @@ Cole::fDeparture
     const phaseModel& liquid,
     const phaseModel& vapor,
     const label patchi,
+    const scalarField& Tl,
+    const scalarField& Tsatw,
+    const scalarField& L,
     const scalarField& dDep
 ) const
 {
     // Gravitational acceleration
     const uniformDimensionedVectorField& g =
-        liquid.mesh().time().lookupObject<uniformDimensionedVectorField>("g");
+        liquid.mesh().lookupObject<uniformDimensionedVectorField>("g");
 
     const scalarField rhoLiquid(liquid.thermo().rho(patchi));
     const scalarField rhoVapor(vapor.thermo().rho(patchi));

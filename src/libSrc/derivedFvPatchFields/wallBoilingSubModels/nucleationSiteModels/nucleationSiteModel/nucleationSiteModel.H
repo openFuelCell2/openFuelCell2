@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -31,7 +29,7 @@ Description
 
 SourceFiles
     nucleationSiteModel.C
-    newnucleationSiteModel.C
+    nucleationSiteModelNew.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -57,15 +55,6 @@ namespace wallBoilingModels
 
 class nucleationSiteModel
 {
-    // Private Member Functions
-
-        //- Disallow default bitwise copy construct
-        nucleationSiteModel(const nucleationSiteModel&);
-
-        //- Disallow default bitwise assignment
-        void operator=(const nucleationSiteModel&);
-
-
 public:
 
     //- Runtime type information
@@ -90,6 +79,12 @@ public:
         //- Construct null
         nucleationSiteModel();
 
+        //- Copy construct
+        nucleationSiteModel(const nucleationSiteModel& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<nucleationSiteModel> clone() const = 0;
+
 
     // Selectors
 
@@ -111,10 +106,18 @@ public:
             const label patchi,
             const scalarField& Tl,
             const scalarField& Tsatw,
-            const scalarField& L
+            const scalarField& L,
+            const scalarField& dDep,
+            const scalarField& fDep
         ) const = 0;
 
         virtual void write(Ostream& os) const;
+
+
+    // Member Operators
+
+        //- Disallow default bitwise assignment
+        void operator=(const nucleationSiteModel&) = delete;
 };
 
 

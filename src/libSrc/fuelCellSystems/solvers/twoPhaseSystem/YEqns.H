@@ -16,11 +16,11 @@
                 phase1_.YiEqn(Y1[i])
              ==
                *massTransfer[Y1[i].name()]
-              + fvOptions(alpha1, rho1, Y1[i])
+              + fvModels.source(alpha1, rho1, Y1[i])
             );
 
             Y1iEqn.relax();
-            Y1iEqn.solve(mesh.solver("Yi"));
+            Y1iEqn.solve("Yi");
 
             Y1[i].max(SMALL);
             Y1[i].min(1.0);
@@ -42,11 +42,11 @@
                 phase2_.YiEqn(Y2[i])
              ==
                *massTransfer[Y2[i].name()]
-              + fvOptions(alpha2, rho2, Y2[i])
+              + fvModels.source(alpha2, rho2, Y2[i])
             );
 
             Y2iEqn.relax();
-            Y2iEqn.solve(mesh.solver("Yi"));
+            Y2iEqn.solve("Yi");
 
             Y2[i].max(SMALL);
             Y2[i].min(1.0);

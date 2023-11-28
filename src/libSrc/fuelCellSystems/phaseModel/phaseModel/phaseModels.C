@@ -28,7 +28,7 @@ License
 #include "rhoThermo.H"
 #include "rhoReactionThermo.H"
 
-#include "CombustionModel.H"
+#include "combustionModel.H"
 
 #include "phaseModel.H"
 #include "ThermoPhaseModel.H"
@@ -175,8 +175,7 @@ namespace Foam
                     MovingPhaseModel
                     <
                         ThermoPhaseModel<phaseModel, rhoReactionThermo>
-                    >,
-                    CombustionModel<rhoReactionThermo>
+                    >
                 >
             >
         >

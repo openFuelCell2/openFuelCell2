@@ -137,7 +137,7 @@ Foam::diameterModels::velocityGroup::mvconvection() const
             phase_.mesh(),
             fields_,
             phase_.alphaRhoPhi(),
-            phase_.mesh().divScheme
+            phase_.mesh().schemes().div
             (
                 "div(" + phase_.alphaRhoPhi()().name() + ",f)"
             )
@@ -229,13 +229,13 @@ Foam::diameterModels::velocityGroup::velocityGroup
 {
     if
     (
-        phase_.mesh().solverDict(popBalName_).lookupOrDefault<Switch>
+        phase_.mesh().solution().solverDict(popBalName_).lookupOrDefault<Switch>
         (
             "renormalizeAtRestart",
             false
         )
      ||
-        phase_.mesh().solverDict(popBalName_).lookupOrDefault<Switch>
+        phase_.mesh().solution().solverDict(popBalName_).lookupOrDefault<Switch>
         (
             "renormalize",
             false
@@ -314,7 +314,7 @@ void Foam::diameterModels::velocityGroup::postSolve()
 
     if
     (
-        phase_.mesh().solverDict(popBalName_).lookupOrDefault<Switch>
+        phase_.mesh().solution().solverDict(popBalName_).lookupOrDefault<Switch>
         (
             "renormalize",
             false

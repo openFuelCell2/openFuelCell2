@@ -30,21 +30,31 @@ License
 #include "dissolvedModel.H"
 
 #include "constants.H"
+#include "addToRunTimeSelectionTable.H"
 
 const Foam::dimensionedScalar Rgas = Foam::constant::physicoChemical::R;
 const Foam::dimensionedScalar dimF = Foam::constant::physicoChemical::F;
 
+// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
+namespace Foam
+{
+namespace combustionModels
+{
+    defineTypeNameAndDebug(electroChemicalReaction, 0);
+    addToRunTimeSelectionTable(combustionModel, electroChemicalReaction, dictionary);
+}
+}
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
-template<class ReactionThermo>
-Foam::combustionModels::electroChemicalReaction<ReactionThermo>::electroChemicalReaction
+Foam::combustionModels::electroChemicalReaction::electroChemicalReaction
 (
     const word& modelType,
-    ReactionThermo& thermo,
-    const compressibleTurbulenceModel& turb,
+    const fluidReactionThermo& thermo,
+    const compressibleMomentumTransportModel& turb,
     const word& electroChemicalReactionProperties
 )
 :
-    ThermoCombustion<ReactionThermo>(modelType, thermo, turb),
+    combustionModel(modelType, thermo, turb),
     thermo_(thermo),
     saturation_(saturationModel::New(this->subDict("saturation"), this->mesh())),
     dissolved_(this->template lookupOrDefault<Switch>("dissolved", true))
@@ -62,13 +72,11 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::electroChemical
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
-template<class ReactionThermo>
-Foam::combustionModels::electroChemicalReaction<ReactionThermo>::~electroChemicalReaction()
+Foam::combustionModels::electroChemicalReaction::~electroChemicalReaction()
 {}
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
-template<class ReactionThermo>
-void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
+void Foam::combustionModels::electroChemicalReaction::correct()
 {
     //- Activation overpotential model update
     eta_->correct();
@@ -95,15 +103,14 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
 
     word water(phaseModel::water);
 
-    //- Lable of water (H2O)
-    const label specieI =
-        thermo_.composition().species()[water];
-
-    //- In case no water exists
-    if (specieI == -1)
+    if (!thermo_.composition().species().found(water))
     {
         return;
     }
+
+    //- Lable of water (H2O)
+    const label specieI =
+        thermo_.composition().species()[water];
 
     //- Get the specieStoichCoeff
     dimensionedScalar specieStoichCoeff
@@ -120,7 +127,7 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     (
         "W",
         dimMass/dimMoles,
-        thermo_.composition().W(specieI)/1000
+        thermo_.composition().Wi(specieI)/1000
     );
 
     //- water production
@@ -135,7 +142,7 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
     dissolvedModel& dW = const_cast<dissolvedModel&>
     (
         ionPhase.template
-        lookupObject<dissolvedModel>(dissolvedModel::modelName)
+            lookupObject<dissolvedModel>(dissolvedModel::modelName)
     );
 
     //- Water activity and water source/sink
@@ -209,9 +216,8 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
 }
 
 
-template<class ReactionThermo>
 Foam::tmp<Foam::fvScalarMatrix>
-Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
+Foam::combustionModels::electroChemicalReaction::R
 (
     volScalarField& Y
 ) const
@@ -238,7 +244,7 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
     (
         "W",
         dimMass/dimMoles,
-        thermo_.composition().W(specieI)/1000
+        thermo_.composition().Wi(specieI)/1000
     );
 
     dimensionedScalar specieStoichCoeff
@@ -263,18 +269,16 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::R
 }
 
 
-template<class ReactionThermo>
 Foam::tmp<Foam::volScalarField>
-Foam::combustionModels::electroChemicalReaction<ReactionThermo>::Qdot() const
+Foam::combustionModels::electroChemicalReaction::Qdot() const
 {
     return eta_->Qdot();
 }
 
 
-template<class ReactionThermo>
-bool Foam::combustionModels::electroChemicalReaction<ReactionThermo>::read()
+bool Foam::combustionModels::electroChemicalReaction::read()
 {
-    if (ThermoCombustion<ReactionThermo>::read())
+    if (combustionModel::read())
     {
         return true;
     }

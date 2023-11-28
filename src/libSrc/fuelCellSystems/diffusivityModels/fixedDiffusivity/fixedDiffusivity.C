@@ -50,7 +50,7 @@ Foam::diffusivityModels::fixedDiffusivity::fixedDiffusivity
 )
 :
     diffusivityModel(name, mesh, diff, dict),
-    diff0_(dict_.get<dimensionedScalar>("diff0"))
+    diff0_(dict_.lookup("diff0"))
 {}
 
 

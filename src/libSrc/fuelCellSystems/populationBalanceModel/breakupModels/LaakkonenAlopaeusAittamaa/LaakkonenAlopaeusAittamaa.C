@@ -25,7 +25,7 @@ License
 
 #include "LaakkonenAlopaeusAittamaa.H"
 #include "addToRunTimeSelectionTable.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 

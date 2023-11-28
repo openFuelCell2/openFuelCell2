@@ -118,14 +118,14 @@ Foam::driftFluxSystem::driftFluxSystem
     phase2_.max(phase2_.residualAlpha().value());
 
     volScalarField& alpha1 = phase1_;
-    mesh.setFluxRequired(alpha1.name());
+    mesh.schemes().setFluxRequired(alpha1.name());
 
     //- Update based on averaged velocity
     phi_ = fvc::flux(U_);
 
     rhoPhi_ = fvc::interpolate(rho_) * phi_;
 
-    turbulence_ = CompressibleTurbulenceModel<twoPhaseInteractingMixture>
+    turbulence_ = compressible::momentumTransportModel
         ::New(rho_, U_, rhoPhi_, mixture_());
 }
 

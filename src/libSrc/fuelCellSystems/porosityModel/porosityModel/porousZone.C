@@ -64,7 +64,7 @@ void Foam::porousZone::adjustNegativeResistance(dimensionedVector& resist)
 Foam::label Foam::porousZone::fieldIndex(const label i) const
 {
     label index = 0;
-    if (!coordSys_.uniform())
+    if (!coordSys_.R().uniform())
     {
         index = i;
     }
@@ -123,10 +123,10 @@ Foam::porousZone::porousZone
     if (zoneName_ == word::null)
     {
         dict.lookup("active") >> active_;
-        dict_.readEntry("cellZone", zoneName_);
+        dict_.lookup("cellZone") >> zoneName_;
     }
 
-    cellZoneIDs_ = mesh_.cellZones().indices(zoneName_);
+    cellZoneIDs_ = mesh_.cellZones().findIndices(zoneName_);
 
     Info<< "    creating porous zone: " << zoneName_ << endl;
 
@@ -246,7 +246,8 @@ bool Foam::porousZone::read(const dictionary& dict)
     active_ = readBool(dict.lookup("active"));
     coeffs_ = dict.subDict(type() + "Coeffs");
     dict.lookup("cellZone") >> zoneName_;
-    cellZoneIDs_ = mesh_.cellZones().indices(zoneName_);
+    cellZoneIDs_ = mesh_.cellZones().findIndices(zoneName_);
+
 
     return true;
 }

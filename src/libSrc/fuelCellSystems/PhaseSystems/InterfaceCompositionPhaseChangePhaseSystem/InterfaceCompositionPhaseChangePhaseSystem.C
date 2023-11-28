@@ -327,7 +327,7 @@ massTransfer() const
         );
 
         // relax the iDmdt
-        scalar iDmdtRelax(this->mesh().fieldRelaxationFactor("iDmdt"));
+        scalar iDmdtRelax(this->mesh().solution().fieldRelaxationFactor("iDmdt"));
 
         forAllConstIter(hashedWordList, compositionModel.species(), memberIter)
         {

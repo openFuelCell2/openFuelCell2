@@ -103,35 +103,35 @@ public:
 // Instantiation for multi-component-multi-component pairs
 #define makeActivationOverpotentialType(Type, Thermo, Comp, Mix, Phys)\
                                                                                \
-    typedef Thermo<Comp, SpecieMixture<Mix<Phys>>>                             \
+    typedef Thermo<Comp::composite, SpecieMixture<Mix<Phys>>>                             \
         Type##Thermo##Comp##Mix##Phys;                                         \
                                                                                \
-    addActivationOverpotentialToRunTimeSelectionTable                             \
+    addActivationOverpotentialToRunTimeSelectionTable                          \
     (                                                                          \
         Type,                                                                  \
-        Type##Thermo##Comp##Mix##Phys                                         \
+        Type##Thermo##Comp##Mix##Phys                                          \
     )
 
 // Addition to the run-time selection table
-#define addActivationOverpotentialToRunTimeSelectionTable(Type, Thermo)\
+#define addActivationOverpotentialToRunTimeSelectionTable(Type, Thermo)        \
                                                                                \
-    typedef Type<Thermo>                                          \
-        Type##Thermo;                                             \
+    typedef Type<Thermo>                                                       \
+        Type##Thermo;                                                          \
                                                                                \
     defineTemplateTypeNameAndDebugWithName                                     \
     (                                                                          \
-        Type##Thermo,                                             \
+        Type##Thermo,                                                          \
         (                                                                      \
-            word(Type##Thermo::typeName_()) + "<"                 \
-          + word(Thermo::typeName) + ">"                                  \
+            word(Type##Thermo::typeName_()) + "<"                              \
+          + word(Thermo::typeName) + ">"                                       \
         ).c_str(),                                                             \
         0                                                                      \
     );                                                                         \
                                                                                \
     addToRunTimeSelectionTable                                                 \
     (                                                                          \
-        activationOverpotentialModel,                                             \
-        Type##Thermo,                                             \
+        activationOverpotentialModel,                                          \
+        Type##Thermo,                                                          \
         dictionary                                                             \
     )
 

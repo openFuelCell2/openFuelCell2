@@ -605,7 +605,7 @@ Foam::MomentumTransferPhaseSystem<BasePhaseSystem>::phiFs
         this->addField(phase, "phiF", pPrimeByAf*snGradAlpha1, phiFs);
 
         const bool implicitPhasePressure =
-            this->mesh_.solverDict(phase.volScalarField::name()).
+            this->mesh_.solution().solverDict(phase.volScalarField::name()).
             template lookupOrDefault<Switch>
             (
                 "implicitPhasePressure",
@@ -768,7 +768,7 @@ Foam::MomentumTransferPhaseSystem<BasePhaseSystem>::phiFfs
         this->addField(phase, "phiFf", pPrimeByAf*snGradAlpha1, phiFfs);
 
         const bool implicitPhasePressure =
-            this->mesh_.solverDict(phase.volScalarField::name()).
+            this->mesh_.solution().solverDict(phase.volScalarField::name()).
             template lookupOrDefault<Switch>
             (
                 "implicitPhasePressure",

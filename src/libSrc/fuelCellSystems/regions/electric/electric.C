@@ -128,7 +128,7 @@ Foam::regionTypes::electric::electric
             IOobject::AUTO_WRITE
         ),
         *this,
-        dimensionedScalar(dimTemperature, dict_.getOrDefault<scalar>("T0", 293.15)),
+        dimensionedScalar(dimTemperature, dict_.lookupOrDefault<scalar>("T0", 293.15)),
         zeroGradientFvPatchScalarField::typeName
     ),
     relax_(dict_.lookupOrDefault<scalar>("relax", 0.0)),
@@ -158,22 +158,22 @@ Foam::regionTypes::electric::electric
     if (control_)
     {
         const dictionary& controlDict = dict_.subDict("galvanostatic");
-        patchName_ = controlDict.get<word>("patchName");
-        galvanostatic_ = controlDict.get<Switch>("active");
+        controlDict.lookup("patchName") >> patchName_;
+        controlDict.lookup("active") >> galvanostatic_;
 
         if (galvanostatic_)
         {
-            ibar_.reset(Function1<scalar>::New("ibar", controlDict, this));
+            ibar_.set(Function1<scalar>::New("ibar", controlDict).ptr());
         }
         else
         {
-            voltage_.reset(Function1<scalar>::New("voltage", controlDict, this));
+            voltage_.set(Function1<scalar>::New("voltage", controlDict).ptr());
         }
 
         if (controlDict.found("zoneName"))
         {
-            zoneName_ = controlDict.get<word>("zoneName");
-            cellZoneIDs_ = this->cellZones().indices(zoneName_);
+            controlDict.lookup("zoneName") >> zoneName_;
+            cellZoneIDs_ = this->cellZones().findIndices(zoneName_);
         }
     }
 }

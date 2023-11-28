@@ -21,20 +21,14 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM; if not, write to the Free Software Foundation,
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
-    
+
 \*---------------------------------------------------------------------------*/
 
-#include "error.H"
 #include "diffusivityModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-namespace Foam
-{
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-autoPtr<diffusivityModel> diffusivityModel::New
+Foam::autoPtr<Foam::diffusivityModel> Foam::diffusivityModel::New
 (
     const word& name,
     const fvMesh& mesh,
@@ -42,14 +36,14 @@ autoPtr<diffusivityModel> diffusivityModel::New
     const dictionary& dict
 )
 {
-    word diffTypeName = dict.get<word>("type");
+    word diffTypeName = dict.lookup("type");
 
     Info<< "Selecting diffusivity model " << diffTypeName << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(diffTypeName);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(diffTypeName);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorIn
         (
@@ -62,21 +56,13 @@ autoPtr<diffusivityModel> diffusivityModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<diffusivityModel>
+    return cstrIter()
     (
-        ctorPtr
-        (
-            name,
-            mesh,
-            diff,
-            dict.subDict(diffTypeName + "Coeffs")
-        )
+        name,
+        mesh,
+        diff,
+        dict.subDict(diffTypeName + "Coeffs")
     );
 }
-
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-} // End namespace Foam
 
 // ************************************************************************* //

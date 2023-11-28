@@ -93,21 +93,8 @@ public:
             const fvPatchFieldMapper&
         );
 
-        //- Construct as copy
-        copiedFixedValueFvPatchScalarField
-        (
-            const copiedFixedValueFvPatchScalarField&
-        );
 
-        //- Construct as copy setting internal field reference
-        copiedFixedValueFvPatchScalarField
-        (
-            const copiedFixedValueFvPatchScalarField&,
-            const DimensionedField<scalar, volMesh>&
-        );
-
-
-    // Member functions
+    // Member Functions
 
         // Evaluation functions
 

@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -69,11 +67,17 @@ class LemmertChawla
 :
     public nucleationSiteModel
 {
-
-    // Private data:
+    // Private Data:
 
         //- Coefficient for nucleation site density
         scalar Cn_;
+
+        //- Reference nucleations density
+        scalar NRef_;
+
+        //- Reference temperature difference
+        scalar deltaTRef_;
+
 
 public:
 
@@ -84,6 +88,15 @@ public:
 
         //- Construct from a dictionary
         LemmertChawla(const dictionary& dict);
+
+        //- Copy construct
+        LemmertChawla(const LemmertChawla& model);
+
+        //- Construct and return a clone
+        virtual autoPtr<nucleationSiteModel> clone() const
+        {
+            return autoPtr<nucleationSiteModel>(new LemmertChawla(*this));
+        }
 
 
     //- Destructor
@@ -100,8 +113,12 @@ public:
             const label patchi,
             const scalarField& Tl,
             const scalarField& Tsatw,
-            const scalarField& L
+            const scalarField& L,
+            const scalarField& dDep,
+            const scalarField& fDep
         ) const;
+
+        virtual void write(Ostream& os) const;
 };
 
 

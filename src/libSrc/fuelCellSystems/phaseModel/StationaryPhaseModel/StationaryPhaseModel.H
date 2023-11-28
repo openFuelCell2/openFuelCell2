@@ -182,12 +182,6 @@ public:
 
         // Turbulence
 
-            //- Return the turbulent dynamic viscosity
-            virtual tmp<volScalarField> mut() const;
-
-            //- Return the effective dynamic viscosity
-            virtual tmp<volScalarField> muEff() const;
-
             //- Return the turbulent kinematic viscosity
             virtual tmp<volScalarField> nut() const;
 

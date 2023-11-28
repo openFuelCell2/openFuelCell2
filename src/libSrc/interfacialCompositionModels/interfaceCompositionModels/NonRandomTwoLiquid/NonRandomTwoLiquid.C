@@ -78,26 +78,26 @@ NonRandomTwoLiquid
     (
         "alpha12",
         dimless,
-        dict.subDict(species1Name_).get<scalar>("alpha")
+        dict.subDict(species1Name_).lookup("alpha")
     );
     alpha21_ = dimensionedScalar
     (
         "alpha21",
         dimless,
-        dict.subDict(species2Name_).get<scalar>("alpha")
+        dict.subDict(species2Name_).lookup("alpha")
     );
 
     beta12_ = dimensionedScalar
     (
         "beta12",
         dimless/dimTemperature,
-        dict.subDict(species1Name_).get<scalar>("beta")
+        dict.subDict(species1Name_).lookup("beta")
     );
     beta21_ = dimensionedScalar
     (
         "beta21",
         dimless/dimTemperature,
-        dict.subDict(species2Name_).get<scalar>("beta")
+        dict.subDict(species2Name_).lookup("beta")
     );
 
     saturationModel12_.reset
@@ -155,7 +155,7 @@ update
     const volScalarField& Tf
 )
 {
-    volScalarField W(this->thermo_.W());
+    volScalarField W(this->pair_.phase1().thermo().W());
 
     volScalarField X1
     (
@@ -165,7 +165,7 @@ update
         (
             "W",
             dimMass/dimMoles,
-            this->thermo_.composition().W(species1Index_)
+            this->thermo_.composition().Wi(species1Index_)
         )
     );
 
@@ -177,7 +177,7 @@ update
         (
             "W",
             dimMass/dimMoles,
-            this->thermo_.composition().W(species2Index_)
+            this->thermo_.composition().Wi(species2Index_)
         )
     );
 

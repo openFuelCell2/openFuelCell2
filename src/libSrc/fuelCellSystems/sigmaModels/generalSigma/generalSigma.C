@@ -81,14 +81,14 @@ Foam::sigmaModels::generalSigma::generalSigma
 )
 :
     sigmaModel(mesh, sigmaDictionary),
-    a_(sigmaDictionary_.getOrDefault<scalar>("a", 0.0)),
-    b_(sigmaDictionary_.getOrDefault<scalar>("b", 0.0)),
-    c_(sigmaDictionary_.getOrDefault<scalar>("c", 0.0)),
-    d_(sigmaDictionary_.getOrDefault<scalar>("d", 0.0)),
-    TName_(sigmaDictionary_.getOrDefault<word>("T", "T")),
-    por_(sigmaDictionary_.get<scalar>("porosity")),
-    phi_(sigmaDictionary_.get<scalar>("phi")),
-    Zii_(sigmaDictionary_.get<scalar>("Zii"))
+    a_(sigmaDictionary_.lookupOrDefault<scalar>("a", 0.0)),
+    b_(sigmaDictionary_.lookupOrDefault<scalar>("b", 0.0)),
+    c_(sigmaDictionary_.lookupOrDefault<scalar>("c", 0.0)),
+    d_(sigmaDictionary_.lookupOrDefault<scalar>("d", 0.0)),
+    TName_(sigmaDictionary_.lookupOrDefault<word>("T", "T")),
+    por_(sigmaDictionary_.lookup("porosity")),
+    phi_(sigmaDictionary_.lookup("phi")),
+    Zii_(sigmaDictionary_.lookup("Zii"))
 {}
 
 

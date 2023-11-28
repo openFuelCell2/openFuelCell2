@@ -40,10 +40,10 @@ Foam::turbulentDispersionModel::New
     Info<< "Selecting turbulentDispersionModel for "
         << pair << ": " << turbulentDispersionModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(turbulentDispersionModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(turbulentDispersionModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown turbulentDispersionModelType type "
@@ -53,7 +53,7 @@ Foam::turbulentDispersionModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 

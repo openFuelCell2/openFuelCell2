@@ -47,10 +47,10 @@ Foam::diameterModels::binaryBreakupModel::New
     const dictionary& dict
 )
 {
-    auto* ctorPtr =
-        dictionaryConstructorTable(type);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(type);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown binary breakup model type "
@@ -60,7 +60,7 @@ Foam::diameterModels::binaryBreakupModel::New
             << exit(FatalError);
     }
 
-    return autoPtr<binaryBreakupModel>(ctorPtr(popBal, dict));
+    return autoPtr<binaryBreakupModel>(cstrIter()(popBal, dict));
 }
 
 

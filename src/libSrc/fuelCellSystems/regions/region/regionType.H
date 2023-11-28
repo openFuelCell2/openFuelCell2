@@ -58,10 +58,12 @@ class regionType
 :
     public fvMesh
 {
-    // Private functions
+    // Private Member Functions
 
-      //- IOobject
-      IOobject createIOobject(const fvMesh&) const;
+        static typeIOobject<IOdictionary> readRegionPropertiesDict
+        (
+            const objectRegistry& obr
+        );
 
 protected:
         //- mesh

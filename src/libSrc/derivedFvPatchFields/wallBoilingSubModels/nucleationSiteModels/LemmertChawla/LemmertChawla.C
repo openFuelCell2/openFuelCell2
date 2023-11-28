@@ -5,9 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
-    Copyright (C) 2020 OpenCFD Ltd.
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -57,7 +54,21 @@ Foam::wallBoilingModels::nucleationSiteModels::LemmertChawla::LemmertChawla
 )
 :
     nucleationSiteModel(),
-    Cn_(dict.getOrDefault<scalar>("Cn", 1))
+    Cn_(dict.lookupOrDefault<scalar>("Cn", 1)),
+    NRef_(dict.lookupOrDefault<scalar>("NRef", 9.922e5)),
+    deltaTRef_(dict.lookupOrDefault<scalar>("deltaTRef", 10))
+{}
+
+
+Foam::wallBoilingModels::nucleationSiteModels::LemmertChawla::LemmertChawla
+(
+    const LemmertChawla& model
+)
+:
+    nucleationSiteModel(),
+    Cn_(model.Cn_),
+    NRef_(model.NRef_),
+    deltaTRef_(model.deltaTRef_)
 {}
 
 
@@ -77,13 +88,25 @@ Foam::wallBoilingModels::nucleationSiteModels::LemmertChawla::N
     const label patchi,
     const scalarField& Tl,
     const scalarField& Tsatw,
-    const scalarField& L
+    const scalarField& L,
+    const scalarField& dDep,
+    const scalarField& fDep
 ) const
 {
     const fvPatchScalarField& Tw =
         liquid.thermo().T().boundaryField()[patchi];
 
-    return Cn_*9.922e5*pow(max((Tw - Tsatw)/10, scalar(0)), 1.805);
+    return Cn_*NRef_*pow(max((Tw - Tsatw)/deltaTRef_, scalar(0)), 1.805);
+}
+
+
+void Foam::wallBoilingModels::nucleationSiteModels::LemmertChawla::
+    write(Ostream& os) const
+{
+    nucleationSiteModel::write(os);
+    writeKeyword(os, "Cn") << Cn_ << token::END_STATEMENT << nl;
+    writeKeyword(os, "NRef") << NRef_ << token::END_STATEMENT << nl;
+    writeKeyword(os, "deltaTRef") << deltaTRef_ << token::END_STATEMENT << nl;
 }
 
 

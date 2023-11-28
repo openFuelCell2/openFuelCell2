@@ -48,13 +48,13 @@ Foam::nernstModel::New
     );
 
     Info<< "Selecting nernstModel for "
-        << phase1.mesh().name() << ": "
+        << phase1.name() << " and " << phase2.name() << ": "
         << nernstModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(nernstModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(nernstModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown nernstModelType type "
@@ -64,7 +64,7 @@ Foam::nernstModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(phase1, phase2, dict);
+    return cstrIter()(phase1, phase2, dict);
 }
 
 

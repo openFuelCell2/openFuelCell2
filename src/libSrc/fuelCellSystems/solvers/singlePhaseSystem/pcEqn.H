@@ -1,4 +1,4 @@
-if (!pimple_.SIMPLErho())
+if (!pimple_.simpleRho())
 {
     rho = thermo.rho();
 }
@@ -12,7 +12,7 @@ volScalarField rAtU(1.0/(1.0/rAU - UEqn.H1()));
 surfaceScalarField rhorAUf("rhorAUf", fvc::interpolate(rho*rAU));
 volVectorField HbyA(constrainHbyA(rAU*UEqn.H(), U, p));
 
-if (pimple_.nCorrPISO() <= 1)
+if (pimple_.nCorrPiso() <= 1)
 {
     tUEqn.clear();
 }
@@ -49,7 +49,7 @@ constrainPressure(p_rgh_, rho, U, phiHbyA, rhorAtU, MRF_);
         fvc::ddt(rho) + psi*correction(fvm::ddt(p_rgh_))
       + fvc::div(phiHbyA)
      ==
-        fvOptions(psi, p_rgh_, rho.name())
+        fvModels.source(psi, p_rgh_, rho.name())
       + dmdt
     );
 
@@ -57,7 +57,7 @@ constrainPressure(p_rgh_, rho, U, phiHbyA, rhorAtU, MRF_);
     {
         fvScalarMatrix pEqn(pDDtEqn - fvm::laplacian(rhorAtU, p_rgh_));
 
-        pEqn.solve(mesh.solver(p_rgh_.select(pimple_.finalInnerIter())));
+        pEqn.solve(mesh.solution().solverDict(p_rgh_.select(pimple_.finalInnerIter())));
 
         if (pimple_.finalNonOrthogonalIter())
         {
@@ -79,12 +79,12 @@ p_rgh_.relax();
 
 U = HbyA - rAtU*fvc::grad(p_rgh_);
 U.correctBoundaryConditions();
-fvOptions.correct(U);
+fvConstraints.constrain(U);
 
-thermo.correctRho(psi*p - psip0, rhoMin, rhoMax) ;
-rho = thermo.rho();
+thermo.correctRho(psi*p - psip0) ;
+//rho = thermo.rho();
 
 if (thermo.dpdt())
 {
-    dpdt = fvc::ddt(p);
+    dpdt = fvc::ddt(p_rgh_);
 }

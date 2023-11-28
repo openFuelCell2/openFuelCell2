@@ -43,10 +43,10 @@ Foam::autoPtr<Foam::diameterModel> Foam::diameterModel::New
         << ": "
         << diameterModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(diameterModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(diameterModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
            << "Unknown diameterModelType type "
@@ -56,7 +56,7 @@ Foam::autoPtr<Foam::diameterModel> Foam::diameterModel::New
            << exit(FatalError);
     }
 
-    return ctorPtr
+    return cstrIter()
     (
         dict.optionalSubDict(diameterModelType + "Coeffs"),
         phase

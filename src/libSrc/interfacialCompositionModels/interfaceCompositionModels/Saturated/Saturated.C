@@ -36,10 +36,10 @@ wRatioByP() const
     (
         "W",
         dimMass/dimMoles,
-        this->thermo_.composition().W(saturatedIndex_)
+        this->thermo_.composition().Wi(saturatedIndex_)
     );
 
-    return Wi/this->thermo_.W()/this->thermo_.p();
+    return Wi/this->pair_.phase1().thermo().W()/this->thermo_.p();
 }
 
 

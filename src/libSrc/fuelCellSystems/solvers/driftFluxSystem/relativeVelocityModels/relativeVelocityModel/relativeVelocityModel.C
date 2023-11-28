@@ -108,10 +108,10 @@ Foam::autoPtr<Foam::relativeVelocityModel> Foam::relativeVelocityModel::New
 
     Info<< "Selecting relative velocity model " << modelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(modelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(modelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown time scale model type " << modelType
@@ -124,7 +124,7 @@ Foam::autoPtr<Foam::relativeVelocityModel> Foam::relativeVelocityModel::New
     return
         autoPtr<relativeVelocityModel>
         (
-            ctorPtr
+            cstrIter()
             (
                 dict.optionalSubDict(modelType + "Coeffs"),
                 mixture

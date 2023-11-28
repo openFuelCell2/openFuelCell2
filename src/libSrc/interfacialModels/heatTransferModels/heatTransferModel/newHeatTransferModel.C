@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::heatTransferModel> Foam::heatTransferModel::New
     Info<< "Selecting heatTransferModel for "
         << pair << ": " << heatTransferModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(heatTransferModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(heatTransferModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown heatTransferModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::heatTransferModel> Foam::heatTransferModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 

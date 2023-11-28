@@ -35,38 +35,33 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "makeReactionThermo.H"
-
 #include "thermoPhysicsTypes.H"
 
 #include "rhoConst.H"
 #include "perfectFluid.H"
 
 #include "pureMixture.H"
-#include "multiComponentMixture.H"
-#include "reactingMixture.H"
+#include "coefficientMultiComponentMixture.H"
 #include "SpecieMixture.H"
 
 #include "rhoThermo.H"
 #include "rhoReactionThermo.H"
 #include "heRhoThermo.H"
 
+#include "forThermo.H"
+#include "makeThermo.H"
+#include "makeReactionThermo.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeActivationOverpotentialModel(Model, Thermo)           \
+#define makeActivationOverpotentialModel(Model, Thermo)                        \
                                                                                \
     /* Composition at an interface with a multi-component mixture */           \
-    makeActivationOverpotentialType                                         \
+    makeActivationOverpotentialType                                            \
     (                                                                          \
         Model,                                                                 \
         heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo                                        \
-    );                                                                         \
-    makeActivationOverpotentialType                                         \
-    (                                                                          \
-        Model,                                                                 \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo                                              \
+        coefficientMultiComponentMixture, Thermo                               \
     );
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -85,6 +80,11 @@ namespace Foam
         ButlerVolmer,
         constGasEThermoPhysics
     );
+    makeActivationOverpotentialModel
+    (
+        ButlerVolmer,
+        rPolyEThermoPhysics
+    );
 
     makeActivationOverpotentialModel
     (
@@ -96,6 +96,11 @@ namespace Foam
         Tafel,
         constGasEThermoPhysics
     );
+    makeActivationOverpotentialModel
+    (
+        Tafel,
+        rPolyEThermoPhysics
+    );
 
     makeActivationOverpotentialModel
     (
@@ -106,6 +111,11 @@ namespace Foam
     (
         Constant,
         constGasEThermoPhysics
+    );
+    makeActivationOverpotentialModel
+    (
+        Constant,
+        rPolyEThermoPhysics
     );
 }
 

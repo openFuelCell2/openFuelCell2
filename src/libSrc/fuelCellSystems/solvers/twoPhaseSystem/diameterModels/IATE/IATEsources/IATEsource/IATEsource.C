@@ -25,7 +25,7 @@ License
 
 #include "IATEsource.H"
 #include "fvMatrix.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 #include "uniformDimensionedFields.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -50,10 +50,10 @@ Foam::diameterModels::IATEsource::New
     const dictionary& dict
 )
 {
-    auto* ctorPtr =
-        dictionaryConstructorTable(type);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(type);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown IATE source type "
@@ -63,7 +63,7 @@ Foam::diameterModels::IATEsource::New
             << exit(FatalError);
     }
 
-    return autoPtr<IATEsource>(ctorPtr(iate, dict));
+    return autoPtr<IATEsource>(cstrIter()(iate, dict));
 }
 
 

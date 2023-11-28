@@ -34,78 +34,46 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "makeReactionThermo.H"
-
 #include "thermoPhysicsTypes.H"
 
 #include "rhoConst.H"
 #include "perfectFluid.H"
 
 #include "pureMixture.H"
-#include "multiComponentMixture.H"
-#include "reactingMixture.H"
+#include "coefficientMultiComponentMixture.H"
 #include "SpecieMixture.H"
 
 #include "rhoThermo.H"
 #include "rhoReactionThermo.H"
 #include "heRhoThermo.H"
 
+#include "forThermo.H"
+#include "makeThermo.H"
+#include "makeReactionThermo.H"
+
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#define makeSpecieNernstModel(Model, Thermo1, Thermo2)           \
+#define makeSpecieNernstModel(Model, Thermo1, Thermo2)                         \
                                                                                \
     /* Composition at an interface with a multi-component mixture */           \
-    makeSpecieNernstType                                         \
+    makeSpecieNernstType                                                       \
     (                                                                          \
         Model,                                                                 \
         heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo1,                                        \
+        coefficientMultiComponentMixture, Thermo1,                             \
         heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo2                                         \
-    );                                                                         \
-    makeSpecieNernstType                                         \
-    (                                                                          \
-        Model,                                                                 \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo1,                                              \
-        heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo2                                         \
-    );                                                                         \
-                                                                               \
-    /* Composition at an interface with a reacting mixture */                  \
-    makeSpecieNernstType                                         \
-    (                                                                          \
-        Model,                                                                 \
-        heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo1,                                        \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo2                                               \
-    );                                                                         \
-    makeSpecieNernstType                                         \
-    (                                                                          \
-        Model,                                                                 \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo1,                                              \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo2                                               \
+        coefficientMultiComponentMixture, Thermo2                              \
     );
 
-#define makeNernstModel(Model, Thermo1, Thermo2)                 \
+#define makeNernstModel(Model, Thermo1, Thermo2)                               \
                                                                                \
     /* Composition at an interface with a pure mixture */                      \
-    makeNernstType                                               \
+    makeNernstType                                                             \
     (                                                                          \
         Model,                                                                 \
         heRhoThermo, rhoReactionThermo,                                        \
-        multiComponentMixture, Thermo1,                                        \
-        heRhoThermo, rhoThermo,                                                \
-        pureMixture, Thermo2                                                   \
-    );                                                                         \
-    makeNernstType                                               \
-    (                                                                          \
-        Model,                                                                 \
-        heRhoThermo, rhoReactionThermo,                                        \
-        reactingMixture, Thermo1,                                              \
+        coefficientMultiComponentMixture, Thermo1,                             \
         heRhoThermo, rhoThermo,                                                \
         pureMixture, Thermo2                                                   \
     );                                                                         \
@@ -119,12 +87,6 @@ namespace Foam
 {
     using namespace nernstModels;
 
-    makeNernstModel
-    (
-        standard,
-        gasEThermoPhysics,
-        constFluidEThermoPhysics
-    );
     makeSpecieNernstModel
     (
         standard,
@@ -135,44 +97,26 @@ namespace Foam
     (
         standard,
         constGasEThermoPhysics,
-        constFluidEThermoPhysics
-    );
-    makeSpecieNernstModel
-    (
-        standard,
-        constGasEThermoPhysics,
         constGasEThermoPhysics
     );
     makeNernstModel
     (
         standard,
-        gasEThermoPhysics,
-        icoPoly8EThermoPhysics
+        constGasEThermoPhysics,
+        rPolyHThermoPhysics
     );
-    makeSpecieNernstModel
+    makeNernstModel
     (
         standard,
-        constGasEThermoPhysics,
-        icoPoly8EThermoPhysics
+        gasEThermoPhysics,
+        rPolyHThermoPhysics
     );
 
-    makeNernstModel
-    (
-        fixedValue,
-        gasEThermoPhysics,
-        constFluidEThermoPhysics
-    );
     makeSpecieNernstModel
     (
         fixedValue,
         gasEThermoPhysics,
         gasEThermoPhysics
-    );
-    makeSpecieNernstModel
-    (
-        fixedValue,
-        constGasEThermoPhysics,
-        constFluidEThermoPhysics
     );
     makeSpecieNernstModel
     (
@@ -184,13 +128,13 @@ namespace Foam
     (
         fixedValue,
         gasEThermoPhysics,
-        icoPoly8EThermoPhysics
+        rPolyHThermoPhysics
     );
-    makeSpecieNernstModel
+    makeNernstModel
     (
         fixedValue,
         constGasEThermoPhysics,
-        icoPoly8EThermoPhysics
+        rPolyHThermoPhysics
     );
 }
 

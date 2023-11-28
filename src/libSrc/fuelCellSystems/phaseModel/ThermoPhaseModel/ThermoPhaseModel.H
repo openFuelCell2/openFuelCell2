@@ -55,7 +55,8 @@ class rhoThermo;
 template<class BasePhaseModel, class ThermoType>
 class ThermoPhaseModel
 :
-    public BasePhaseModel
+    public BasePhaseModel,
+    public viscosity
 {
 protected:
 
@@ -66,6 +67,8 @@ protected:
 
 
 public:
+
+    typedef ThermoType thermoModel;
 
     // Constructors
 
@@ -138,28 +141,6 @@ public:
                 const scalarField& alphat,
                 const label patchi
             ) const;
-
-            //- Return the thermal diffusivity for enthalpy
-            virtual tmp<volScalarField> alpha() const;
-
-            //- Return the thermal diffusivity for enthalpy on a patch
-            virtual tmp<scalarField> alpha(const label patchi) const;
-
-            //- Return the effective thermal diffusivity for enthalpy, given the
-            //  turbulent thermal diffusivity
-            virtual tmp<volScalarField> alphaEff
-            (
-                const volScalarField& alphat
-            ) const;
-
-            //- Return the effective thermal diffusivity for enthalpy on a
-            //  patch, given the turbulent thermal diffusivity
-            virtual tmp<scalarField> alphaEff
-            (
-                const scalarField& alphat,
-                const label patchi
-            ) const;
-
 
         // Turbulence (prevents compiler warnings)
 

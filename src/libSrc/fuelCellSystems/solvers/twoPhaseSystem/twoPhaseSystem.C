@@ -53,7 +53,7 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
     volScalarField& alpha1 = phase1;
     volScalarField& alpha2 = phase2;
 
-    const dictionary& alphaControls = mesh_.solverDict(alpha1.name());
+    const dictionary& alphaControls = mesh_.solution().solverDict(alpha1.name());
 
     label nAlphaSubCycles(readLabel(alphaControls.lookup("nAlphaSubCycles")));
     label nAlphaCorr(readLabel(alphaControls.lookup("nAlphaCorr")));
@@ -267,11 +267,11 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.clip(phase1.residualAlpha().value(), 1);
+        alpha1.maxMin(phase1.residualAlpha().value(), 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.clip(phase2.residualAlpha().value(), 1);
+        alpha2.maxMin(phase2.residualAlpha().value(), 1);
     }
 }
 
@@ -320,7 +320,7 @@ Foam::twoPhaseSystem::twoPhaseSystem
     phase2_.volScalarField::operator=(scalar(1) - phase1_);
 
     volScalarField& alpha1 = phase1_;
-    mesh.setFluxRequired(alpha1.name());
+    mesh.schemes().setFluxRequired(alpha1.name());
 }
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
@@ -420,7 +420,7 @@ void Foam::twoPhaseSystem::solve()
 
     Switch implicitPhasePressure
     (
-        mesh.solverDict(alpha1.name()).lookupOrDefault<Switch>
+        mesh.solution().solverDict(alpha1.name()).lookupOrDefault<Switch>
         (
             "implicitPhasePressure", false
         )

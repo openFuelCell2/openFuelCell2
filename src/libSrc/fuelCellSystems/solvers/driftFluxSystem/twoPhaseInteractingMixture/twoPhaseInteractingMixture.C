@@ -52,7 +52,7 @@ Foam::twoPhaseInteractingMixture::phi(const volVectorField& U) const
         IOobject::NO_READ
     );
 
-    if (phiHeader.typeHeaderOk<surfaceScalarField>(true))
+    if (phiHeader.headerOk())
     {
         Info<< "Reading face flux field " << phiName << endl;
 
@@ -164,6 +164,5 @@ twoPhaseInteractingMixture
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
-
 
 // ************************************************************************* //

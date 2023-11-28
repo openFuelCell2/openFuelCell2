@@ -28,9 +28,8 @@ License
 #include "addToRunTimeSelectionTable.H"
 
 #include "phaseSystem.H"
-#include "compressibleTurbulenceModel.H"
-#include "ThermalDiffusivity.H"
-#include "PhaseCompressibleTurbulenceModel.H"
+#include "compressibleMomentumTransportModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -73,38 +72,10 @@ fixedMultiPhaseHeatFluxFvPatchScalarField
 )
 :
     fixedValueFvPatchScalarField(psf, p, iF, mapper),
-    q_(psf.q_, mapper),
+    q_(mapper(psf.q_)),
     relax_(psf.relax_),
     Tmin_(psf.Tmin_)
 {}
-
-
-Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::
-fixedMultiPhaseHeatFluxFvPatchScalarField
-(
-    const fixedMultiPhaseHeatFluxFvPatchScalarField& psf
-)
-:
-    fixedValueFvPatchScalarField(psf),
-    q_(psf.q_),
-    relax_(psf.relax_),
-    Tmin_(psf.Tmin_)
-{}
-
-
-Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::
-fixedMultiPhaseHeatFluxFvPatchScalarField
-(
-    const fixedMultiPhaseHeatFluxFvPatchScalarField& psf,
-    const DimensionedField<scalar, volMesh>& iF
-)
-:
-    fixedValueFvPatchScalarField(psf, iF),
-    q_(psf.q_),
-    relax_(psf.relax_),
-    Tmin_(psf.Tmin_)
-{}
-
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -167,12 +138,37 @@ void Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::updateCoeffs()
 }
 
 
+void Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::autoMap
+(
+    const fvPatchFieldMapper& m
+)
+{
+    fixedValueFvPatchScalarField::autoMap(m);
+    m(q_, q_);
+}
+
+
+void Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::rmap
+(
+    const fvPatchScalarField& ptf,
+    const labelList& addr
+)
+{
+    fixedValueFvPatchScalarField::rmap(ptf, addr);
+
+    const fixedMultiPhaseHeatFluxFvPatchScalarField& mptf =
+        refCast<const fixedMultiPhaseHeatFluxFvPatchScalarField>(ptf);
+
+    q_.rmap(mptf.q_, addr);
+}
+
+
 void Foam::fixedMultiPhaseHeatFluxFvPatchScalarField::write(Ostream& os) const
 {
     fvPatchField<scalar>::write(os);
-    os.writeKeyword("relax") << relax_ << token::END_STATEMENT << nl;
-    q_.writeEntry("q", os);
-    writeEntry("value", os);
+    writeEntry(os, "relax", relax_);
+    writeEntry(os, "q", q_);
+    writeEntry(os, "value", *this);
 }
 
 

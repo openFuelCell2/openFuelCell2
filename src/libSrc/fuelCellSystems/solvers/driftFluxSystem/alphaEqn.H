@@ -4,7 +4,7 @@
     volScalarField& alpha1 = phase1_;
     volScalarField& alpha2 = phase2_;
 
-    const dictionary& alphaControls = mesh_.solverDict(alpha1.name());
+    const dictionary& alphaControls = mesh_.solution().solverDict(alpha1.name());
 
     label nAlphaSubCycles(readLabel(alphaControls.lookup("nAlphaSubCycles")));
     label nAlphaCorr(readLabel(alphaControls.lookup("nAlphaCorr")));
@@ -188,10 +188,10 @@
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.clip(SMALL, 1);
+        alpha1.maxMin(SMALL, 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.clip(SMALL, 1);
+        alpha2.maxMin(SMALL, 1);
     }
 }

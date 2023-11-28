@@ -47,10 +47,10 @@ Foam::activationOverpotentialModel::New
     Info<< "Selecting activationOverpotentialModel: "
         << activationOverpotentialModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(activationOverpotentialModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(activationOverpotentialModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown activationOverpotentialModelType type "
@@ -60,7 +60,7 @@ Foam::activationOverpotentialModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(phase1, dict);
+    return cstrIter()(phase1, dict);
 }
 
 

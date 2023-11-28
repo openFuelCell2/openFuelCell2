@@ -43,7 +43,7 @@ Contributors
 #include "fuelCellSystem.H"
 #include "phaseSystem.H"
 #include "regionCourantNo.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 #include "pimpleControl.H"
 #include "localEulerDdtScheme.H"
 #include "fvcSmooth.H"

@@ -5,8 +5,6 @@
     \\  /    A nd           | Copyright held by the original author
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2016-2018 OpenFOAM Foundation
--------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
 
@@ -54,6 +52,13 @@ Foam::wallBoilingModels::partitioningModels::
 phaseFraction::phaseFraction(const dictionary& dict)
 :
     partitioningModel()
+{}
+
+
+Foam::wallBoilingModels::partitioningModels::
+phaseFraction::phaseFraction(const phaseFraction& model)
+:
+    partitioningModel(model)
 {}
 
 

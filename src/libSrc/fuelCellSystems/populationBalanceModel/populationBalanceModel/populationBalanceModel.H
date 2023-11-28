@@ -158,7 +158,7 @@ SourceFiles
 #include "phasePair.H"
 #include "HashPtrTable.H"
 #include "pimpleControl.H"
-#include "phaseCompressibleTurbulenceModelFwd.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -425,7 +425,7 @@ public:
         ) const;
 
         //- Return reference to turbulence model of the continuous phase
-        const phaseCompressibleTurbulenceModel& continuousTurbulence() const;
+        const phaseCompressibleMomentumTransportModel& continuousTurbulence() const;
 
         //- Solve the population balance equation
         void solve();

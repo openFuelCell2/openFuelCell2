@@ -34,18 +34,7 @@ namespace Foam
 {
     defineTypeNameAndDebug(masterRegionToCell, 0);
     addToRunTimeSelectionTable(topoSetSource, masterRegionToCell, word);
-    addToRunTimeSelectionTable(topoSetSource, masterRegionToCell, istream);
 }
-
-
-Foam::topoSetSource::addToUsageTable Foam::masterRegionToCell::usage_
-(
-    masterRegionToCell::typeName,
-    "\n    Usage: masterRegionToCell zone\n\n"
-    "    Select all cells in the cellZone."
-    " Note:accepts wildcards for zone.\n\n"
-);
-
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
@@ -139,17 +128,7 @@ Foam::masterRegionToCell::masterRegionToCell
     const dictionary& dict
 )
 :
-    masterRegionToCell(mesh, dict.lookup("name"))
-{}
-
-
-Foam::masterRegionToCell::masterRegionToCell
-(
-    const polyMesh& mesh,
-    Istream& is
-)
-:
-    masterRegionToCell(mesh, word(checkIs(is)))
+    masterRegionToCell(mesh, word(dict.lookup("name")))
 {}
 
 

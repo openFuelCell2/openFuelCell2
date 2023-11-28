@@ -38,7 +38,7 @@ SourceFiles
 #define twoPhaseInteractingMixture_H
 
 #include "mixtureViscosityModel.H"
-#include "compressibleTransportModel.H"
+#include "viscosityModel.H"
 #include "phaseSystem.H"
 #include "volFields.H"
 
@@ -53,7 +53,7 @@ namespace Foam
 
 class twoPhaseInteractingMixture
 :
-    public compressibleTransportModel
+    public viscosity
 {
 private:
 
@@ -209,7 +209,7 @@ public:
         }
 
         //- Return the mixture viscosity for patch
-        virtual tmp<scalarField> nu(const label patchi) const
+        tmp<scalarField> nu(const label patchi) const
         {
             return mu_.boundaryField()[patchi]/rho(patchi);
         }
@@ -219,6 +219,12 @@ public:
         {
             mu_ = phasec()*phasec().thermo().mu()
                 + phased()*phased().thermo().mu();
+        }
+
+        //- Read
+        virtual bool read()
+        {
+            return true;
         }
 };
 

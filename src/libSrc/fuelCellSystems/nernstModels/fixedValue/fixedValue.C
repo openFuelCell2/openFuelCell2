@@ -71,17 +71,24 @@ void Foam::nernstModels::fixedValue<Thermo, OtherThermo>::correct()
 
         if (nameI != "e" && nameI != water)
         {
+            const typename Thermo::thermoType& localThermo =
+                this->getLocalThermo
+                (
+                    nameI,
+                    this->thermo_
+                );
+
             label speciesI = this->thermo_.composition().species()[nameI];
-            const scalar Wi = this->thermo_.composition().W(speciesI)/1000.0;
+            const scalar Wi = this->thermo_.composition().Wi(speciesI)/1000.0;
             scalar stoiCoeffI = this->rxnList()[nameI];
 
             forAll(this->deltaH(), cellI)
             {
                 this->deltaH()[cellI] +=
-                    stoiCoeffI*this->thermo_.composition().Hc(speciesI)*Wi;
+                    stoiCoeffI*localThermo.Ha(p[cellI], T[cellI])*Wi;
 
                 this->deltaS()[cellI] +=
-                    stoiCoeffI*this->thermo_.composition().S(speciesI, p[cellI], T[cellI])*Wi;
+                    stoiCoeffI*localThermo.S(p[cellI], T[cellI])*Wi;
             }
 
             const scalarField& X = phase1_.X(nameI);
@@ -103,12 +110,12 @@ void Foam::nernstModels::fixedValue<Thermo, OtherThermo>::correct()
             );
 
         label speciesI = this->thermo_.composition().species()[water];
-        const scalar Wi = this->thermo_.composition().W(speciesI)/1000.0;
+        const scalar Wi = this->thermo_.composition().Wi(speciesI)/1000.0;
         scalar stoiCoeffI = this->rxnList()[water];
 
         forAll(this->deltaH(), cellI)
         {
-            this->deltaH()[cellI] += stoiCoeffI*otherLocalThermo.Hc()*Wi;
+            this->deltaH()[cellI] += stoiCoeffI*otherLocalThermo.Ha(p[cellI], T[cellI])*Wi;
             this->deltaS()[cellI] += stoiCoeffI*otherLocalThermo.S(p[cellI], T[cellI])*Wi;
         }
 

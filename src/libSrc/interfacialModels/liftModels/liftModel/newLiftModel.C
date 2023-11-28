@@ -39,10 +39,10 @@ Foam::autoPtr<Foam::liftModel> Foam::liftModel::New
     Info<< "Selecting liftModel for "
         << pair << ": " << liftModelType << endl;
 
-    auto* ctorPtr =
-        dictionaryConstructorTable(liftModelType);
+    dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(liftModelType);
 
-    if (!ctorPtr)
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
     {
         FatalErrorInFunction
             << "Unknown liftModelType type "
@@ -52,7 +52,7 @@ Foam::autoPtr<Foam::liftModel> Foam::liftModel::New
             << exit(FatalError);
     }
 
-    return ctorPtr(dict, pair);
+    return cstrIter()(dict, pair);
 }
 
 

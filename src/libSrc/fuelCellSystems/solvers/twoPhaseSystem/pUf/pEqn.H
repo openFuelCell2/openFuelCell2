@@ -75,8 +75,7 @@ while (pimple_.correct())
     surfaceScalarField rhof2(fvc::interpolate(rho2));
 
     // Correct fixed-flux BCs to be consistent with the velocity BCs
-    MRF_.correctBoundaryFlux(U1, phi1);
-    MRF_.correctBoundaryFlux(U2, phi2);
+    correctBoundaryFlux();
 
     const surfaceScalarField alpharAUf1
     (
@@ -205,9 +204,9 @@ while (pimple_.correct())
 
     // Add option sources
     {
-        if (fvOptions.appliesToField(rho1.name()))
+        if (fvModels.addsSupToField(rho1.name()))
         {
-            tmp<fvScalarMatrix> optEqn1 = fvOptions(alpha1, rho1);
+            tmp<fvScalarMatrix> optEqn1 = fvModels.source(alpha1, rho1);
             if (pEqnComp1.valid())
             {
                 pEqnComp1.ref() -= (optEqn1 & rho1)/rho1;
@@ -217,9 +216,9 @@ while (pimple_.correct())
                 pEqnComp1 = fvm::Su(- (optEqn1 & rho1)/rho1, p_rgh_);
             }
         }
-        if (fvOptions.appliesToField(rho2.name()))
+        if (fvModels.addsSupToField(rho2.name()))
         {
-            tmp<fvScalarMatrix> optEqn2 = fvOptions(alpha2, rho2);
+            tmp<fvScalarMatrix> optEqn2 = fvModels.source(alpha2, rho2);
             if (pEqnComp2.valid())
             {
                 pEqnComp2.ref() -= (optEqn2 & rho2)/rho2;
@@ -304,13 +303,9 @@ while (pimple_.correct())
                 pEqn += pEqnComp2();
             }
 
-            pEqn.relax();
+            //pEqn.relax();
 
-            Foam::solve
-            (
-                pEqn,
-                mesh.solver(p_rgh_.select(pimple_.finalInnerIter()))
-            );
+            pEqn.solve(mesh.solution().solverDict(p_rgh_.select(pimple_.finalInnerIter())));
         }
 
         if (pimple_.finalNonOrthogonalIter())
@@ -340,11 +335,11 @@ while (pimple_.correct())
 
             U1 = fvc::reconstruct(MRF_.absolute(phi1));
             U1.correctBoundaryConditions();
-            fvOptions.correct(U1);
+            fvConstraints.constrain(U1);
 
             U2 = fvc::reconstruct(MRF_.absolute(phi2));
             U2.correctBoundaryConditions();
-            fvOptions.correct(U2);
+            fvConstraints.constrain(U2);
 
             // Set the phase dilatation rates
             if (pEqnComp1.valid())

@@ -90,7 +90,7 @@ void Foam::diameterModels::driftModels::constantDrift::addToDriftRate
     phaseModel& phase = const_cast<phaseModel&>(fi.phase());
     volScalarField& rho = phase.thermoRef().rho();
 
-    driftRate += (popBal_.fluid().fvOptions()(phase, rho)&rho)/(N_*rho);
+    driftRate += (popBal_.fluid().fvModels().source(phase, rho)&rho)/(N_*rho);
 }
 
 

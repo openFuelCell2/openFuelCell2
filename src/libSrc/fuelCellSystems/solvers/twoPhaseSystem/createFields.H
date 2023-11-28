@@ -1,5 +1,4 @@
-const uniformDimensionedVectorField& g =
-  runTime.lookupObject<uniformDimensionedVectorField>("g");
+const uniformDimensionedVectorField& g = g_;
 
 #include "readhRef.H"
 
@@ -14,4 +13,5 @@ dimensionedScalar pMin
 
 volScalarField& p = phase1_.thermoRef().p();
 
-fv::options& fvOptions = this->fvOptions();
+Foam::fvModels& fvModels = this->fvModels(mesh);
+Foam::fvConstraints& fvConstraints = this->fvConstraints(mesh);

@@ -286,22 +286,6 @@ void Foam::StationaryPhaseModel<BasePhaseModel>::divU
 
 template<class BasePhaseModel>
 Foam::tmp<Foam::volScalarField>
-Foam::StationaryPhaseModel<BasePhaseModel>::mut() const
-{
-    return zeroVolField<scalar>("continuityError", dimDynamicViscosity);
-}
-
-
-template<class BasePhaseModel>
-Foam::tmp<Foam::volScalarField>
-Foam::StationaryPhaseModel<BasePhaseModel>::muEff() const
-{
-    return this->thermo().mu();
-}
-
-
-template<class BasePhaseModel>
-Foam::tmp<Foam::volScalarField>
 Foam::StationaryPhaseModel<BasePhaseModel>::nut() const
 {
     return zeroVolField<scalar>("continuityError", dimViscosity);
@@ -328,7 +312,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::scalarField>
 Foam::StationaryPhaseModel<BasePhaseModel>::kappaEff(const label patchi) const
 {
-    return this->thermo().kappa(patchi);
+    return this->thermo().kappa().boundaryField()[patchi];
 }
 
 
@@ -336,7 +320,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::volScalarField>
 Foam::StationaryPhaseModel<BasePhaseModel>::alphaEff() const
 {
-    return this->thermo().alpha();
+    return this->thermo().alphahe();
 }
 
 
@@ -344,7 +328,7 @@ template<class BasePhaseModel>
 Foam::tmp<Foam::scalarField>
 Foam::StationaryPhaseModel<BasePhaseModel>::alphaEff(const label patchi) const
 {
-    return this->thermo().alpha(patchi);
+    return this->thermo().alphahe(patchi);
 }
 
 

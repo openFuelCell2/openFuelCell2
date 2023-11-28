@@ -45,12 +45,32 @@ SourceFiles
 #define MovingPhaseModel_H
 
 #include "phaseModel.H"
-#include "phaseCompressibleTurbulenceModel.H"
+#include "PhaseThermophysicalTransportModel.H"
+#include "phaseCompressibleMomentumTransportModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
+
+// Trait for converting the ThermoModel's thermo type to the thermo type needed
+// for the thermophysical transport model type; i.e., from rho-type thermo to
+// fluid-type thermo.
+
+template<class ThermoModel>
+struct MovingPhaseModelTransportThermoModel;
+
+template<>
+struct MovingPhaseModelTransportThermoModel<rhoThermo>
+{
+    typedef fluidThermo type;
+};
+
+template<>
+struct MovingPhaseModelTransportThermoModel<rhoReactionThermo>
+{
+    typedef fluidReactionThermo type;
+};
 
 /*---------------------------------------------------------------------------*\
                        Class MovingPhaseModel Declaration
@@ -62,6 +82,16 @@ class MovingPhaseModel
     public BasePhaseModel
 {
 protected:
+
+    // Protected typedefs
+
+        //- Thermo type for the thermophysical transport model
+        typedef
+            typename MovingPhaseModelTransportThermoModel
+            <
+                typename BasePhaseModel::thermoModel
+            >::type
+            transportThermoModel;
 
     // Protected data
 
@@ -87,7 +117,17 @@ protected:
         tmp<volScalarField> divU_;
 
         //- Turbulence model
-        autoPtr<phaseCompressibleTurbulenceModel> turbulence_;
+        autoPtr<phaseCompressible::momentumTransportModel> turbulence_;
+
+        //- Thermophysical transport model
+        autoPtr
+        <
+            PhaseThermophysicalTransportModel
+            <
+                phaseCompressible::momentumTransportModel,
+                transportThermoModel
+            >
+        > thermophysicalTransport_;
 
         //- Continuity error due to the flow
         volScalarField continuityErrorFlow_;
@@ -211,12 +251,6 @@ public:
 
 
         // Turbulence
-
-            //- Return the turbulent dynamic viscosity
-            virtual tmp<volScalarField> mut() const;
-
-            //- Return the effective dynamic viscosity
-            virtual tmp<volScalarField> muEff() const;
 
             //- Return the turbulent kinematic viscosity
             virtual tmp<volScalarField> nut() const;

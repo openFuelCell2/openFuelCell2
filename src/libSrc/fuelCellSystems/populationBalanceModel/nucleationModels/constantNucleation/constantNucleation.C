@@ -67,7 +67,7 @@ constantNucleation
                 IOobject::groupName
                 (
                     "alpha",
-                    dict.get<word>("velocityGroup")
+                    dict.lookup("velocityGroup")
                 )
             ).dPtr()()
         )
@@ -110,7 +110,7 @@ Foam::diameterModels::nucleationModels::constantNucleation::addToNucleationRate
 
     nucleationRate +=
         popBal_.gamma(i, velGroup_.formFactor()*pow3(d_))
-       *(popBal_.fluid().fvOptions()(phase, rho)&rho)/rho/fi.x();
+       *(popBal_.fluid().fvModels().source(phase, rho)&rho)/rho/fi.x();
 }
 
 

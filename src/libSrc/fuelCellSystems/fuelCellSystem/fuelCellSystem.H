@@ -59,10 +59,12 @@ class fuelCellSystem
 :
     public IOdictionary
 {
-    // Private functions
+    // Private Member Functions
 
-        //- Create IO object if dictionary is present
-        IOobject createIOobject(const fvMesh& mesh) const;
+        static typeIOobject<IOdictionary> readCellPropertiesDict
+        (
+            const objectRegistry& obr
+        );
 
     // Private members
 
