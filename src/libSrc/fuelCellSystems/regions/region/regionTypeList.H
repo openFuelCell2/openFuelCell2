@@ -111,6 +111,9 @@ public:
 
         void solve();
 
+        //- Solve only electric regions
+        void solveElectric();
+
         void mapToCell(fuelCellSystem&);
 
         void mapFromCell(fuelCellSystem&);

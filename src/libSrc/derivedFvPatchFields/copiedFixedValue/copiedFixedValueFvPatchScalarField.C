@@ -71,7 +71,7 @@ Foam::copiedFixedValueFvPatchScalarField::copiedFixedValueFvPatchScalarField
     const copiedFixedValueFvPatchScalarField& awfpsf
 )
 :
-    fixedValueFvPatchScalarField(awfpsf),
+    fixedValueFvPatchScalarField(awfpsf, awfpsf.internalField()),
     sourceFieldName_(awfpsf.sourceFieldName_)
 {}
 

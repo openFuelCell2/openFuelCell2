@@ -25,17 +25,45 @@ solvers
     p_rgh
     {
         solver          PCG;
-        preconditioner  DIC;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            tolerance       2e-09;
+            relTol          0;
+            smoother        DIC;
+            nPreSweeps      1;
+            nPostSweeps     2;
+            nFinestSweeps   2;
+            cacheAgglomeration on;
+            nCellsInCoarsestLevel 10;
+            agglomerator    faceAreaPair;
+            mergeLevels     1;
+        }
         tolerance       1e-10;
-        relTol          0.001;
+        relTol          0.01;
+        maxIter         150;
     }
 
     p_rghFinal
     {
-        solver          PCG;
-        preconditioner  DIC;
+        solver          PBiCGStab;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            tolerance       2e-09;
+            relTol          0;
+            smoother        DIC;
+            nPreSweeps      1;
+            nPostSweeps     2;
+            nFinestSweeps   2;
+            cacheAgglomeration on;
+            nCellsInCoarsestLevel 10;
+            agglomerator    faceAreaPair;
+            mergeLevels     1;
+        }
         tolerance       1e-10;
         relTol          0;
+        maxIter         120;
     }
 
     "(e|h).*"
@@ -67,8 +95,10 @@ solvers
 
 PIMPLE
 {
+    momentumPredictor no;
+
     nOuterCorrectors 1;
-    nCorrectors      4;
+    nCorrectors      3;
     nNonOrthogonalCorrectors 0;
 
     consistent     	yes;
@@ -78,15 +108,14 @@ relaxationFactors
 {
     fields
     {
-        default     1;
-        p_rgh       0.5;
+         default       1;
+         p_rgh         0.7;
     }
 
     equations
     {
-        default     1;
-         "U.*"      0.7;
-         "H2.*"     0.999;
+         "U.*"         0.9;
+         "H2.*"        0.999;
     }
 }
 

@@ -63,7 +63,7 @@ public:
 
         class hash
         :
-            public Hash<phasePairKey>
+            public hasher
         {
         public:
 

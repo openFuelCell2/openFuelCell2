@@ -107,7 +107,8 @@ Foam::AnisothermalPhaseModel<BasePhaseModel>::heEqn()
     const volScalarField contErr(this->continuityError());
     const volScalarField K(this->K());
 
-    const volScalarField& rho = this->thermo().rho();
+    const tmp<volScalarField> trho(this->thermo().rho());
+    const volScalarField& rho = trho();
 
     volScalarField& he = this->thermo_->he();
 

@@ -272,6 +272,14 @@ Foam::combustionModels::electroChemicalReaction<ReactionThermo>::Qdot() const
 
 
 template<class ReactionThermo>
+Foam::tmp<Foam::volScalarField>
+Foam::combustionModels::electroChemicalReaction<ReactionThermo>::dQdotdT() const
+{
+    return eta_->dQdotdT();
+}
+
+
+template<class ReactionThermo>
 bool Foam::combustionModels::electroChemicalReaction<ReactionThermo>::read()
 {
     if (ThermoCombustion<ReactionThermo>::read())

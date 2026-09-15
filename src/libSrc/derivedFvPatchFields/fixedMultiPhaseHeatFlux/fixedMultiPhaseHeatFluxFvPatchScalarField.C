@@ -85,7 +85,7 @@ fixedMultiPhaseHeatFluxFvPatchScalarField
     const fixedMultiPhaseHeatFluxFvPatchScalarField& psf
 )
 :
-    fixedValueFvPatchScalarField(psf),
+    fixedValueFvPatchScalarField(psf, psf.internalField()),
     q_(psf.q_),
     relax_(psf.relax_),
     Tmin_(psf.Tmin_)

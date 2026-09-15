@@ -84,4 +84,25 @@ Foam::InertPhaseModel<BasePhaseModel>::Qdot() const
 }
 
 
+template<class BasePhaseModel>
+Foam::tmp<Foam::volScalarField>
+Foam::InertPhaseModel<BasePhaseModel>::dQdotdT() const
+{
+    return tmp<volScalarField>
+    (
+        new volScalarField
+        (
+            IOobject
+            (
+                IOobject::groupName("dQdotdT", this->name()),
+                this->mesh().time().timeName(),
+                this->mesh()
+            ),
+            this->mesh(),
+            dimensionedScalar("zero", dimEnergy/dimTime/dimVolume/dimTemperature, 0)
+        )
+    );
+}
+
+
 // ************************************************************************* //

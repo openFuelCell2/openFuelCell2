@@ -294,7 +294,6 @@ Foam::ThermalPhaseChangePhaseSystem<BasePhaseSystem>::heatTransfer
             }
 
             const phaseModel& phase1 = pair.phase1();
-            const phaseModel& phase2 = pair.phase2();
 
             volScalarField wMDotL
             (

@@ -83,8 +83,10 @@ Foam::tmp<Foam::volScalarField> Foam::dragModels::segregated::K() const
     const volScalarField& alpha1(pair_.phase1());
     const volScalarField& alpha2(pair_.phase2());
 
-    const volScalarField& rho1(pair_.phase1().rho());
-    const volScalarField& rho2(pair_.phase2().rho());
+    const tmp<volScalarField> trho1(pair_.phase1().rho());
+    const volScalarField& rho1(trho1());
+    const tmp<volScalarField> trho2(pair_.phase2().rho());
+    const volScalarField& rho2(trho2());
 
     tmp<volScalarField> tnu1(pair_.phase1().nu());
     tmp<volScalarField> tnu2(pair_.phase2().nu());

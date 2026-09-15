@@ -115,6 +115,9 @@ public:
         //- Heat release rate [kg/m/s3]
         virtual tmp<volScalarField> Qdot() const;
 
+        //- Temperature derivative of the heat release rate
+        virtual tmp<volScalarField> dQdotdT() const;
+
         //- Update properties from given dictionary
         virtual bool read();
 };

@@ -37,13 +37,13 @@ solvers
         tolerance       1e-10;
         relTol          0;
 
-        maxIter         100;
+        maxIter         200;
     }
 }
 
 relaxationFactors
 {
-    T               0.9999;
+//    T               0.9999;
 }
 
 

@@ -230,6 +230,9 @@ public:
         //- Heat source
         virtual tmp<volScalarField> Qdot() const;
 
+        //- Temperature derivative of the heat source (for linearization)
+        virtual tmp<volScalarField> dQdotdT() const;
+
         //- Update
         virtual void correct() = 0;
 };

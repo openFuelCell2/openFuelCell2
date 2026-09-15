@@ -75,6 +75,9 @@ class fuelCellSystem
         //- temperature source term
         fvScalarMatrix Qdot_;
 
+        //- temperature derivative of the source term
+        volScalarField dQdotdT_;
+
         //- thermal conductivity
         volScalarField k_;
 
@@ -114,6 +117,9 @@ public:
         void correct();
 
         void solve();
+
+        //- Solve only the inexpensive electric-region equations
+        void solveElectric();
 
         void setRDeltaT();
 
@@ -165,6 +171,11 @@ public:
             fvScalarMatrix& Qdot()
             {
                 return Qdot_;
+            }
+
+            volScalarField& dQdotdT()
+            {
+                return dQdotdT_;
             }
 
             regionTypeList& regions();

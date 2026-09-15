@@ -191,4 +191,56 @@ Foam::activationOverpotentialModel::Qdot() const
     return q;
 }
 
+
+Foam::tmp<Foam::volScalarField>
+Foam::activationOverpotentialModel::dQdotdT() const
+{
+    tmp<volScalarField> q
+    (
+        new volScalarField
+        (
+            IOobject
+            (
+                IOobject::groupName("dQdotdT", phase_.name()),
+                eta_.mesh().time().timeName(),
+                eta_.mesh()
+            ),
+            eta_.mesh(),
+            dimensionedScalar
+            (
+                "zero",
+                dimEnergy/dimVolume/dimTime/dimTemperature,
+                0
+            )
+        )
+    );
+
+    if (!nernst_.valid())
+    {
+        return q;
+    }
+
+    const regionType& fluidPhase = region
+    (
+        word(regions_.subDict("fluid").lookup("name"))
+    );
+
+    const scalarField& j = j_;
+
+    label znId = fluidPhase.cellZones().findZoneID(zoneName_);
+    const labelList& cells = fluidPhase.cellZones()[znId];
+
+    const scalar n = nernst_->rxnList()["e"];
+
+    forAll(cells, cellI)
+    {
+        label fluidId = cells[cellI];
+
+        q.ref()[fluidId] =
+          - j[fluidId]*nernst_->deltaS()[fluidId]/mag(n)/F;
+    }
+
+    return q;
+}
+
 // ************************************************************************* //

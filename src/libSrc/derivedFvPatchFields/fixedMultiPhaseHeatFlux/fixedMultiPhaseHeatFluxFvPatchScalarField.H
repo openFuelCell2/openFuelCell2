@@ -76,6 +76,8 @@ public:
     //- Runtime type information
     TypeName("fixedMultiPhaseHeatFlux");
 
+    using fixedValueFvPatchField<scalar>::operator=;
+
 
     // Constructors
 

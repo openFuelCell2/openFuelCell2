@@ -186,6 +186,8 @@ public:
 
         virtual void setRDeltaT() = 0;
 
+        using fvMesh::solve;
+
         virtual void solve() = 0;
 
         virtual void mapToCell(fuelCellSystem&) = 0;

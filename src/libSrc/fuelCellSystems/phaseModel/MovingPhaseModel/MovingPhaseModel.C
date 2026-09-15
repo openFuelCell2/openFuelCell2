@@ -288,7 +288,8 @@ Foam::tmp<Foam::fvVectorMatrix>
 Foam::MovingPhaseModel<BasePhaseModel>::UEqn()
 {
     const volScalarField& alpha = *this;
-    const volScalarField& rho = this->thermo().rho();
+    const tmp<volScalarField> trho(this->thermo().rho());
+    const volScalarField& rho = trho();
 
     return
     (
@@ -308,7 +309,8 @@ Foam::MovingPhaseModel<BasePhaseModel>::UfEqn()
     // As the "normal" U-eqn but without the ddt terms
 
     const volScalarField& alpha = *this;
-    const volScalarField& rho = this->thermo().rho();
+    const tmp<volScalarField> trho(this->thermo().rho());
+    const volScalarField& rho = trho();
 
     return
     (

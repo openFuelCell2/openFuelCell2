@@ -80,6 +80,22 @@ void Foam::activationOverpotentialModels::Tafel<Thermo>::correct()
     (
         ionPhase.template lookupObject<volScalarField>("J")
     );
+    scalarField& jPrimeE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jPrimeI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jSourceE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jSource")
+    );
+    scalarField& jSourceI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jSource")
+    );
 
     //- Potential fields
     const scalarField& phiE = electronPhase.template
@@ -156,23 +172,29 @@ void Foam::activationOverpotentialModels::Tafel<Thermo>::correct()
           * this->relax_
         );
 
-        //- Buttler-volmer relation
-        j[fluidId] = Foam::max
-        (
-            this->j0_.value()*
-            coeff[fluidId]*
-            Foam::pow(s[fluidId], this->gamma_)*
+        j[fluidId] =
+            this->j0_.value()
+           *coeff[fluidId]
+           *Foam::pow(s[fluidId], this->gamma_)
+           *Foam::exp
             (
-                Foam::exp(n*this->alpha_*F*eta[fluidId]/Rgas/T[fluidId])
-            )
-            ,
-            scalar(0)
-        );
+                n*this->alpha_*F*eta[fluidId]/Rgas/T[fluidId]
+            );
+        const scalar jPrime =
+            mag(n)*this->alpha_*F/Rgas/T[fluidId]*j[fluidId];
 
         //- anode side: SE = Rj, SI = -Rj
         //- cathode side: SE = -Rj, SI = Rj
         SE[electronId] = -sign*j[fluidId];
         SI[ionId] = -SE[electronId];
+        jPrimeE[electronId] = jPrime;
+        jPrimeI[ionId] = jPrime;
+        jSourceE[electronId] =
+            SE[electronId]
+          + jPrime*(phiI[ionId] + nernst[fluidId] + eta[fluidId]);
+        jSourceI[ionId] =
+            SI[ionId]
+          + jPrime*(phiE[electronId] - nernst[fluidId] - eta[fluidId]);
 
         Rj += fluidPhase.V()[fluidId] * j[fluidId];
     }

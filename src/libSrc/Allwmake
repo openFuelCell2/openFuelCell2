@@ -10,7 +10,6 @@ wmake $targetType regionCourantNo
 wmake $targetType interfacialModels
 wmake $targetType interfacialCompositionModels
 wmake $targetType derivedFvPatchFields
-wmake $targetType thermoTools
 wmake $targetType multiPhaseCompressibleTurbulenceModels
 wmake $targetType fuelCellSystems
 

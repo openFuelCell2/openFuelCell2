@@ -63,8 +63,10 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
     word alphaScheme("div(phi," + alpha1.name() + ')');
     word alpharScheme("div(phir," + alpha1.name() + ')');
 
-    const surfaceScalarField& phi1 = phase1.phi();
-    const surfaceScalarField& phi2 = phase2.phi();
+    const tmp<surfaceScalarField> tphi1(phase1.phi());
+    const surfaceScalarField& phi1 = tphi1();
+    const tmp<surfaceScalarField> tphi2(phase2.phi());
+    const surfaceScalarField& phi2 = tphi2();
 
     // Construct the dilatation rate source term
     tmp<volScalarField::Internal> tdgdt;
@@ -267,11 +269,11 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.clip(phase1.residualAlpha().value(), 1);
+        alpha1.clamp_range(phase1.residualAlpha().value(), 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.clip(phase2.residualAlpha().value(), 1);
+        alpha2.clamp_range(phase2.residualAlpha().value(), 1);
     }
 }
 

@@ -101,6 +101,8 @@ public:
 
     // Member Functions
 
+        using phaseSystem::heatTransfer;
+
         //- Return the heat transfer matrices
         virtual autoPtr<phaseSystem::heatTransferTable> heatTransfer() const;
 

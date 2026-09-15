@@ -130,6 +130,8 @@ public:
     //- Runtime type information
     TypeName("compressible::alphatPhaseChangeJayatillekeWallFunction");
 
+    using fixedValueFvPatchField<scalar>::operator=;
+
 
     // Constructors
 

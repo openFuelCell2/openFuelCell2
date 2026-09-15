@@ -76,6 +76,16 @@ int main(int argc, char *argv[])
 
     Info<< "\nStarting time loop\n" << endl;
 
+    const label nCouplingIter =
+        runTime.controlDict().lookupOrDefault<label>("nCouplingIter", 3);
+
+    if (nCouplingIter < 1)
+    {
+        FatalIOErrorInFunction(runTime.controlDict())
+            << "nCouplingIter must be at least 1"
+            << exit(FatalIOError);
+    }
+
     fuelCell.mapToCell();
 
     while (runTime.run())
@@ -96,9 +106,22 @@ int main(int argc, char *argv[])
 
         fuelCell.mapFromCell();
 
-        fuelCell.correct();
+        for (label couplingIter = 0; couplingIter < nCouplingIter; ++couplingIter)
+        {
+            Info<< "\nElectrochemical coupling iteration "
+                << couplingIter + 1 << '/' << nCouplingIter << nl << endl;
 
-        fuelCell.solve();
+            fuelCell.correct();
+
+            if (couplingIter == 0)
+            {
+                fuelCell.solve();
+            }
+            else
+            {
+                fuelCell.solveElectric();
+            }
+        }
 
         fuelCell.mapToCell();
 

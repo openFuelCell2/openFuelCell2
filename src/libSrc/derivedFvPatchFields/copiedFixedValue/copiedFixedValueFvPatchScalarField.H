@@ -64,6 +64,8 @@ public:
     //- Runtime type information
     TypeName("copiedFixedValue");
 
+    using fixedValueFvPatchField<scalar>::operator=;
+
 
     // Constructors
 

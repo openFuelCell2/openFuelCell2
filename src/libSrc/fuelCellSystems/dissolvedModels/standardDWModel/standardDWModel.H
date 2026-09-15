@@ -126,6 +126,8 @@ public:
 
     //- IO
 
+        using regIOobject::read;
+
         virtual bool read(const dictionary& dict);
 };
 

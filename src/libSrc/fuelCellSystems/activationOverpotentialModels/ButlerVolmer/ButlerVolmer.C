@@ -80,6 +80,22 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
     (
         ionPhase.template lookupObject<volScalarField>("J")
     );
+    scalarField& jPrimeE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jPrimeI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jSourceE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jSource")
+    );
+    scalarField& jSourceI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jSource")
+    );
 
     //- Potential fields
     const scalarField& phiE = electronPhase.template
@@ -156,24 +172,40 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
           * this->relax_
         );
 
-        //- Buttler-volmer relation
-        j[fluidId] = Foam::max
+        const scalar prefactor =
+            this->j0_.value()
+           *coeff[fluidId]
+           *Foam::pow(s[fluidId], this->gamma_);
+        const scalar expForward = Foam::exp
         (
-            this->j0_.value()*
-            coeff[fluidId]*
-            Foam::pow(s[fluidId], this->gamma_)*
-            (
-                Foam::exp(n*this->alpha_*F*eta[fluidId]/Rgas/T[fluidId])
-              - Foam::exp(-n*(scalar(1) - this->alpha_)*F*eta[fluidId]/Rgas/T[fluidId])
-            )
-            ,
-            scalar(0)
+            n*this->alpha_*F*eta[fluidId]/Rgas/T[fluidId]
         );
+        const scalar expReverse = Foam::exp
+        (
+            -n*(scalar(1) - this->alpha_)*F*eta[fluidId]/Rgas/T[fluidId]
+        );
+
+        // Signed Butler-Volmer current and its positive equation Jacobian.
+        j[fluidId] = prefactor*(expForward - expReverse);
+        const scalar jPrime =
+            mag(n)*F/Rgas/T[fluidId]*prefactor
+           *(
+                this->alpha_*expForward
+              + (scalar(1) - this->alpha_)*expReverse
+            );
 
         //- anode side: SE = Rj, SI = -Rj
         //- cathode side: SE = -Rj, SI = Rj
         SE[electronId] = -sign*j[fluidId];
         SI[ionId] = -SE[electronId];
+        jPrimeE[electronId] = jPrime;
+        jPrimeI[ionId] = jPrime;
+        jSourceE[electronId] =
+            SE[electronId]
+          + jPrime*(phiI[ionId] + nernst[fluidId] + eta[fluidId]);
+        jSourceI[ionId] =
+            SI[ionId]
+          + jPrime*(phiE[electronId] - nernst[fluidId] - eta[fluidId]);
 
         Rj += fluidPhase.V()[fluidId] * j[fluidId];
     }

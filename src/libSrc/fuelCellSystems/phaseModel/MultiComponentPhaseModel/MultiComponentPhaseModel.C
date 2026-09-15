@@ -152,7 +152,7 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::MultiComponentPhaseModel
     }
 
     // Diffusivity
-    diffModels_.set
+    diffModels_.reset
     (
         new diffusivityModelList
         (
@@ -246,7 +246,8 @@ Foam::MultiComponentPhaseModel<BasePhaseModel>::YiEqn(volScalarField& Yi)
 {
     const volScalarField& alpha = *this;
     const surfaceScalarField alphaRhoPhi(this->alphaRhoPhi());
-    const volScalarField& rho = this->thermo().rho();
+    const tmp<volScalarField> trho(this->thermo().rho());
+    const volScalarField& rho = trho();
 
     label speciesIndex = this->thermo_->composition().species()[Yi.member()];
 

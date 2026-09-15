@@ -123,6 +123,8 @@ public:
         //- Return the mass transfer rates for each phase
         virtual PtrList<volScalarField> dmdts() const;
 
+        using phaseSystem::heatTransfer;
+
         //- Return the heat transfer matrices
         virtual autoPtr<phaseSystem::heatTransferTable> heatTransfer() const;
 

@@ -79,6 +79,22 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
     (
         ionPhase.template lookupObject<volScalarField>(this->jName)
     );
+    scalarField& jPrimeE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jPrimeI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jPrime")
+    );
+    scalarField& jSourceE = const_cast<volScalarField&>
+    (
+        electronPhase.template lookupObject<volScalarField>("jSource")
+    );
+    scalarField& jSourceI = const_cast<volScalarField&>
+    (
+        ionPhase.template lookupObject<volScalarField>("jSource")
+    );
 
     //- Potential fields
     const scalarField& phiE = electronPhase.template
@@ -99,14 +115,11 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
     //- Current density
     scalarField& j = this->j_;
 
-    //- Access temperature and reactant
-    const scalarField& T = this->thermo_.T();
+    //- Access reactant
     const scalarField& s = this->phase_;
 
     //- Mixture mole fraction
     const scalarField W(this->thermo_.W()/1000.0);
-    //- Mixture density
-    const scalarField& rho= this->phase_.thermo().rho();
     //- Store values for all species
 
     scalarField coeff(this->phase_.mesh().nCells(), 1.0);
@@ -119,7 +132,6 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
             const dictionary& dict0 = iter().dict();
 
             scalar ksi = readScalar(dict0.lookup("ksi"));
-            scalar cRef = readScalar(dict0.lookup("cRef"));
 
             const scalarField& X = this->phase_.X(name);
 
@@ -139,7 +151,7 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
     scalar n = this->nernst_->rxnList()["e"];
     scalar sign = n/mag(n);
     scalar relax = this->relax();
-    const scalarField& j0 = this->j0().ref();
+    const scalar j0 = this->j0().value();
 
     //- The total current: volume averaged
     scalar Rj(0.0);
@@ -159,22 +171,22 @@ void Foam::activationOverpotentialModels::ChangJaffe<Thermo>::correct()
           * relax
         );
 
-        //- Buttler-volmer relation
-        j[fluidId] = Foam::max
-        (
-            j0[fluidId]
-          * coeff[fluidId]
-          * sign
-          * eta[fluidId]
-          * Foam::pow(s[fluidId], this->gamma_)
-            ,
-            scalar(0)
-        );
+        const scalar jPrime =
+            j0*coeff[fluidId]*Foam::pow(s[fluidId], this->gamma_);
+        j[fluidId] = jPrime*sign*eta[fluidId];
 
         //- anode side: SE = Rj, SI = -Rj
         //- cathode side: SE = -Rj, SI = Rj
         SE[electronId] = -sign*j[fluidId];
         SI[ionId] = -SE[electronId];
+        jPrimeE[electronId] = jPrime;
+        jPrimeI[ionId] = jPrime;
+        jSourceE[electronId] =
+            SE[electronId]
+          + jPrime*(phiI[ionId] + nernst[fluidId] + eta[fluidId]);
+        jSourceI[ionId] =
+            SI[ionId]
+          + jPrime*(phiE[electronId] - nernst[fluidId] - eta[fluidId]);
 
         Rj += fluidPhase.V()[fluidId] * j[fluidId];
     }

@@ -135,23 +135,10 @@ void Foam::dissolvedModels::standardDWModel::solve()
       - dmdt_
     );
 
-    //- Set reference values
-    {
-        const scalarField& source = dmdt_;
-        const scalarField& volume = mesh().V();
-
-        // Update the water content
-        // Water intake = water uptake
-        scalarField sum = source*volume;
-        scalar iDot(Foam::gSum(sum)/Foam::gSum(volume));
-
-        for (label i = 0; i < lambda_.size(); i++)
-        {
-            //- The option has to be true (forceReference)
-            //- otherwise, errors happen in parallel simulations
-            wEqn->setReference(i, lambda_[i] + iDot*relax_, true);    // TODO! figure out the reason
-        }
-    }
+    //- Set a single reference cell to remove the null-space of the
+    //- steady-state (Neumann) operator.  Pinning every cell (the previous
+    //- loop) effectively froze the local water-content solution.
+    wEqn->setReference(0, lambda_[0], true);
 
     wEqn->relax();
     wEqn->solve();

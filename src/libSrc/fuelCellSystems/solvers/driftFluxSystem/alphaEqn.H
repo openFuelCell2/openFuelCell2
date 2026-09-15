@@ -14,8 +14,10 @@
     word alphaScheme("div(phi," + alpha1.name() + ')');
     word alpharScheme("div(phir," + alpha1.name() + ')');
 
-    const surfaceScalarField& phi1 = phase1_.phi();
-    const surfaceScalarField& phi2 = phase2_.phi();
+    const tmp<surfaceScalarField> tphi1(phase1_.phi());
+    const surfaceScalarField& phi1 = tphi1();
+    const tmp<surfaceScalarField> tphi2(phase2_.phi());
+    const surfaceScalarField& phi2 = tphi2();
 
     // Construct the dilatation rate source term
     tmp<volScalarField::Internal> tdgdt;
@@ -188,10 +190,10 @@
             << endl;
 
         // Ensure the phase-fractions are bounded
-        alpha1.clip(SMALL, 1);
+        alpha1.clamp_range(SMALL, 1);
 
         // Update the phase-fraction of the other phase
         alpha2 = scalar(1) - alpha1;
-        alpha2.clip(SMALL, 1);
+        alpha2.clamp_range(SMALL, 1);
     }
 }

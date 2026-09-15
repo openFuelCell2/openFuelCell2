@@ -58,6 +58,7 @@ cp -r 1/phiI/polyMesh constant/phiI/.
 rm -rf 1
 rm -rf constant/phiE0
 rm -rf system/phiE0
+rm -rf system/phiI0
 rm -rf 0/phiE0
 
 # mv back the original cell zones

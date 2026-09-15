@@ -1227,7 +1227,8 @@ void Foam::diameterModels::populationBalanceModel::solve()
                 const phaseModel& phase = fi.phase();
                 const volScalarField& alpha = phase;
                 const dimensionedScalar& residualAlpha = phase.residualAlpha();
-                const volScalarField& rho = phase.thermo().rho();
+                const tmp<volScalarField> trho(phase.thermo().rho());
+                const volScalarField& rho = trho();
 
                 fvScalarMatrix sizeGroupEqn
                 (

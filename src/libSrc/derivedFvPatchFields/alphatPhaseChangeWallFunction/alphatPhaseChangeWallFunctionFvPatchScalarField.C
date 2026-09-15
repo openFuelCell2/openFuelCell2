@@ -99,7 +99,7 @@ alphatPhaseChangeWallFunctionFvPatchScalarField
     const alphatPhaseChangeWallFunctionFvPatchScalarField& awfpsf
 )
 :
-    fixedValueFvPatchScalarField(awfpsf),
+    fixedValueFvPatchScalarField(awfpsf, awfpsf.internalField()),
     dmdt_(awfpsf.dmdt_),
     mDotL_(awfpsf.mDotL_)
 {}

@@ -53,7 +53,7 @@ PISO
 
 relaxationFactors
 {
-//    lambda              0.9;
+    lambda              0.99;
 //    phi                 0.8;
 }
 

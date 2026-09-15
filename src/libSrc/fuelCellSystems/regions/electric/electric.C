@@ -103,6 +103,34 @@ Foam::regionTypes::electric::electric
         dimensionedScalar(dimCurrent/dimVol, Zero),
         zeroGradientFvPatchScalarField::typeName
     ),
+    jPrime_
+    (
+        IOobject
+        (
+            "jPrime",
+            this->time().timeName(),
+            *this,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        *this,
+        dimensionedScalar(j_.dimensions()/phi_.dimensions(), Zero),
+        zeroGradientFvPatchScalarField::typeName
+    ),
+    jSource_
+    (
+        IOobject
+        (
+            "jSource",
+            this->time().timeName(),
+            *this,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        *this,
+        dimensionedScalar(j_.dimensions(), Zero),
+        zeroGradientFvPatchScalarField::typeName
+    ),
     sigmaField_
     (
         IOobject
@@ -131,7 +159,6 @@ Foam::regionTypes::electric::electric
         dimensionedScalar(dimTemperature, dict_.getOrDefault<scalar>("T0", 293.15)),
         zeroGradientFvPatchScalarField::typeName
     ),
-    relax_(dict_.lookupOrDefault<scalar>("relax", 0.0)),
     control_(dict_.lookupOrDefault<Switch>("control", false)),
     dissolveOnOff_(dict_.lookupOrDefault<Switch>("dissolveOnOff", false)),
     patchName_(word::null),
@@ -139,7 +166,8 @@ Foam::regionTypes::electric::electric
     cellZoneIDs_(),
     galvanostatic_(true),
     ibar_(nullptr),
-    voltage_(nullptr)
+    voltage_(nullptr),
+    maxPhiStep_(0.2)
 {
     if (dissolveOnOff_)
     {
@@ -164,6 +192,15 @@ Foam::regionTypes::electric::electric
         if (galvanostatic_)
         {
             ibar_.reset(Function1<scalar>::New("ibar", controlDict, this));
+            maxPhiStep_ =
+                controlDict.lookupOrDefault<scalar>("maxPhiStep", 0.2);
+
+            if (maxPhiStep_ <= 0)
+            {
+                FatalIOErrorInFunction(controlDict)
+                    << "maxPhiStep must be greater than zero"
+                    << exit(FatalIOError);
+            }
         }
         else
         {
@@ -186,37 +223,135 @@ Foam::regionTypes::electric::~electric()
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
+void Foam::regionTypes::electric::solvePotential()
+{
+    tmp<fvScalarMatrix> phiEqn
+    (
+      - fvm::laplacian(sigmaField_, phi_, "laplacian(sigma,phi)")
+      + fvm::Sp(jPrime_, phi_)
+     == jSource_
+    );
+
+    // A single reference is sufficient.  The positive Newton diagonal
+    // normally removes the Laplacian null space in reacting regions.
+    if (phi_.needReference() && nCells())
+    {
+        phiEqn->setReference(0, phi_[0], true);
+    }
+
+    phiEqn->solve();
+}
+
+
+Foam::scalar Foam::regionTypes::electric::integratedCurrent() const
+{
+    const scalarField source
+    (
+        jSource_.primitiveField()
+      - jPrime_.primitiveField()*phi_.primitiveField()
+    );
+
+    scalar current = 0;
+
+    if (cellZoneIDs_.size())
+    {
+        forAll(cellZoneIDs_, zoneI)
+        {
+            const labelList& cells = cellZones()[cellZoneIDs_[zoneI]];
+
+            forAll(cells, i)
+            {
+                const label cellI = cells[i];
+                current += source[cellI]*V()[cellI];
+            }
+        }
+        reduce(current, sumOp<scalar>());
+    }
+    else
+    {
+        current = Foam::gSum(source*V());
+    }
+
+    return current;
+}
+
+
 void Foam::regionTypes::electric::solve()
 {
     Info << "\nSolve for region " << name() << ":\n" << endl;
 
-    tmp<fvScalarMatrix> phiEqn
-    (
-      - fvm::laplacian(sigmaField_, phi_, "laplacian(sigma,phi)")
-      - j_
-    );
-
-    //- Set reference values
-    if (phi_.needReference())
+    if (control_ && galvanostatic_)
     {
-        //- Update the potential field.
-        //- Electro-Neutral, the total electron+proton flux should be zero
-        const scalarField& source = j_;
-        const scalarField& volume = this->V();
-        scalarField sum = source*volume;
-        scalar iDot(Foam::gSum(sum)/Foam::gSum(volume));
+        const label patchID = boundaryMesh().findPatchID(patchName_);
 
-        for (label id = 0; id < nCells(); id++)
+        if (patchID == -1)
         {
-            //- The option has to be true (forceReference)
-            //- otherwise, errors happen in parallel simulations
-            phiEqn->setReference(id, phi_[id] - iDot*relax_, true);
+            FatalErrorInFunction
+                << "Cannot find " << patchName_
+                << "; please check patchName" << exit(FatalError);
+        }
+
+        const scalar area = Foam::gSum(magSf().boundaryField()[patchID]);
+        const scalar oldPhi = Foam::gAverage(phi_.boundaryField()[patchID]);
+
+        // The Newton-linearized equation is affine in the controlled
+        // boundary value.  Two unit-response solves therefore give the
+        // boundary potential required for the prescribed total current.
+        phi_.boundaryFieldRef()[patchID] == scalar(0);
+        solvePotential();
+        const scalar current0 = integratedCurrent();
+        const scalarField phi0(phi_.primitiveField());
+
+        phi_.boundaryFieldRef()[patchID] == scalar(1);
+        solvePotential();
+        const scalar current1 = integratedCurrent();
+        const scalarField phi1(phi_.primitiveField());
+
+        const scalar conductance = current1 - current0;
+        const scalar targetCurrent = ibar_->value(time().value())*area;
+        scalar targetPhi = oldPhi;
+
+        if (mag(conductance) > VSMALL)
+        {
+            targetPhi = (targetCurrent - current0)/conductance;
+        }
+        else
+        {
+            WarningInFunction
+                << "The galvanostatic unit response is too small in region "
+                << name() << "; retaining boundary potential " << oldPhi
+                << endl;
+        }
+
+        const scalar deltaPhi = Foam::max
+        (
+            -maxPhiStep_,
+            Foam::min(maxPhiStep_, targetPhi - oldPhi)
+        );
+        const scalar boundaryPhi = oldPhi + deltaPhi;
+
+        phi_.primitiveFieldRef() =
+            phi0 + boundaryPhi*(phi1 - phi0);
+        phi_.boundaryFieldRef()[patchID] == boundaryPhi;
+        phi_.correctBoundaryConditions();
+
+        const scalar current = current0 + boundaryPhi*conductance;
+        Info<< "ibar: " << current/area
+            << '\t' << "voltage: " << boundaryPhi << endl;
+    }
+    else
+    {
+        solvePotential();
+
+        if (control_)
+        {
+            const label patchID = boundaryMesh().findPatchID(patchName_);
+            const scalar area = Foam::gSum(magSf().boundaryField()[patchID]);
+            Info<< "ibar: " << integratedCurrent()/area
+                << '\t' << "voltage: "
+                << Foam::gAverage(phi_.boundaryField()[patchID]) << endl;
         }
     }
-
-    //phiEqn->relax();
-
-    phiEqn->solve();
 
     i_ = -sigmaField_ * fvc::grad(phi_);
     i_.correctBoundaryConditions();
@@ -239,60 +374,25 @@ void Foam::regionTypes::electric::correct()
     sigma_->correct(sigmaField_);
     sigmaField_.correctBoundaryConditions();
 
-    if (control_)
+    // Models that do not provide a Jacobian retain the original explicit
+    // source treatment.
+    if (Foam::gMax(jPrime_.primitiveField()) <= VSMALL)
     {
-        //- Update the potential field.
-        const scalarField& source = j_;
-        const scalarField& volume = this->V();
-        scalar iDot(0.0);
+        jSource_ = j_;
+    }
 
-        if (cellZoneIDs_.size())
+    if (control_ && !galvanostatic_)
+    {
+        const label patchID = boundaryMesh().findPatchID(patchName_);
+
+        if (patchID == -1)
         {
-            forAll(cellZoneIDs_, zoneI)
-            {
-                const labelList& cells = this->cellZones()[cellZoneIDs_[zoneI]];
-
-                forAll(cells, i)
-                {
-                    const label cellI = cells[i];
-
-                    iDot += source[cellI] * volume[cellI];
-                }
-            }
-
-            reduce(iDot, sumOp<scalar>());
-        }
-        else
-        {
-            iDot = Foam::gSum(source*volume);
+            FatalErrorInFunction
+                << "Cannot find " << patchName_
+                << "; please check patchName" << exit(FatalError);
         }
 
-        {
-            label patchID = this->boundaryMesh().findPatchID(patchName_);
-
-            if (patchID == -1)
-            {
-                FatalErrorInFunction
-                    << "Cannot find " << patchName_
-                    << "please check the patchName" << exit(FatalError);
-            }
-
-            scalarField phiBoundary = phi_.boundaryFieldRef()[patchID];
-
-            scalar ibar0 = iDot/Foam::gSum(this->magSf().boundaryField()[patchID]);
-
-            if (galvanostatic_)
-            {
-                phi_.boundaryFieldRef()[patchID] ==
-                    phiBoundary + relax_*(ibar0 - ibar_->value(time().value()));
-            }
-            else
-            {
-                phi_.boundaryFieldRef()[patchID] == voltage_->value(time().value());
-            }
-            
-            Info << "ibar: " << ibar0 << "\t"<< "voltage: " << Foam::gAverage(phiBoundary) << endl;
-        }
+        phi_.boundaryFieldRef()[patchID] == voltage_->value(time().value());
     }
 
     if (dissolved_.valid())

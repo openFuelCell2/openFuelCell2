@@ -33,5 +33,4 @@ EXE_LIBS = \
     -lfuelCellEulerianFvPatchFields \
     -lfuelCellEulerianInterfacialCompositionModels \
     -lfuelCellEulerianInterfacialModels \
-    -lthermoBoundary \
     -lfuelCellSystem

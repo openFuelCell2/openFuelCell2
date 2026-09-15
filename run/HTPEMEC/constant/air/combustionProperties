@@ -68,7 +68,7 @@ activationOverpotentialModel
     );
 
     j0              120;
-    relax           0.5;
+    relax 1.0;
     alpha           0.5;
     gamma           1.5;
 

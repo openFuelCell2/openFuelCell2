@@ -127,6 +127,8 @@ public:
 
         // Transfers
 
+            using phaseSystem::heatTransfer;
+
             //- Return the heat transfer matrices
             virtual autoPtr<heatTransferTable> heatTransfer() const = 0;
 

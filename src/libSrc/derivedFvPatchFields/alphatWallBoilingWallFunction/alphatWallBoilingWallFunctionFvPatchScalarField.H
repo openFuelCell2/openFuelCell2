@@ -359,6 +359,8 @@ public:
     //- Runtime type information
     TypeName("compressible::alphatWallBoilingWallFunction");
 
+    using fixedValueFvPatchField<scalar>::operator=;
+
 
     // Constructors
 

@@ -12,10 +12,10 @@ regionTypeList& regions = fuelCell.regions();
 // temperature
 volScalarField& TCell = fuelCell.T();
 volScalarField& kCell = fuelCell.k();
-volScalarField& contErrCpCell = fuelCell.contErrCp();
 volScalarField& rhoCpCell = fuelCell.rhoCp();
 surfaceScalarField& rhoCpPhiCell = fuelCell.rhoCpPhi();
 fvScalarMatrix& QdotCell = fuelCell.Qdot();
+volScalarField& dQdotdTCell = fuelCell.dQdotdT();
 
 bool LTS = false;
 

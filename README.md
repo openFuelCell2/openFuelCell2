@@ -138,6 +138,11 @@ The local regions can be classified as three different types, namely fluid, soli
     4. Copy thermoTools to the repo. (need to remove this in next update.)
     5. In test cases, when it comes to two-phase flow, a steadyState scheme is now used, specially for ddt term of species transfer.
     6. Update the preprocessing script for an easier usage.
+- [Sep. 2026] OpenFOAM-v2606 compatibility and solver/case fixes
+    1. The source was ported to OpenFOAM-v2606: deprecated `clip()` and `autoPtr::set()` calls were replaced, `tmp<>` holders were added where `phaseModel`/`rhoThermo` accessors now return fields by value, the boundary-field and `fixedValueFvPatchField` copy constructors were updated to the new interface, and `using` declarations were added to resolve hidden base-class overloads. The library now builds without warnings under v2606; the discretisation and numerical results are unchanged.
+    2. The dissolved-water (lambda) equation in `standardDWModel::solve()` now imposes a single reference cell instead of forcing a reference on every cell, which previously pinned the whole field and effectively froze the local water-content solution. Only cases with the dissolved-water model enabled (`dissolveOnOff true`) are affected. (TODO: Not sure this is good.)
+    3. The test cases were updated: `p_rgh`/`p_rghFinal` now use a GAMG-preconditioned Krylov solver. The `parallel.sh` run workflow is unchanged.
+    4. The electric potential (charge/`phi`) equations are now solved with a Newton-linearized electrochemical source: the activation-overpotential models expose the reaction-current Jacobian (`jPrime`, A/m3/V) and a matching linearized source (`jSource`), so the potential equation gains an implicit diagonal term (`+ fvm::Sp(jPrime, phi)`) instead of treating the reaction current as a fully explicit source. The prescribed-current (galvanostatic) boundary potential is now obtained from two unit-response solves with a maximum step per solve (`maxPhiStep`, default 0.2 V), and a single reference cell replaces the previous pinning of every cell. This makes the coupled potential/electrochemistry solve more robust; the converged solution is unchanged, the `relax` entry in the electric region's `regionProperties` is no longer used, and the `jPrime`/`jSource` fields are now written.
 
 ## Related publications
 
@@ -169,10 +174,10 @@ The local regions can be classified as three different types, namely fluid, soli
 
 ---
 
-The code is firstly developed by [Shidong Zhang](s.zhang@fz-juelich.de) for the PhD thesis, supervised by Prof. [Werner Lehnert](w.lehnert@fz-juelich.de) and Prof. [Steven Beale](s.beale@fz-juelich.de). The detailed model description and simulation results can be found in the thesis, `Modeling and Simulation of Polymer Electrolyte Fuel Cells` by FZJ. The following individuals also contribute to the optimization of the code,
+- Shidong Zhang (s.zhang@fz-juelich.de), Forschungszentrum Juelich, IET-1
 
-- Steffen Hess (s.hess@fz-juelich.de), Forschungszentrum Juelich, IEK-14
+- Steffen Hess (s.hess@fz-juelich.de), Forschungszentrum Juelich, IET-3
 
-- Prof. Steven B. Beale (s.beale@fz-juelich.de), Forschungszentrum Juelich, IEK-13
+- Prof. Steven B. Beale (s.beale@fz-juelich.de), Forschungszentrum Juelich, IET-3
 
 To be continued...

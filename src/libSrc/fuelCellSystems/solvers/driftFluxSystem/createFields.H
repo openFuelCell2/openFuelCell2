@@ -9,11 +9,13 @@ const volScalarField& alpha2 = phase2_;
 
 volVectorField& U1 = phase1_.URef();
 surfaceScalarField& phi1 = phase1_.phiRef();
-const surfaceScalarField& alphaPhi1 = phase1_.alphaPhi();
+const tmp<surfaceScalarField> tAlphaPhi1(phase1_.alphaPhi());
+const surfaceScalarField& alphaPhi1 = tAlphaPhi1();
 
 volVectorField& U2 = phase2_.URef();
 surfaceScalarField& phi2 = phase2_.phiRef();
-const surfaceScalarField& alphaPhi2 = phase2_.alphaPhi();
+const tmp<surfaceScalarField> tAlphaPhi2(phase2_.alphaPhi());
+const surfaceScalarField& alphaPhi2 = tAlphaPhi2();
 
 rhoThermo& thermo1 = phase1_.thermoRef();
 rhoThermo& thermo2 = phase2_.thermoRef();

@@ -239,6 +239,9 @@ public:
             //- Return the heat source/sink (as explicit form)
             virtual tmp<volScalarField> Qdot() const = 0;
 
+            //- Temperature derivative of the heat source (for linearization)
+            virtual tmp<volScalarField> dQdotdT() const = 0;
+
             //- Return the thermophysical model
             virtual const rhoThermo& thermo() const = 0;
 

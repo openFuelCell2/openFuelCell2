@@ -77,6 +77,9 @@ public:
 
             //- Return the heat release rate
             virtual tmp<volScalarField> Qdot() const;
+
+            //- Return temperature derivative of the heat release rate
+            virtual tmp<volScalarField> dQdotdT() const;
 };
 
 

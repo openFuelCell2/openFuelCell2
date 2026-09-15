@@ -145,6 +145,50 @@ void Foam::regionTypes::fluid::mapToCell
     fuelCell.Qdot() += heatSource0;
     fuelCell.Qdot() += phases_->heatTransfer(fuelCell.T(), cellMapIO_)();
 
+    //- Temperature derivative of the heat source (for source linearization)
+    volScalarField dQdotdT
+    (
+        IOobject
+        (
+            "dQdotdT",
+            phase.mesh().time().timeName(),
+            phase.mesh()
+        ),
+        phase.mesh(),
+        dimensionedScalar
+        (
+            "zero",
+            dimEnergy/dimVolume/dimTime/dimTemperature,
+            0.0
+        )
+    );
+
+    forAll(phases_->phases(), phasei)
+    {
+        dQdotdT += phases_->phases()[phasei].dQdotdT().ref();
+    }
+
+    volScalarField dQdotdT0
+    (
+        IOobject
+        (
+            "dQdotdT",
+            mesh_.time().timeName(),
+            mesh_
+        ),
+        mesh_,
+        dimensionedScalar
+        (
+            "zero",
+            dimEnergy/dimVolume/dimTime/dimTemperature,
+            0.0
+        )
+    );
+
+    dQdotdT0.rmap(dQdotdT, cellMapIO_);
+
+    fuelCell.dQdotdT() += dQdotdT0;
+
     // Rho*Cp
     scalarField rhoCp
     (

@@ -80,6 +80,12 @@ private:
         //- Source term (A/m3)
         volScalarField j_;
 
+        //- Positive reaction-current Jacobian (A/m3/V)
+        volScalarField jPrime_;
+
+        //- Newton-linearized source term (A/m3)
+        volScalarField jSource_;
+
         //- Electric conductivity
         volScalarField sigmaField_;
 
@@ -88,9 +94,6 @@ private:
 
         //- Sigma model (electric conductivity)
         autoPtr<sigmaModelList> sigma_;
-
-        //- Relaxation
-        scalar relax_;
 
         //- Active side?
         //- Reference side: voltage = 0.0
@@ -126,6 +129,15 @@ private:
         //- Voltage
         //- Make semse when galvanostatic_ is false
         autoPtr<Function1<scalar>> voltage_;
+
+        //- Maximum galvanostatic boundary-potential change per solve (V)
+        scalar maxPhiStep_;
+
+        //- Solve the current Newton-linearized potential equation
+        void solvePotential();
+
+        //- Integrated reaction current over the controlled zone (A)
+        scalar integratedCurrent() const;
 
 public:
         TypeName("electric");

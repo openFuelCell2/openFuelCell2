@@ -581,6 +581,17 @@ void Foam::phaseSystem::setRDeltaT()
         LTSdict.lookupOrDefault<scalar>("maxCo", 0.2)
     );
 
+    // Maximum phase-fraction (relative-flux) Courant number. This limits
+    // the local pseudo-time step based on the relative flux phir, which
+    // is what actually controls the stability of the explicit MULES
+    // phase-fraction update at the two-phase front (e.g. water front in
+    // the GDL of a PEMFC air region). The key was present in every
+    // regionProperties dictionary but previously ignored.
+    scalar maxAlphaCo
+    (
+        LTSdict.lookupOrDefault<scalar>("maxAlphaCo", 0.2)
+    );
+
     scalar maxDeltaT
     (
         LTSdict.lookupOrDefault<scalar>("maxDeltaT", GREAT)
@@ -591,18 +602,56 @@ void Foam::phaseSystem::setRDeltaT()
         LTSdict.lookupOrDefault<scalar>("rDeltaTSmoothingCoeff", 0.02)
     );
 
-    // Set the reciprocal time-step from the local Courant number
+    // Damping coefficient (1-0) limiting the rate at which the reciprocal
+    // time-step is allowed to increase between iterations, to avoid
+    // unstable oscillation of the pseudo-time step. 1 = un-damped.
+    scalar rDeltaTDampingCoeff
+    (
+        LTSdict.lookupOrDefault<scalar>("rDeltaTDampingCoeff", 1.0)
+    );
+
+    // Cache the reciprocal time-step for damping
+    const volScalarField rDeltaT0("rDeltaT0", rDeltaT);
+
+    // Set the reciprocal time-step from the maximum of the local flow and
+    // phase-fraction Courant numbers
     rDeltaT.ref() = max
     (
         1/dimensionedScalar("maxDeltaT", dimTime, maxDeltaT),
-        fvc::surfaceSum(phiMagMax())()()
-       /((2*maxCo)*mesh_.V())
+        max
+        (
+            fvc::surfaceSum(phiMagMax())()()
+           /((2*maxCo)*mesh_.V()),
+            fvc::surfaceSum(phirMag())()()
+           /((2*maxAlphaCo)*mesh_.V())
+        )
     );
 
     // Update tho boundary values of the reciprocal time-step
     rDeltaT.correctBoundaryConditions();
 
-    fvc::smooth(rDeltaT, rDeltaTSmoothingCoeff);
+    // Spatially smooth the time-scale field
+    if (rDeltaTSmoothingCoeff < 1.0)
+    {
+        fvc::smooth(rDeltaT, rDeltaTSmoothingCoeff);
+    }
+
+    // Limit the rate of change of the reciprocal time-step:
+    // - allow the time-step to be reduced without restriction
+    // - only allow it to grow at a (damped) fraction of the old value
+    if
+    (
+        rDeltaTDampingCoeff < 1.0
+     && mesh_.time().timeIndex() > mesh_.time().startTimeIndex() + 1
+    )
+    {
+        rDeltaT = max
+        (
+            rDeltaT,
+            (scalar(1) - rDeltaTDampingCoeff)*rDeltaT0
+        );
+        rDeltaT.correctBoundaryConditions();
+    }
 
     Info<< "Flow time scale min/max = "
         << gMin(1/rDeltaT.primitiveField())

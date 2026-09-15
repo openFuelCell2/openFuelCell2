@@ -26,6 +26,7 @@ License
 #include "ReactingPhaseModel.H"
 #include "phaseSystem.H"
 #include "fvMatrix.H"
+#include "electroChemicalReaction.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -76,6 +77,45 @@ Foam::tmp<Foam::volScalarField>
 Foam::ReactingPhaseModel<BasePhaseModel, ReactionType>::Qdot() const
 {
     return reaction_->Qdot();
+}
+
+
+template<class BasePhaseModel, class ReactionType>
+Foam::tmp<Foam::volScalarField>
+Foam::ReactingPhaseModel<BasePhaseModel, ReactionType>::dQdotdT() const
+{
+    typedef typename ReactionType::reactionThermo Thermo;
+
+    const ReactionType& rxn = reaction_();
+
+    const combustionModels::electroChemicalReaction<Thermo>* eta =
+        dynamic_cast<const combustionModels::electroChemicalReaction<Thermo>*>
+        (&rxn);
+
+    if (eta)
+    {
+        return eta->dQdotdT();
+    }
+
+    return tmp<volScalarField>
+    (
+        new volScalarField
+        (
+            IOobject
+            (
+                IOobject::groupName("dQdotdT", this->name()),
+                this->mesh().time().timeName(),
+                this->mesh()
+            ),
+            this->mesh(),
+            dimensionedScalar
+            (
+                "zero",
+                dimEnergy/dimTime/dimVolume/dimTemperature,
+                0
+            )
+        )
+    );
 }
 
 

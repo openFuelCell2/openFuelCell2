@@ -31,6 +31,7 @@ License
 #include "ActivationOverpotentialModel.H"
 #include "ButlerVolmer.H"
 #include "Tafel.H"
+#include "ChangJaffe.H"
 #include "Constant.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -94,6 +95,17 @@ namespace Foam
     makeActivationOverpotentialModel
     (
         Tafel,
+        constGasEThermoPhysics
+    );
+
+    makeActivationOverpotentialModel
+    (
+        ChangJaffe,
+        gasEThermoPhysics
+    );
+    makeActivationOverpotentialModel
+    (
+        ChangJaffe,
         constGasEThermoPhysics
     );
 
