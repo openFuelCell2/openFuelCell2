@@ -20,6 +20,10 @@ type          interfaceCompositionPhaseChangeTwoPhaseSystem;
 
 phases (air water);
 
+// The parent energy equation follows this phase. This electrode starts
+// water-filled; selecting absent air gives zero channel thermal conductivity.
+continuous water;
+
 LTS
 {
     maxCo               0.5;

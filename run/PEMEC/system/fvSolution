@@ -43,7 +43,7 @@ solvers
 
 relaxationFactors
 {
-//    T               0.9999;
+    T               0.9999;
 }
 
 

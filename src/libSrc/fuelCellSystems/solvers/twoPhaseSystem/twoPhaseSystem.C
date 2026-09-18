@@ -32,6 +32,7 @@ License
 #include "MULES.H"
 #include "subCycle.H"
 #include "UniformField.H"
+#include "boundPhaseFractions.H"
 
 #include "localEulerDdtScheme.H"
 
@@ -268,12 +269,13 @@ void Foam::twoPhaseSystem::solveAlpha(phaseModel& phase1)
             << "  Max(alpha." << alpha1.group() << ") = " << max(alpha1).value()
             << endl;
 
-        // Ensure the phase-fractions are bounded
-        alpha1.clamp_range(phase1.residualAlpha().value(), 1);
-
-        // Update the phase-fraction of the other phase
-        alpha2 = scalar(1) - alpha1;
-        alpha2.clamp_range(phase2.residualAlpha().value(), 1);
+        // Do not inject residualAlpha into the physical phase inventory.
+        // Keep the second fraction exactly complementary to the first.
+        boundPhaseFractions
+        (
+            alpha1, alpha2, phase1.alphaMax(), phase2.alphaMax(),
+            alphaControls.lookupOrDefault<bool>("reportAlphaBounding", false)
+        );
     }
 }
 

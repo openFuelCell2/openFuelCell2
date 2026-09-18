@@ -62,10 +62,18 @@ Foam::porousZones::DarcyForchheimer::DarcyForchheimer
     nuName_(coeffs_.lookupOrDefault<word>("nu", "thermo:nu")),
     alphaName_(coeffs_.lookupOrDefault<word>("alpha", "alpha")),
     theta_(coeffs_.lookupOrDefault<scalar>("theta", 0.0)),
-    sigma_(coeffs_.lookupOrDefault<scalar>("sigma", 0.0))
+    sigma_(coeffs_.lookupOrDefault<scalar>("sigma", 0.0)),
+    alphaMin_(coeffs_.lookupOrDefault<scalar>("alphaMin", 1.0e-6))
 {
     adjustNegativeResistance(dXYZ_);
     adjustNegativeResistance(fXYZ_);
+
+    if (alphaMin_ <= 0 || alphaMin_ > 1)
+    {
+        FatalErrorInFunction
+            << "alphaMin must lie in (0, 1], got " << alphaMin_
+            << exit(FatalError);
+    }
 
     calcTranformModelData();
 }
@@ -227,7 +235,11 @@ void Foam::porousZones::DarcyForchheimer::correct
         alpha.ref() = mesh_.lookupObject<volScalarField>(alphaFullName);
     }
 
-    alpha.ref().max(Foam::SMALL); //avoid
+    //- Bound the phase fraction that scales the Darcy resistance. The
+    //  resistance goes like mu/alpha, so an unbounded alpha -> 0 makes the
+    //  momentum matrix arbitrarily stiff and makes a vanished phase
+    //  permanently unable to move. alphaMin is the documented floor.
+    alpha.ref().max(alphaMin_);
 
     if (UEqn.dimensions() == dimForce)
     {
@@ -396,6 +408,13 @@ void Foam::porousZones::DarcyForchheimer::correctU
     //- temperary velocities
     volVectorField U10 = dpcds & fvc::grad(alpha1);
 
+    //- Regularised phase fractions and viscosities. Both terms below divide by
+    //  alpha1^2*mu1; at alpha1 -> 0 that is a double singularity which
+    //  produces inf/nan velocities that are then fed back into the phase
+    //  fluxes. Flooring the denominator bounds the reconstruction without
+    //  altering it anywhere the phase is genuinely present.
+    const scalar alphaMin = alphaMin_;
+
     forAll(cellZoneIDs_, zoneI)
     {
         const tensorField& dZones = D_[zoneI];
@@ -407,14 +426,17 @@ void Foam::porousZones::DarcyForchheimer::correctU
             const label cellI = cells[i];
             const label j = this->fieldIndex(i);
 
+            const scalar a1 = max(alpha1[cellI], alphaMin);
+            const scalar a2 = max(alpha2[cellI], scalar(0));
+
             //- only update velocity in porous media
             U2[cellI] = U[cellI];
 
-            U1[cellI] = - Foam::pow(alpha1[cellI], 2)/mu1[cellI]*U10[cellI]/dZones[j]
+            U1[cellI] = - Foam::sqr(a1)/mu1[cellI]*U10[cellI]/dZones[j]
                         + (
-                              Foam::pow(alpha2[cellI], 2) * mu2[cellI]
-                            / Foam::pow(alpha1[cellI], 2) / mu1[cellI]
-                          ) * U[cellI];  
+                              Foam::sqr(a2) * mu2[cellI]
+                            / Foam::sqr(a1) / mu1[cellI]
+                          ) * U[cellI];
         }
     }
 }

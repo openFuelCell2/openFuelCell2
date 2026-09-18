@@ -206,6 +206,85 @@ void Foam::combustionModels::electroChemicalReaction<ReactionThermo>::correct()
             iDmdtWater[fluidId] = wSpecie[fluidId] - dmdt[ionId]*Wi.value();
         }
     }
+
+    //- Gas species source for the phase fraction equation.
+    //
+    // The water bookkeeping above only fills iDmdt for H2O. The species that
+    // actually changes phase volume in a cell is the reacting gas (O2 at the
+    // oxygen electrode, H2 at the hydrogen electrode), and in these cases that
+    // species is configured as the composition's inertSpecie. Inert species
+    // are excluded from YActive_, so their transport equation - and therefore
+    // the R(Y) hook that would have set their iDmdt - is never assembled.
+    // The gas production rate was consequently identically zero, the phase
+    // fraction source term dgdt never saw it, and the gas phase could not
+    // nucleate: alpha stayed pinned at its initial value forever.
+    //
+    // Set the gas sources here, directly from the reaction stoichiometry and
+    // the current density, for every species in the reaction list other than
+    // water and the electron.
+    if (!phaseSys.isSinglePhase() && eta_->phaseChange())
+    {
+        // The reacting gas species belong to this (gaseous) phase's
+        // composition, so their sources go into this phase's iDmdt list. The
+        // water source above is deliberately posted to the *other* phase
+        // because it is the condensate that changes volume there.
+        const HashTable<scalar>& rxnList = eta_->nernst().rxnList();
+        const scalar nElectrons = rxnList.found("e") ? mag(rxnList.at("e")) : 0;
+
+        if (nElectrons > 0)
+        {
+            const PtrList<volScalarField>& Y = thermo_.composition().Y();
+
+            forAll(Y, specieI)
+            {
+                const word& specieName = Y[specieI].member();
+
+                // Water is handled above together with the dissolved phase;
+                // the electron is not a species carried by this phase.
+                if (specieName == water || specieName == "e")
+                {
+                    continue;
+                }
+
+                if (!rxnList.found(specieName))
+                {
+                    continue;
+                }
+
+                const dimensionedScalar stoich
+                (
+                    "stoich",
+                    dimless,
+                    rxnList[specieName]/nElectrons
+                );
+
+                const dimensionedScalar Wspecie
+                (
+                    "W",
+                    dimMass/dimMoles,
+                    thermo_.composition().W(specieI)/1000
+                );
+
+                //- kg/(m3 s) of gas produced per unit electrode volume
+                const volScalarField wSpecieGas
+                (
+                    eta_->j()*Wspecie*stoich/dimF
+                );
+
+                volScalarField& iDmdtGas = const_cast<volScalarField&>
+                (
+                    phase.iDmdt(specieName)
+                );
+
+                forAll(cells, cellI)
+                {
+                    const label fluidId = cells[cellI];
+
+                    iDmdtGas[fluidId] = wSpecieGas[fluidId];
+                }
+            }
+        }
+    }
 }
 
 

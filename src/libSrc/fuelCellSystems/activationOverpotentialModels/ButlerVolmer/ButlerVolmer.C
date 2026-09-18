@@ -26,6 +26,20 @@ License
 #include "ButlerVolmer.H"
 #include "phaseModel.H"
 
+
+// Default bound on the magnitude of the Boltzmann exponent argument.
+// exp(709.78) is the double-precision overflow limit; 50 leaves a wide
+// margin while still being far outside the physically meaningful range
+// (|n alpha F eta / R T| = 50 corresponds to |eta| ~ 1.3 V at 330 K).
+static const Foam::scalar butlerVolmerDefaultMaxExpArg = 50;
+
+// Default bound on the magnitude of the activation overpotential [V]. A real
+// cell operates at activation overpotentials well under 1 V; 5 V is an order
+// of magnitude above any converged solution, so the bound is inactive for
+// physical states and only arrests an unconverged potential field.
+static const Foam::scalar butlerVolmerDefaultMaxEta = 5;
+
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class Thermo>
@@ -35,8 +49,30 @@ Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::ButlerVolmer
     const dictionary& dict
 )
 :
-    ActivationOverpotentialModel<Thermo>(phase, dict)
-{}
+    ActivationOverpotentialModel<Thermo>(phase, dict),
+    maxExpArg_
+    (
+        dict.lookupOrDefault<scalar>("maxExpArg", butlerVolmerDefaultMaxExpArg)
+    ),
+    maxEta_
+    (
+        dict.lookupOrDefault<scalar>("maxEta", butlerVolmerDefaultMaxEta)
+    )
+{
+    if (maxExpArg_ <= 0)
+    {
+        FatalErrorInFunction
+            << "maxExpArg must be positive, got " << maxExpArg_
+            << exit(FatalError);
+    }
+
+    if (maxEta_ <= 0)
+    {
+        FatalErrorInFunction
+            << "maxEta must be positive, got " << maxEta_
+            << exit(FatalError);
+    }
+}
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
@@ -157,6 +193,14 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
     //- The total current: volume averaged
     scalar Rj(0.0);
 
+    //- Number of catalyst cells whose Boltzmann exponent had to be clipped in
+    //  this call, and the largest unclipped magnitude seen. A non-zero count
+    //  means the electrochemical coupling is being driven outside its
+    //  converged range; it is reported so the clamp is never silent.
+    label nClippedLocal = 0;
+    label nClipped = 0;
+    scalar maxExpArgSeen = 0;
+
     forAll(cells, cellI)
     {
         //- get cell IDs
@@ -165,30 +209,61 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
         label ionId = ionPhase.cellMap()[fluidPhase.cellMapIO()[fluidId]];
 
         //- activation overpotential
-        eta[fluidId] = 
+        eta[fluidId] =
         (
             eta[fluidId]*(scalar(1) - this->relax_)
           + (phiE[electronId] - phiI[ionId] - nernst[fluidId])
           * this->relax_
         );
 
+        // Bound the overpotential itself, not only the Boltzmann exponent.
+        // The activation heat source posted to the energy equation is j*eta,
+        // so a finite clamped j combined with an unconverged eta of order 1e42
+        // V still overflows the source and destroys the temperature field.
+        // Clamping eta here keeps the heat source bounded and is inactive for
+        // any converged solution.
+        if (mag(eta[fluidId]) > maxEta_)
+        {
+            eta[fluidId] = Foam::sign(eta[fluidId])*maxEta_;
+        }
+
         const scalar prefactor =
             this->j0_.value()
            *coeff[fluidId]
            *Foam::pow(s[fluidId], this->gamma_);
-        const scalar expForward = Foam::exp
-        (
-            n*this->alpha_*F*eta[fluidId]/Rgas/T[fluidId]
-        );
-        const scalar expReverse = Foam::exp
-        (
-            -n*(scalar(1) - this->alpha_)*F*eta[fluidId]/Rgas/T[fluidId]
-        );
+        // Boltzmann exponents, bounded by maxExpArg_. The argument is
+        // proportional to eta/T, so during an unconverged electrochemical
+        // coupling iteration a transiently large overpotential drives it past
+        // the double-precision overflow limit (~709): Foam::exp returns inf,
+        // the inf propagates into the exchange-current sources J, jPrime and
+        // jSource of the electron and ion regions, and the next potential
+        // solve traps a hardware floating point exception. Clamping the
+        // argument keeps j and its Jacobian finite, which lets the coupling
+        // iteration recover instead of aborting. The Jacobian below is built
+        // from the clamped exponentials, so the linearisation stays
+        // consistent with the current that is actually reported.
+        const scalar RT = Rgas*T[fluidId];
+
+        scalar argForward = n*this->alpha_*F*eta[fluidId]/RT;
+        scalar argReverse = -n*(scalar(1) - this->alpha_)*F*eta[fluidId]/RT;
+
+        const scalar argMag = max(mag(argForward), mag(argReverse));
+        maxExpArgSeen = max(maxExpArgSeen, argMag);
+        if (argMag > maxExpArg_)
+        {
+            ++nClippedLocal;
+        }
+
+        argForward = min(max(argForward, -maxExpArg_), maxExpArg_);
+        argReverse = min(max(argReverse, -maxExpArg_), maxExpArg_);
+
+        const scalar expForward = Foam::exp(argForward);
+        const scalar expReverse = Foam::exp(argReverse);
 
         // Signed Butler-Volmer current and its positive equation Jacobian.
         j[fluidId] = prefactor*(expForward - expReverse);
         const scalar jPrime =
-            mag(n)*F/Rgas/T[fluidId]*prefactor
+            mag(n)*F/RT*prefactor
            *(
                 this->alpha_*expForward
               + (scalar(1) - this->alpha_)*expReverse
@@ -211,6 +286,28 @@ void Foam::activationOverpotentialModels::ButlerVolmer<Thermo>::correct()
     }
 
     reduce(Rj, sumOp<scalar>());
+
+    // Report clipping rather than letting it pass silently: a saturated
+    // Boltzmann factor is no longer the Butler-Volmer law, so the reported
+    // current is only a numerical holding action and the coupling has not
+    // converged. The warning identifies the zone and the exponent magnitude
+    // that had to be bounded.
+    // Reduced unconditionally: a conditional reduce would be a collective
+    // called by only some ranks and would deadlock under MPI.
+    nClipped = nClippedLocal;
+    reduce(nClipped, sumOp<label>());
+    reduce(maxExpArgSeen, maxOp<scalar>());
+
+    if (nClipped)
+    {
+        WarningInFunction
+            << "zone " << this->zoneName_ << ": bounded the Boltzmann exponent"
+            << " in " << nClipped << " catalyst cells"
+            << " (max |n alpha F eta / R T| = " << maxExpArgSeen
+            << " > maxExpArg = " << maxExpArg_ << ')'
+            << ". The current density is saturated and the electrochemical"
+            << " coupling has not converged." << endl;
+    }
 
     Info << "Total current (A) at " << this->zoneName_
          << ": " << Rj << endl;

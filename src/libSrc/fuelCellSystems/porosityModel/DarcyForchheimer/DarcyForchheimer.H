@@ -106,6 +106,13 @@ class DarcyForchheimer
         //- Surface tension
         scalar sigma_;
 
+        //- Lower bound applied to the phase fraction that enters the Darcy
+        //  resistance (mu/alpha). Without a bound the resistance is singular
+        //  as the phase fraction goes to zero, which both destroys the
+        //  conditioning of the momentum matrix and turns alpha == 0 into an
+        //  absorbing state the phase can never leave.
+        scalar alphaMin_;
+
 
     // Private Member Functions
 

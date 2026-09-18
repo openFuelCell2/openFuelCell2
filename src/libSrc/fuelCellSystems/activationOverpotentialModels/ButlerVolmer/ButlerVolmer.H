@@ -67,6 +67,26 @@ class ButlerVolmer
 :
     public ActivationOverpotentialModel<Thermo>
 {
+    // Private data
+
+        //- Upper bound on the magnitude of the exponent argument
+        //  n alpha F eta / (R T) applied to both the anodic and cathodic
+        //  Boltzmann factors. exp(709) is the double-precision overflow
+        //  limit, so an unbounded argument turns a transiently large
+        //  overpotential into inf and then into a hardware floating point
+        //  exception. The bound is a numerical safety net: it is inactive
+        //  whenever |eta| stays below ~maxExpArg R T / (n alpha F).
+        scalar maxExpArg_;
+
+        //- Upper bound on the magnitude of the activation overpotential (V).
+        //  Bounding the exponent alone is not sufficient: the activation heat
+        //  source posted to the energy equation is j*eta, and an unconverged
+        //  potential field can make eta enormous while the clamped j stays
+        //  finite, so j*eta still overflows and destroys the temperature field.
+        //  A real cell never exceeds a few volts of activation overpotential, so
+        //  this bound is inactive for any converged solution.
+        scalar maxEta_;
+
 
 public:
     //- Runtime type information

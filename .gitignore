@@ -6,4 +6,5 @@ docs
 linux*/
 lnInclude/
 backup/
+.validation/
 *~
